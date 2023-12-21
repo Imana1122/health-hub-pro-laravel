@@ -3,13 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Notifications\MessageSent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
 
 class User extends Authenticatable
 {
@@ -20,8 +17,11 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = 'users';
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'name',
+        'phone_number',
+        'password',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -29,23 +29,17 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password'
+        'password',
+        'remember_token',
     ];
 
-    const USER_TOKEN = 'userToken';
-
-    public function chats(): HasMany
-    {
-        return $this->hasMany(Chat::class, 'created_by');
-    }
-
-    public function routeNotificationForOneSignal() : array{
-        return ['tags'=>['key'=>'userId','relation'=>': ', 'value'=>(string)(1)]];
-    }
-
-    public function sendNewMessageNotification(array $data) : void
-    {
-        $this->notify(new MessageSent($data));
-    }
-
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'phone_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 }
