@@ -3,7 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Laravel Shop :: Administrative Panel</title>
+		<title>HealthHub Pro :: Administrative Panel</title>
+		<link rel="icon" type="image/png" href="{{ asset('/admin-assets/img/logo.gif') }}">
+
 		<!-- Google Font: Source Sans Pro -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 		<!-- Font Awesome -->
@@ -15,6 +17,9 @@
         <link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.css') }}">
 
 		<link rel="stylesheet" href="{{asset('admin-assets/css/custom.css')}}">
+
+
+
         <meta name="csrf-token" content="{{ csrf_token() }}">
 	</head>
 	<body class="hold-transition sidebar-mini">
@@ -48,11 +53,8 @@
 							<h4 class="h4 mb-0"><strong>{{ Auth::guard('admin')->user()->name }}</strong></h4>
 							<div class="mb-3">{{ Auth::guard('admin')->user()->phone_number }}</div>
 							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<i class="fas fa-user-cog mr-2"></i> Settings
-							</a>
 							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
+							<a href="{{ route('admin.showChangePasswordForm') }}" class="dropdown-item">
 								<i class="fas fa-lock mr-2"></i> Change Password
 							</a>
 							<div class="dropdown-divider"></div>
@@ -67,13 +69,14 @@
 			<!-- Main Sidebar Container -->
             @include('admin.layouts.sidebar')
 			<!-- Content Wrapper. Contains page content -->
-			<div class="content-wrapper">
+			<div class="content-wrapper" style="max-height: 80vh; overflow-y: auto;">
                 @yield('content')
-			</div>
+            </div>
+
 			<!-- /.content-wrapper -->
 			<footer class="main-footer">
 
-				<strong>Copyright &copy; 2014-2022 AmazingShop All rights reserved.
+				<strong>Copyright &copy; 2014-2022 HealthHub Pro All rights reserved.
 			</footer>
 
 		</div>
@@ -103,6 +106,7 @@
                     height:250
                 });
             });
+
         </script>
 
         @yield('customJs')

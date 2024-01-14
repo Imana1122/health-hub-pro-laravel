@@ -24,12 +24,12 @@
                 <div class="small-box card">
                     <div class="inner">
                         <h3>150</h3>
-                        <p>Total Orders</p>
+                        <p>Total Recipes</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <a href="#" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('recipes.index') }}" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
@@ -49,8 +49,8 @@
             <div class="col-lg-4 col-6">
                 <div class="small-box card">
                     <div class="inner">
-                        <h3>$1000</h3>
-                        <p>Total Sale</p>
+                        <h3>10</h3>
+                        <p>Total Dieticians</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-person-add"></i>

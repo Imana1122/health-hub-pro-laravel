@@ -5,7 +5,9 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
 
 class TempImagesController extends Controller
 {
@@ -26,8 +28,8 @@ class TempImagesController extends Controller
             $sourcePath = public_path().'/temp/'.$newName; // Fix the path
             $destPath = public_path().'/temp/thumb/'.$newName; // Fix the path
 
-            $image = Image::make($sourcePath); // Use $sourcePath instead of $tempImage
-            $image->fit(300, 275);
+            $image = ImageManager::gd()->read($sourcePath);
+            $image->resize(300, 275);
             $image->save($destPath);
 
 
@@ -45,24 +47,19 @@ class TempImagesController extends Controller
         $imageId = $request->input('id');
             // Find the image in the database
             $image = TempImage::findOrFail($imageId);
-            $filename = $image->name;
+            $path = public_path('/temp/'. $image->name);
+            $thumbPath = public_path('/temp/thumb/'. $image->name);
 
-            $basePath = public_path('/temp/'); // adjust the path based on your folder structure
-
-            // Delete the original image
-            $imagePath = $basePath.$filename;
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
+            //Delete main image
+            if( File::exists( $path ) ){
+                File::delete( $path );
             }
 
-            // Delete the thumbnail image
-            $thumbPath = $basePath . 'thumb/' . $filename;
-            if (file_exists($thumbPath)) {
-                unlink($thumbPath);
+            if( File::exists( $thumbPath ) ){
+                File::delete( $thumbPath );
             }
 
-            // Delete the image record from the database
-            $image->delete();
+            TempImage::where('id',$image->id)->delete();
 
             return response()->json([
                 'status' => true,

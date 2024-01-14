@@ -3,8 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Laravel Shop :: Administrative Panel</title>
-		<!-- Google Font: Source Sans Pro -->
+    	<title><?php echo (!empty($title)) ? 'Title-'.$title: 'HealthHub Pro'; ?></title>
+    	<link rel="icon" type="image/png" href="{{ asset('/front-assets/images/logo.png') }}">
+    	<!-- Google Font: Source Sans Pro -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 		<!-- Font Awesome -->
 		<link rel="stylesheet" href="{{asset('admin-assets/plugins/fontawesome-free/css/all.min.css')}}">
@@ -18,7 +19,7 @@
             @include('admin.message')
 			<div class="card card-outline card-primary">
 			  	<div class="card-header text-center">
-					<a href="#" class="h3">Administrative Panel</a>
+					<a href="{{ route('admin.dashboard') }}" class="h3">Administrative Panel</a>
 			  	</div>
 			  	<div class="card-body">
 					<p class="login-box-msg">Sign in to start your session</p>
@@ -49,14 +50,14 @@
                             @enderror
 				  		</div>
 				  		<div class="row">
-							<!-- <div class="col-8">
+							<div class="col-8">
 					  			<div class="icheck-primary">
 									<input type="checkbox" id="remember">
 									<label for="remember">
 						  				Remember Me
 									</label>
 					  			</div>
-							</div> -->
+							</div>
 							<!-- /.col -->
 							<div class="col-4">
 					  			<button type="submit" class="btn btn-primary btn-block">Login</button>
@@ -64,7 +65,7 @@
 							<!-- /.col -->
 				  		</div>
 					</form>
-				  		<a href="forgot-password.html">I forgot my password</a>
+				  		<a href="{{ route('admin.showForgotPasswordForm') }}">I forgot my password</a>
 					</p>
 			  	</div>
 			  	<!-- /.card-body -->
@@ -82,5 +83,4 @@
 		<script src="{{asset('admin-assets/js/demo.js')}}"></script>
 	</body>
 </html>
-
 
