@@ -23,7 +23,7 @@
             <div class="col-lg-4 col-6">
                 <div class="small-box card">
                     <div class="inner">
-                        <h3>150</h3>
+                        <h3>{{ $recipesCount }}</h3>
                         <p>Total Recipes</p>
                     </div>
                     <div class="icon">
@@ -36,20 +36,20 @@
             <div class="col-lg-4 col-6">
                 <div class="small-box card">
                     <div class="inner">
-                        <h3>50</h3>
-                        <p>Total Customers</p>
+                        <h3>{{ $usersCount }}</h3>
+                        <p>Total Users</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                    <a href="#" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{ route('users.index') }}" class="small-box-footer text-dark">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
 
             <div class="col-lg-4 col-6">
                 <div class="small-box card">
                     <div class="inner">
-                        <h3>10</h3>
+                        <h3>{{ $dieticiansCount }}</h3>
                         <p>Total Dieticians</p>
                     </div>
                     <div class="icon">

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Allergen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -42,11 +41,11 @@ class AllergenController extends Controller
                 $request->only('name', 'slug', 'status'
             ));
 
-            session()->flash('success','Sub category created successfully');
+            session()->flash('success','Allergen created successfully');
 
             return response()->json([
                 'status' => true,
-                'message'=> 'Sub category created successfully.'
+                'message'=> 'Allergen created successfully.'
             ]);
         }else{
             return response()->json([
@@ -93,11 +92,11 @@ class AllergenController extends Controller
 
 
 
-            session()->flash("success","Sub category updated successfully");
+            session()->flash("success","Allergen updated successfully");
 
             return response()->json([
                 "status"=> true,
-                "message"=> 'Sub category updated successfully'
+                "message"=> 'Allergen updated successfully'
             ]);
 
         }else{

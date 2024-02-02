@@ -38,6 +38,7 @@
                             </div>
                           </div>
                     </div>
+
                 </div>
             </form>
 
@@ -46,6 +47,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Email</th>
                             <th>Phone Number</th>
                             <th>Role</th>
                             <th width="100">Status</th>
@@ -57,6 +59,7 @@
                             @foreach ( $admins as $admin)
                             <tr>
                                 <td>{{ $admin->name }}</td>
+                                <td>{{ $admin->email }}</td>
                                 <td>{{ $admin->phone_number }}</td>
                                 <td>{{ ($admin->role == 1) ? 'superadmin' : 'admin' }}</td>
                                 <td>

@@ -31,10 +31,18 @@
                                 <p></p>
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="phone_number">Phone Number</label>
                                 <input type="number" name="phone_number" id="phone_number" class="form-control" placeholder="Phone" value="{{ $admin->phone_number }}">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email">Email</label>
+                                <input type="text" name="email" id="email" class="form-control" placeholder="Email" value="{{ $admin->email }}">
                                 <p></p>
                             </div>
                         </div>
@@ -102,6 +110,10 @@ $("#adminForm").submit(function(event){
                 .siblings('p')
                 .removeClass('invalid-feedback')
                 .html("");
+                $("#email").removeClass('is-invalid')
+                .siblings('p')
+                .removeClass('invalid-feedback')
+                .html("");
 
                 $("#password").removeClass('is-invalid')
                 .siblings('p')
@@ -130,6 +142,18 @@ $("#adminForm").submit(function(event){
                     .html(errors['phone_number']);
                 }else{
                     $("#phone_number").removeClass('is-invalid')
+                    .siblings('p')
+                    .removeClass('invalid-feedback')
+                    .html("");
+                }
+
+                if(errors['email']){
+                    $("#email").addClass('is-invalid')
+                    .siblings('p')
+                    .addClass('invalid-feedback')
+                    .html(errors['email']);
+                }else{
+                    $("#email").removeClass('is-invalid')
                     .siblings('p')
                     .removeClass('invalid-feedback')
                     .html("");

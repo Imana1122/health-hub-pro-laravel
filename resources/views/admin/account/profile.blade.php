@@ -96,7 +96,7 @@
                             </div>
                             <div class="modal-body">
                                 <p>Are you sure you want to delete your account?</p>
-                                <form id="deleteAccountForm" action="{{ route('account.deleteAccount') }}" method="delete">
+                                <form id="deleteAccountForm" action="{{ route('admin.deleteAccount') }}" method="delete">
                                     @csrf
                                     <div class="form-group">
                                         <label for="password">Password</label>
@@ -163,19 +163,19 @@
     })
 
 
-    
+
     $(document).ready(function(){
         $("#confirmDeleteAccountBtn").click(function(){
             // Submit the delete account form
             $("#deleteAccountForm").submit();
         });
     });
-    
+
     function confirmDeleteAccount() {
         // Show the delete account confirmation modal
         $('#deleteAccountConfirmationModal').modal('show');
     }
-    
+
 </script>
 
 @endsection

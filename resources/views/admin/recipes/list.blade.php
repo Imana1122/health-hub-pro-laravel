@@ -22,24 +22,103 @@
     <!-- Default box -->
     <div class="container-fluid">
         @include('admin.message')
-        <div class="card">
-            <!-- Add your search form here if needed -->
+        <div class="card bg-light">
+            <form action="{{ route('recipes.index') }}" method="get">
+                <div class="card-header">
+                    <div class="card-title">
+                        <button type="button" onclick="window.location.href='{{ route('recipes.index') }}' " class="btn btn-default btn-sm">Reset</button>
+                    </div>
+                    <div class="card-tools">
+                        <div class="input-group input-group" style="width: 250px;">
+                            <input value="{{ Request::get('keyword') }}" type="text" name="keyword" class="form-control float-right" placeholder="Search">
 
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i> Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="meal_type">Meal Type</label>
+                                <select class="form-control" name="meal_type">
+                                    <option value="" class="font-italic">All</option>
+                                    @foreach($mealTypes as $mealType)
+                                        <option value="{{ $mealType->id }}" {{ Request::get('meal_type') == $mealType->id ? 'selected' : '' }}>{{ $mealType->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select class="form-control" name="category">
+                                    <option value="" class="font-italic">All</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ Request::get('category') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="cuisine">Cuisine:</label>
+                                <select class="form-control" name="cuisine">
+                                    <option value="" class="font-italic">All</option>
+                                    @foreach($cuisines as $cuisine)
+                                        <option value="{{ $cuisine->id }}" {{ Request::get('cuisine') == $cuisine->id ? 'selected' : '' }}>{{ $cuisine->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="allergen">Allergen:</label>
+                                <select class="form-control" name="allergen">
+                                    <option value="" class="font-italic">All</option>
+                                    @foreach($allergens as $allergen)
+                                        <option value="{{ $allergen->id }}" {{ Request::get('allergen') == $allergen->id ? 'selected' : '' }}>{{ $allergen->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="health_condition" class="font-weight-bold">Health Condition:</label>
+                                <select class="form-control" name="health_condition">
+                                    <option value="" selected class="font-italic">All</option>
+                                    @foreach($healthConditions as $healthCondition)
+                                        <option value="{{ $healthCondition->id }}" {{ Request::get('health_condition') == $healthCondition->id ? 'selected' : '' }}>{{ $healthCondition->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="card">
             <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Title</th>
-                            <th>Slug</th>
-                            <th>Description</th>
-                            <th>Tags</th>
+                            <th>Image</th>
+
                             <th>Cuisine</th>
                             <th>Meal Type</th>
                             <th>Calories</th>
-                            <th>Total Fat</th>
-                            <th>Saturated Fat</th>
-                            <th>Sodium</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -48,17 +127,21 @@
                         @if (!empty($recipes))
                             @foreach ($recipes as $recipe)
                                 <tr>
-                                    <td>{{ $recipe->id }}</td>
                                     <td><a href="#">{{ $recipe->title }}</a></td>
-                                    <td>{{ $recipe->slug }}</td>
-                                    <td>{{ $recipe->description }}</td>
-                                    <td>{{ $recipe->tags }}</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            @if (!empty($recipe->images) && count($recipe->images) > 0)
+                                                    <img src="{{ asset('uploads/recipes/small/' . $recipe->images->last()->image) }}" class="img-thumbnail mr-2" width="50">
+                                            @else
+                                                <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-thumbnail mr-2" width="50">
+                                            @endif
+
+                                        </div>
+                                    </td>
                                     <td>{{ $recipe->cuisine->name }}</td>
                                     <td>{{ $recipe->meal_type->name }}</td>
                                     <td>{{ $recipe->calories }}</td>
-                                    <td>{{ $recipe->total_fat }}</td>
-                                    <td>{{ $recipe->saturated_fat }}</td>
-                                    <td>{{ $recipe->sodium }}</td>
+
                                     <td>
                                         @if ($recipe->status == 1)
                                             <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">

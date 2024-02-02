@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Allergen;
+use App\Models\AllergenRecipe;
 use App\Models\Cuisine;
+use App\Models\HealthCondition;
+use App\Models\HealthConditionRecipe;
+use App\Models\Ingredient;
 use App\Models\Recipe;
 use App\Models\MealType;
+use App\Models\RecipeCategory;
 use App\Models\RecipeImage;
-use App\Models\RecipeTag;
-use App\Models\Tag;
+use App\Models\RecipeIngredient;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -18,39 +23,89 @@ use Illuminate\Support\Str;
 
 class RecipeController extends Controller
 {
+
     public function index(Request $request)
     {
-        $recipes = Recipe::with(['meal_type', 'cuisine', 'images']);
+        $recipes = Recipe::with(['meal_type', 'cuisine', 'images'])->orderBy('title', 'ASC');
+        $allergens = Allergen::orderBy('name', 'ASC')->get();
+        $mealTypes = MealType::orderBy('name', 'ASC')->get();
+        $cuisines = Cuisine::orderBy('name', 'ASC')->get();
+        $healthConditions = HealthCondition::orderBy('name', 'ASC')->get();
+        $categories = RecipeCategory::orderBy('name', 'ASC')->get();
 
-        if ($request->get('keyword')) {
-            $recipes = $recipes->where('recipes.title', 'like', '%' . $request->get('keyword') . '%');
+        if ($request->get('keyword') != '') {
+            $recipes = $recipes->where('recipes.title', 'like', '%' . $request->input('keyword') . '%');
         }
 
-        $recipes = $recipes->paginate(10);
+        // $categoryId = RecipeCategory::where('slug', 'smoothie')->first()->id;
 
-        return view("admin.recipes.list", compact('recipes'));
+        // $recipes->where('title', 'like', '%smoothie%')->each(function ($recipe) use ($categoryId) {
+        //     $recipe->category_id = $categoryId;
+        //     $recipe->save();
+        // });
+
+
+        // Filter by category
+        if ($request->get('category') != '') {
+            $recipes = $recipes->where('category_id', $request->input('category'));
+        }
+
+        // Filter by meal_type
+        if ($request->get('meal_type') != '') {
+            $recipes = $recipes->where('meal_type_id', $request->input('meal_type'));
+        }
+
+        // Filter by cuisine
+        if ($request->get('cuisine') != '') {
+            $recipes = $recipes->where('cuisine_id', $request->input('cuisine'));
+        }
+
+        // Filter by allergens
+        if ($request->get('allergen') != '') {
+            $recipes = $recipes->whereHas('allergenRecipes', function ($query) use ($request) {
+                $query->where('allergen_id', $request->input('allergen'));
+            });
+        }
+
+        // Filter by healthConditions
+        if ($request->get('health_condition') != '') {
+            $recipes = $recipes->whereHas('healthConditionRecipes', function ($query) use ($request) {
+                $query->where('health_condition_id', $request->input('health_condition'));
+            });
+        }
+
+        $recipes = $recipes->doesntHave('images')->paginate(10);
+
+        return view("admin.recipes.list", compact('recipes', 'allergens', 'mealTypes', 'cuisines', 'healthConditions','categories'));
     }
+
 
     public function create(){
         $mealTypes = MealType::orderBy('name','ASC')->get();
         $cuisines = Cuisine::orderBy('name','ASC')->get();
+        $allergens = Allergen::orderBy('name','ASC')->get();
+        $healthConditions = HealthCondition::orderBy('name','ASC')->get();
+        $ingredients = Ingredient::orderBy('name','ASC')->get();
 
-        return view("admin.recipes.create", compact('cuisines','mealTypes'));
+        return view("admin.recipes.create", compact('cuisines','mealTypes','allergens','healthConditions','ingredients'));
     }
 
     public function store(Request $request){
-
         $rules = [
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:recipes',
             'description' => 'nullable|string',
-            'tags' => 'nullable|string',
+            'tags' => 'nullable|array',
+            'steps'=>'required|array',
+            'ingredients' => 'required|array',
             'cuisine_id' => 'required|exists:cuisines,id',
             'meal_type_id' => 'required|exists:meal_types,id',
-            'calories' => 'nullable|numeric|min:0',
-            'total_fat' => 'nullable|numeric|min:0',
-            'saturated_fat' => 'nullable|numeric|min:0',
-            'sodium' => 'nullable|numeric|min:0',
+            'calories' => 'required|numeric|min:0',
+            'total_fat' => 'required|numeric|min:0',
+            'saturated_fat' => 'required|numeric|min:0',
+            'sugar' => 'required|numeric|min:0',
+            'carbohydrates' => 'required|numeric|min:0',
+            'protein' => 'required|numeric|min:0',
             'status' => 'required|in:0,1',
         ];
 
@@ -63,14 +118,19 @@ class RecipeController extends Controller
                 $request->only(
                     'title',
                     'slug',
+                    'minutes',
                     'description',
                     'tags',
+                    'steps',
                     'cuisine_id',
                     'meal_type_id',
                     'calories',
+                    'carbohydrates',
+                    'protein',
                     'total_fat',
                     'saturated_fat',
                     'sodium',
+                    'sugar',
                     'status'
                 )
             );
@@ -113,34 +173,35 @@ class RecipeController extends Controller
 
 
             }
+            if(!empty($request->allergens)){
+                foreach($request->allergens as $allergen){
+                    AllergenRecipe::create([
+                        'recipe_id' => $recipeId,
+                        'allergen_id' => $allergen
+                    ]);
+                }
+            }
 
-            $tagArray = $request->input('tags', []);
-            if(!empty($tagArray)){
-                foreach($request->tags as $tag){
-                    $slug = Str::slug($tag);
+            if(!empty($request->healthConditions)){
+                foreach($request->healthConditions as $healthCondition){
+                    HealthConditionRecipe::create([
+                        'recipe_id' => $recipeId,
+                        'health_condition_id' => $healthCondition
+                    ]);
+                }
+            }
 
-                    $newTag = Tag::updateOrCreate([
-                        'slug'=> $slug,
+            foreach($request->ingredients as $ingredient){
+
+                RecipeIngredient::updateOrCreate(
+                    [
+                        'ingredient_id' => $ingredient,
+                        'recipe_id' => $recipe->id
                     ],
                     [
-                        'name'=> $tag,
-                        'slug' => $slug
-                    ]);
-
-                    RecipeTag::updateOrCreate(
-                        [
-                            'recipe_id' => $recipeId,
-                            'tag_id' => $newTag->id, // Use tag ID here
-                        ],
-                        [
-                            'recipe_id' => $recipeId,
-                            'tag_id' => $newTag->id, // Use tag ID here
-                        ]
-                    );
-
-                }
-
-
+                        // Add additional fields if needed
+                    ]
+                );
             }
 
             session()->flash('success','Recipe created successfully');
@@ -162,8 +223,10 @@ class RecipeController extends Controller
 
     public function edit($recipeId, Request $request){
 
-        $recipe = Recipe::find($recipeId);
-
+        $recipe = Recipe::with('allergenRecipes')->with('healthConditionRecipes')->with('recipeIngredients')->find($recipeId);
+        $ingredients = Ingredient::orderBy('name','ASC')->get();
+        $totalIngredients = $ingredients->count();
+        // dd($totalIngredients);
         if(empty($recipe)){
             session()->flash('error','Recipe not found');
 
@@ -174,25 +237,29 @@ class RecipeController extends Controller
 
         $mealTypes = MealType::orderBy('name','ASC')->get();
         $cuisines = Cuisine::orderBy('name','ASC')->get();
+        $allergens = Allergen::orderBy('name','ASC')->get();
+        $healthConditions = HealthCondition::orderBy('name','ASC')->get();
+        $categories = RecipeCategory::orderBy('name','ASC')->get();
 
-        return view("admin.recipes.edit", compact('mealTypes','cuisines', 'recipe','images'));
+        return view("admin.recipes.edit", compact('mealTypes','categories','ingredients','cuisines', 'recipe','images','allergens','healthConditions'));
     }
 
-    public function update($recipeId, Request $request){
+    public function update($recipeId, Request $request)
+    {
         $recipe = Recipe::find($recipeId);
-        if(empty($recipe)){
-            session()->flash('error','Recipe not found');
 
-
-            return redirect()->route('recipes.index')->with('error','Recipe not found');
+        if (empty($recipe)) {
+            session()->flash('error', 'Recipe not found');
+            return redirect()->route('recipes.index')->with('error', 'Recipe not found');
         }
-
 
         $rules = [
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:recipes,slug,'.$recipe->id.',id',
+            'slug' => 'required|string|max:255|unique:recipes,slug,' . $recipe->id . ',id',
             'description' => 'nullable|string',
-            'tags' => 'nullable|string',
+            'tags' => 'nullable|array',
+            'steps' => 'required|array',
+            'ingredients' => 'required|array',
             'cuisine_id' => 'required|exists:cuisines,id',
             'meal_type_id' => 'required|exists:meal_types,id',
             'calories' => 'nullable|numeric|min:0',
@@ -200,43 +267,82 @@ class RecipeController extends Controller
             'saturated_fat' => 'nullable|numeric|min:0',
             'sodium' => 'nullable|numeric|min:0',
             'status' => 'required|in:0,1',
+            'sugar' => 'required|numeric|min:0',
+            'carbohydrates' => 'required|numeric|min:0',
+            'protein' => 'required|numeric|min:0',
         ];
 
+        $validator = Validator::make($request->all(), $rules);
 
+        if ($validator->passes()) {
+            $recipe->update($request->only(
+                'title',
+                'slug',
+                'minutes',
+                'description',
+                'tags',
+                'steps',
+                'cuisine_id',
+                'meal_type_id',
+                'calories',
+                'carbohydrates',
+                'protein',
+                'total_fat',
+                'saturated_fat',
+                'sodium',
+                'sugar',
+                'status'
+            ));
+            foreach($request->ingredients as $ingredient){
 
-        $validator = Validator::make($request->all(),$rules);
+                RecipeIngredient::updateOrCreate(
+                    [
+                        'ingredient_id' => $ingredient,
+                        'recipe_id' => $recipe->id
+                    ],
+                    [
+                        // Add additional fields if needed
+                    ]
+                );
 
-        if ($validator->passes()){
-            $recipe->update(
-                $request->only(
-                    'title',
-                    'slug',
-                    'description',
-                    'tags',
-                    'cuisine_id',
-                    'meal_type_id',
-                    'calories',
-                    'total_fat',
-                    'saturated_fat',
-                    'sodium',
-                    'status'
-                )
-            );
+            }
 
-            session()->flash('success','Recipe updated successfully');
+            // Delete existing relationships
+            $recipe->allergenRecipes()->delete();
+            $recipe->healthConditionRecipes()->delete();
+
+            // Create new relationships
+            if (!empty($request->allergens)) {
+
+                $recipe->allergenRecipes()->createMany(
+                    collect($request->allergens)->map(function ($allergen) use ($request) {
+                        return ['allergen_id' => $allergen, 'status' => $request->input('status', 1)];
+                    })->all()
+                );
+
+            }
+
+            if (!empty($request->healthConditions)) {
+                $recipe->healthConditionRecipes()->createMany(
+                    collect($request->healthConditions)->map(function ($healthCondition) use ($request) {
+                        return ['health_condition_id' => $healthCondition, 'status' => $request->input('status', 1)];
+                    })->all()
+                );
+
+            }
+
+            session()->flash('success', 'Recipe updated successfully');
 
             return response()->json([
                 'status' => true,
-                'message'=> 'Recipe updated successfully.'
+                'message' => 'Recipe updated successfully.'
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors(),
             ]);
         }
-
-
     }
 
     public function destroy($recipeId, Request $request){

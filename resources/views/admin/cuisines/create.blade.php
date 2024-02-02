@@ -20,7 +20,7 @@
 <section class="content">
     <!-- Default box -->
     <div class="container-fluid">
-        <form action="" id="brandForm" name="brandForm">
+        <form action="" id="cuisineForm" name="cuisineForm">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -66,9 +66,9 @@
 @section('customJs')
 <script>
 
-$("#brandForm").submit(function(event){
+$("#cuisineForm").submit(function(event){
     event.preventDefault();
-    var element = $("#brandForm");
+    var element = $("#cuisineForm");
     $("button[type=submit]").prop('disabled',true);
 
     $.ajax({

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\RecipeImage;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
 
 class RecipeImageController extends Controller
 {
@@ -30,16 +30,18 @@ class RecipeImageController extends Controller
         //Generate Recipe Thumbnail
         //Large Image
         $destinationPath = public_path().'/uploads/recipes/large/'.$imageName;
-        $image = Image::make($sourcePath);
-        $image->resize(1400,null, function ($constraint) {
-            $constraint->aspectRatio();
-        });
+        // Create an instance of the ImageManager
+
+        // Load the image
+        $image = ImageManager::gd()->read($sourcePath);
+        // scale the image
+        $image->scale(height:1400);
         $image->save($destinationPath);
 
         //Small Image
         $destinationPath = public_path().'/uploads/recipes/small/'.$imageName;
-        $image = Image::make($sourcePath);
-        $image->fit(300,300);
+        $image = ImageManager::gd()->read($sourcePath);
+        $image->resize(300,300);
         $image->save($destinationPath);
 
         return response()->json([

@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use App\Models\MealType;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Session;
 use Intervention\Image\ImageManager;
 
 class MealTypeController extends Controller

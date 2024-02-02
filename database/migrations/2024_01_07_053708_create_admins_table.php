@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->string('email')->unique();
             $table->string('phone_number')->unique();
             $table->integer('role')->default(1);
             $table->string('password');

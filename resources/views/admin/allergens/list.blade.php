@@ -8,9 +8,9 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1>Allergens</h1>
-            </div>e
+            </div>
             <div class="col-sm-6 text-right">
-                <a href="{{ route("allergens.create") }}" class="btn btn-primary">New Sub Category</a>
+                <a href="{{ route("allergens.create") }}" class="btn btn-primary">New</a>
             </div>
         </div>
     </div>
@@ -45,7 +45,6 @@
                 <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
-                            <th width="60">ID</th>
                             <th>Name</th>
                             <th>Slug</th>
                             <th width="100">Status</th>
@@ -56,7 +55,6 @@
                         @if($allergens->isNotEmpty())
                             @foreach ( $allergens as $allergen)
                             <tr>
-                                <td>{{ $allergen->id }}</td>
                                 <td>{{ $allergen->name }}</td>
                                 <td>{{ $allergen->slug }}</td>
                                 <td>

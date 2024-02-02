@@ -40,6 +40,13 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
+                                <label for="email">Email</label>
+                                <input type="text" name="email" id="email" class="form-control" placeholder="Email">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
                                 <label for="password">Password</label>
                                 <input type="password" name="password" id="password" class="form-control" placeholder="Password" autocomplete="off" value="">
                                 <p></p>
@@ -121,6 +128,11 @@ $("#adminForm").submit(function(event){
                 .siblings('p')
                 .removeClass('invalid-feedback')
                 .html("");
+
+                $("#email").removeClass('is-invalid')
+                .siblings('p')
+                .removeClass('invalid-feedback')
+                .html("");
             }else{
 
                 var errors=response['errors'];
@@ -131,6 +143,18 @@ $("#adminForm").submit(function(event){
                     .html(errors['name']);
                 }else{
                     $("#name").removeClass('is-invalid')
+                    .siblings('p')
+                    .removeClass('invalid-feedback')
+                    .html("");
+                }
+
+                if(errors['email']){
+                    $("#email").addClass('is-invalid')
+                    .siblings('p')
+                    .addClass('invalid-feedback')
+                    .html(errors['email']);
+                }else{
+                    $("#email").removeClass('is-invalid')
                     .siblings('p')
                     .removeClass('invalid-feedback')
                     .html("");

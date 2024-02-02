@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 
 use App\Models\PasswordResetToken;
 use App\Models\User;
+use App\Models\UserProfile;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -21,59 +21,32 @@ class AuthController extends Controller
     public function processRegister(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3',
+            'email'=> 'required|email|unique:users',
             'phone_number' => 'required|unique:users',
+            'password' => 'required|confirmed',
         ]);
-        $password = Str::random(8);
 
         if ($validator->passes()){
             $user = User::create([
                 'name' => $request->name,
+                'email'=> $request->email,
                 'phone_number' => $request->phone_number,
-                'password' => $password
+                'password' => $request->password
                 ]);
             if($user){
-                try {
+                $token = $user->createToken('auth_token')->accessToken;
 
-                    $client = new Client();
-                    $response = $client->post('https://sms.aakashsms.com/sms/v3/send', [
-                        'form_params' => [
-                            'auth_token' => 'c1eecbd817abc78626ee119a530b838ef57f8dad9872d092ab128776a00ed31d',
-                            'to' => $user->phone_number,
-                            'text' => "You have successfully registered in Look Me Cosmetics. Your password is: $password"
-                        ],
-                    ]);
+                return response()->json([
+                    'status'=> true,
+                    'user' => $user,
+                    'token' => $token,
+                ]);
 
-                    if ($response->getStatusCode() === 200) {
-                        Auth::login($user);
-                        $user = Auth::user();
-                        // $token = $user->createToken('auth_token')->plainTextToken;
-
-
-                        $message = 'You have registered successfully. Your auto-generated password is sent to your phone number. You can reset it.';
-
-                        return response()->json([
-                            'status'=> true,
-                            'user' => $user,
-                            // 'token' => $token,
-                        ]);
-
-                    } else {
-                        $message = 'Failed to register.';
-                        User::where('id', $user->id)->first()->delete();
-                        return response()->json(['error' => $message, 'status' => false]);
-                    }
-                } catch (\Exception $e) {
-                    $message = 'Failed to send SMS. Check your Internet Connection.';
-                    User::where('id', $user->id)->first()->delete();
-                    return response()->json(['error' => 'Failed to send SMS: ' . $e->getMessage(), 'message' => $message]);
-                }
             }else{
                 return response()->json([
-                    'status'=> false,
-                    'errors'=> 'Some errors in registering'
+                    'status' => false
                 ]);
             }
-
 
         }else{
             return response()->json([
@@ -84,51 +57,72 @@ class AuthController extends Controller
     }
 
     public function authenticate(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            "phone_number" => "required|string",
-            "password" => "required"
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        "phone_number" => "required|string",
+        "password" => "required"
+    ]);
 
-        if ($validator->passes()) {
-            if (Auth::attempt([
-                'phone_number' => $request->phone_number,
-                'password' => $request->password
-            ], $request->get('remember'))) {
-                $user = Auth::user();
-                // $token = $user->createToken('auth_token')->plainTextToken;
+    if ($validator->passes()) {
+        $user = User::where('phone_number', $request->phone_number)->first();
 
-                return response()->json(['user' => $user,
-                //  'token' => $token,
-                 'status'=>true]);
-
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'errors' => "Phone Number is incorrect."
+            ]);
+        } else {
+            // Use Hash::check to compare the provided password with the hashed password in the database
+            if (Hash::check($request->password, $user->password)) {
+                $token = $user->createToken('auth_token')->accessToken;
+                $userProfile = UserProfile::with('weightPlan')->where('user_id',$user->id)->first();
+                if(empty($userProfile)){
+                    return response()->json([
+                        'status' => false,
+                        'errors' => "Profile not setup."
+                    ]);
+                }
+                $userCuisines = $user->cuisines()->get();
+                $userHealthConditions = $user->healthConditions()->get();
+                $userAllergens = $user->allergens()->get();
+                return response()->json([
+                    'status' => true,
+                    'user' => $user,
+                    'token' => $token,
+                    'userProfile'=>$userProfile,
+                    'userCuisines' => $userCuisines,
+                    'userHealthConditions' => $userHealthConditions,
+                    'userAllergens' => $userAllergens
+                ]);
             } else {
                 return response()->json([
-                    'status'=> false,
-                    'errors'=> 'Your phone number or password is incorrect.'
+                    'status' => false,
+                    'errors' => "Password incorrect."
                 ]);
             }
-        } else {
+        }
+    } else {
+        return response()->json([
+            'status' => false,
+            'errors' => $validator->errors()
+        ]);
+    }
+}
+
+    public function logout(Request $request){
+        try {
+            $request->user()->token()->revoke();
             return response()->json([
-                'status'=> false,
-                'errors'=> $validator->errors()
+                'status' => true
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'error' => $e
             ]);
         }
     }
 
-
-
-    public function logout(){
-        Auth::logout();
-        return redirect()->route('account.login')
-        ->with('success', 'You successfully logged out.');
-    }
-
-
-
-    public function showChangePasswordForm(){
-        return view('front.account.change-password');
-    }
 
     public function changePassword(Request $request){
 
@@ -138,14 +132,12 @@ class AuthController extends Controller
         ]);
 
         if($validator->passes()){
-            $user = User::select('id','password')->where('id',Auth::user()->id)->first();
+            $user = User::where('id',auth()->user()->id)->first();
             if(Hash::check($request->old_password,$user->password)){
-                $user = User::where('id',$user->id)->update([
-                    'password' => bcrypt($request->password),
-                ]);
+                $user->password = Hash::make($request->password);
+                $user->save();
 
                 $message = 'Password updated successfully!';
-                session()->flash('success', $message);
 
                 return response()->json([
                     'status'=> true,
@@ -153,22 +145,23 @@ class AuthController extends Controller
                 ]);
             }else{
                 $message = 'Old password is incorrect. Please try again.';
-                session()->flash('error', $message);
                 return response()->json([
-                    'status'=> true,
-                    'error'=> $message
+                    'status'=> false,
+                    'error'=> Hash::make($request->old_password)
                 ]);
             }
 
 
         }else{
-            return redirect()->route('front.forgotPassword')->withInput()->withErrors($validator);
+            $message = 'Old password is incorrect. Please try again.';
+            return response()->json([
+                'status'=> false,
+                'errors'=> $validator->errors()
+            ]);
         }
     }
-
-
-    public function showForgotPasswordForm(){
-        return view('front.account.forgot-password');
+    public function resetPasswordForm(Request $request){
+        return view('reset-password');
     }
 
     public function sendcode(Request $request)
@@ -186,10 +179,11 @@ class AuthController extends Controller
         ]);
         if ($validator->fails()) {
 
-            return redirect()->back()
-            ->with('error', 'Phone Number is incorrect')
-            ->withErrors($validator)
-            ->withInput($request->only('phone_number'));
+            return response()->json([
+                'status'=> false,
+                'errors'=> $validator->errors()
+            ]);
+
 
         }else{
 
@@ -210,51 +204,58 @@ class AuthController extends Controller
                 ]);
             try {
                 $client = new Client();
+                $queryParams = http_build_query(['phone_number' => $phone_number, 'code' => $code]);
+                $resetRoute = url('reset-password') . '?' . $queryParams;
                 $response = $client->post('https://sms.aakashsms.com/sms/v3/send', [
                     'form_params' => [
                         'auth_token' => 'c1eecbd817abc78626ee119a530b838ef57f8dad9872d092ab128776a00ed31d',
                         'to' => $phone_number,
-                        'text' => "Your verification code is: $code",
+                        'text' => "You can change your password here: $resetRoute",
                     ],
                 ]);
 
                 if ($response->getStatusCode() === 200) {
                     $message = 'Verification code sent successfully';
-                    return redirect()->route('account.showVerificationCodeForm')->with('phone_number', $phone_number);
+                    return response()->json([
+                        'status'=> true,
+                        'message'=> $message
+                    ]);
                 } else {
-                    return redirect()->back()
-                    ->with('error', 'Failed to send verification code');
+                    return response()->json([
+                        'status'=> false,
+                        'error'=> 'Failed to send verification code'
+                    ]);
                 }
             } catch (\Exception $e) {
                 $message = 'Failed to send verification code. Check your Internet Connection.';
-                return redirect()->back()->with('error', $message);
+                return response()->json([
+                    'status'=> false,
+                    'errors'=> $message
+                ]);
             }
         }
 
 
     }
 
-    public function showVerificationCodeForm(){
-        return view('front.account.verify-code');
-    }
-
-    public function verifyCode(Request $request)
+    public function resetPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'phone_number' => ['required', 'numeric'],
             'code' => ['required', 'numeric'],
+            'password'=> 'required|confirmed|min:5',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()
-            ->with('error', 'Both code and phone_number are required')
-            ->withErrors($validator)
-            ->withInput($request->only('phone_number'));
+            return response()->json([
+                'status'=> false,
+                'errors'=> $validator->errors()
+            ]);
 
         }
 
-        $phone_number = $request->input('phone_number');
-        $code = $request->input('code');
+        $phone_number = $request->phone_number;
+        $code = $request->code;
 
         $verificationRecord = DB::table('password_reset_tokens')
             ->where('phone_number', $phone_number)
@@ -264,6 +265,11 @@ class AuthController extends Controller
             $message =  'Verification code is missing.';
             return redirect()->back()->with('error', $message);
 
+            // return response()->json([
+            //     'status'=> false,
+            //     'error'=> $message
+            // ]);
+
         }else{
             $storedcode = $verificationRecord->code;
 
@@ -272,10 +278,34 @@ class AuthController extends Controller
                     $message =  'Verification code is expired.';
                     return redirect()->back()->with('error', $message);
 
+                    // return response()->json([
+                    //     'status'=> true,
+                    //     'message'=> $message
+                    // ]);
                 }else{
 
-                    $message = 'Verification code is successful';
-                    return redirect()->route('account.showResetPasswordForm')->with('phone_number', $phone_number);
+                    $user = User::where('phone_number', $request->phone_number)->first();
+                    if (!$user) {
+                        $message = 'User with the given phone number not found! Try again';
+                        return redirect()->back()->with('error', $message);
+
+                        // return response()->json([
+                        //     'status'=> false,
+                        //     'message'=> $message
+                        // ]);
+
+                    }else{
+                        $user->password = Hash::make($request->password);
+                        $user->save();
+
+                        $message ='Password successfully reset.';
+                        return redirect()->back()->with('success', $message);
+
+                        // return response()->json([
+                        //     'status'=> true,
+                        //     'message'=> $message
+                        // ]);
+                    }
 
                 }
 
@@ -283,43 +313,115 @@ class AuthController extends Controller
                 $message = 'Invalid verification code. Try regenerating again.';
                 return redirect()->back()->with('error', $message);
 
+                // return response()->json([
+                //     'status'=> false,
+                //     'error'=> $message
+                // ]);
+
             }
         }
 
 
     }
 
-    public function showResetPasswordForm(){
-        return view('front.account.password-input');
-    }
+    public function updateInfo(Request $request){
+        $userId = auth()->user()->id;
 
-    public function resetPassword(Request $request){
+        if(!$userId){
+            return response()->json([
+                'error'=> 'User not found',
+                'status'=>false
+            ]);
+        }
+
         $validator = Validator::make($request->all(), [
-            'password'=> 'required|confirmed|min:5',
-            'phone_number' => 'required'
+            'name' => 'required|min:3',
+            'phone_number' => 'required|unique:users,phone_number,' . $userId . ',id',
+            'email' => 'required|email|unique:users,email,' . $userId . ',id',
+
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->with('error','Failed validation. Try again.');
+        if($validator->passes()){
+
+            $user = User::find($userId);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->phone_number = $request->phone_number;
+            $user->save();
+
+            $message = 'Profile updated successfully';
+
+            return response()->json([
+                'status' => true,
+                'user' => $user
+            ]);
+
         }else{
-            $user = User::where('phone_number', $request->phone_number)->first();
-            if (!$user) {
-                return redirect()->route('account.showForgotPasswordForm')->with('error','User with the given phone number not found! Try again');
-
-            }else{
-                $user->password = Hash::make($request->password);
-                $user->save();
-                if($user->role == 1){
-                    return redirect()->route('account.login')->with('success','Password successfully reset.');
-
-                }else{
-                    return redirect()->route('admin.login')->with('success','Password successfully reset.');
-
-                }
-            }
-
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
         }
+
+
     }
+
+    public function completeProfile(Request $request){
+        $userId = auth()->user()->id;
+
+        if(!$userId){
+            return response()->json([
+                'error'=> 'User not found',
+                'status'=>false
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'height' => 'required',
+            'weight' => 'required',
+            'waist' => 'required',
+            'hips'=> "required",
+            'targeted_weight' => "required",
+            'age'=> 'required',
+            'gender' => 'required'
+        ]);
+
+        if($validator->passes()){
+
+            $userProfile = UserProfile::updateOrCreate(
+                ['user_id' => $userId],
+                [
+                    'height' => $request->height,
+                    'weight' => $request->weight,
+                    'waist' => $request->waist,
+                    'hips' => $request->hips,
+                    'bust' => $request->bust,
+                    'targeted_weight' => $request->targeted_weight,
+                    'gender' => $request->gender,
+                    'age' => $request->age
+                ]
+            );
+            // Assuming $userProfile is an instance of UserProfile
+            $weightPlan = $userProfile->weightPlan; // Correct
+
+            $message = 'Profile completed successfully';
+
+            return response()->json([
+                'status' => true,
+                'userProfile' => $userProfile,
+                'weightPlan' => $weightPlan
+            ]);
+
+        }else{
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+
+    }
+
+
 
 }
 

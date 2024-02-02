@@ -47,6 +47,7 @@ class AdminController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name'=> 'required|min:3',
+            'email'=> 'required|unique:admins,email|email',
             'phone_number'=> 'required|unique:admins,phone_number',
             'password' => 'required|confirmed|min:5'
         ]);
@@ -111,6 +112,8 @@ class AdminController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name'=> 'required|min:3',
+            'email'=> 'required|email|unique:admins,email,'. $id . ',id',
+
             'phone_number'=> 'required|unique:admins,phone_number,'. $id . ',id',
             'password' => 'nullable|confirmed|min:5'
         ]);

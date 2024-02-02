@@ -43,7 +43,7 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="description">Description</label>
-                                        <textarea name="description" id="description" cols="30" rows="10" class="summernote" placeholder="Description"></textarea>
+                                        <textarea name="description" id="description" class="form-control" rows="5" placeholder="Description"></textarea>
                                         <p></p>
                                     </div>
                                 </div>
@@ -63,41 +63,65 @@
                     <div class="row" id="recipe-gallery">
 
                     </div>
+
                     <div class="card mb-3">
                         <div class="card-body">
                             <h2 class="h4 mb-3">Nutrients</h2>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label for="price">Calories</label>
+                                        <label for="calories">Calories</label>
                                         <input type="float" name="calories" id="calories" class="form-control" placeholder="Calories">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label for="price">Protein</label>
+                                        <label for="protein">Protein</label>
                                         <input type="float" name="protein" id="protein" class="form-control" placeholder="Protein">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label for="price">Total Fat</label>
+                                        <label for="total_fat">Total Fat</label>
                                         <input type="float" name="total_fat" id="total_fat" class="form-control" placeholder="Total Fat">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label for="price">Saturated Fat</label>
+                                        <label for="saturated_fat">Saturated Fat</label>
                                         <input type="float" name="saturated_fat" id="saturated_fat" class="form-control" placeholder="Saturated Fat">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label for="price">Sodium</label>
+                                        <label for="sodium">Sodium</label>
                                         <input type="float" name="sodium" id="sodium" class="form-control" placeholder="Sodium">
                                     </div>
                                 </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="carbohydrates">Carbohydrates</label>
+                                        <input type="float" name="carbohydrates" id="carbohydrates" class="form-control" placeholder="Carbohydrates">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="sugar">Sugar</label>
+                                        <input type="float" name="sugar" id="sugar" class="form-control" placeholder="Sugar">
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+
+
+                    </div>
+
+                    <div id="card">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">Steps</h2>
+                            <ul id="step-list" class="list-group">
+
+                            </ul>
                         </div>
                     </div>
 
@@ -145,15 +169,73 @@
                         </div>
                     </div>
 
-                    <div id="card">
+                    <div class="card">
                         <div class="card-body">
-                            <h2 class="h4 mb-3">Tags</h2>
-                            <div id="tag-container">
-                                <input type="hidden" name="tags" id="tagsInput" value="">
+                            <h2 class="h4 mb-3">Allergen Recommendation</h2>
+                            <div class="mb-3">
+                                <label for="allergens">Allergens</label>
+
+                                <!-- Loop through allergens and create checkbox inputs -->
+                                @if(!empty($allergens))
+                                    @foreach ($allergens as $allergen)
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input type="checkbox" id="allergen{{ $allergen->id }}" name="allergens[]" value="{{ $allergen->id }}" aria-label="Checkbox for following text input">
+                                                </div>
+                                            </div>
+                                            <label class="form-control" for="allergen{{ $allergen->id }}">{{ $allergen->name }}</label>
+                                        </div>
+                                    @endforeach
+                                @endif
+
+                                <p></p>
                             </div>
                         </div>
                     </div>
 
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">Health Condition Recommendation</h2>
+                            <div class="mb-3">
+                                <label for="healthConditions">Health Conditions</label>
+
+                                <!-- Loop through healthConditions and create checkbox inputs -->
+                                @if(!empty($healthConditions))
+                                    @foreach ($healthConditions as $healthCondition)
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input type="checkbox" id="healthCondition{{ $healthCondition->id }}" name="healthConditions[]" value="{{ $healthCondition->id }}" aria-label="Checkbox for following text input">
+                                                </div>
+                                            </div>
+                                            <label class="form-control" for="healthCondition{{ $healthCondition->id }}">{{ $healthCondition->name }}</label>
+                                        </div>
+                                    @endforeach
+                                @endif
+
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="card">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">Tags</h2>
+                            <ul id="tag-list" class="list-group">
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="card">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">Ingredients</h2>
+                            <ul id="ingredient-list" class="list-group">
+
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -260,8 +342,6 @@
         var formArray = $(this).serializeArray();
         $("button[type=submit]").prop('disabled',true);
 
-        // Include the tags from the hidden input field in the form data
-        formArray.push({ name: "tags", value: $("#tagsInput").val() });
 
         $.ajax({
             url: '{{ route("recipes.store") }}',
@@ -319,93 +399,389 @@
         })
     })
 
+
+    //Steps
     document.addEventListener("DOMContentLoaded", function () {
-    const tagContainer = document.getElementById("tag-container");
-    const tagsArray = [];
+        const stepList = document.getElementById("step-list");
+        let stepIndex = 1;
 
-    function createTagInput() {
-        const outerCardDiv = document.createElement("div");
-        outerCardDiv.classList.add("card", "mb-3");
+        if(stepList){
 
-        const outerCardBodyDiv = document.createElement("div");
-        outerCardBodyDiv.classList.add("card-body");
+        function createStepItem() {
+            const stepItem = document.createElement("li");
+            stepItem.classList.add("list-group-item");
 
-        const tagInputDiv = document.createElement("div");
-        tagInputDiv.classList.add("input-group", "mb-3");
+            const stepTextarea = document.createElement("textarea");
+            stepTextarea.classList.add("form-control", "mb-2");
+            stepTextarea.setAttribute("name", `steps[${stepIndex}]`);
+            stepTextarea.setAttribute("placeholder", "Enter step");
+            stepIndex++;
 
-        const tagInput = document.createElement("input");
-        tagInput.classList.add("form-control");
-        tagInput.setAttribute("type", "text");
-        tagInput.setAttribute("placeholder", "Enter tag");
-        tagInput.addEventListener("input", function () {
-            this.value = this.value.toLowerCase(); // Convert to lowercase
-        });
+            const buttonGroup = document.createElement("div");
+            buttonGroup.classList.add("btn-group");
 
-        const addTagIconContainer = document.createElement("div");
-        addTagIconContainer.classList.add("input-group-append");
+            const addButton = document.createElement("button");
+            addButton.classList.add("btn", "btn-success", "drag-handle");
+            addButton.setAttribute("type", "button"); // Set type to button
+            addButton.innerHTML = '<i class="fas fa-bars"></i>';
+            addButton.addEventListener("click", function () {
+                createStepItemAfter(stepItem);
+            });
 
-        const addTagIcon = document.createElement("button");
-        addTagIcon.classList.add("btn", "btn-success", "rounded-circle", "ml-2");
-        addTagIcon.type = "button";
-        addTagIcon.innerHTML = '<i class="fas fa-plus"></i>';
-        addTagIcon.addEventListener("click", function () {
-            const tagValue = tagInput.value.trim();
-            if (tagValue !== "") {
-                tagsArray.push(tagValue);
-                createTagElement(tagValue);
-            }
-            tagInput.value = "";
-        });
+            const deleteButton = document.createElement("button");
+            addButton.setAttribute("type", "button"); // Set type to button
+            deleteButton.classList.add("btn", "btn-danger");
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener("click", function () {
+                removeStepItem(stepItem);
+            });
 
-        tagInputDiv.appendChild(tagInput);
-        addTagIconContainer.appendChild(addTagIcon);
-        tagInputDiv.appendChild(addTagIconContainer);
-        outerCardBodyDiv.appendChild(tagInputDiv);
-        outerCardDiv.appendChild(outerCardBodyDiv);
-        tagContainer.appendChild(outerCardDiv);
+            buttonGroup.appendChild(addButton);
+            buttonGroup.appendChild(deleteButton);
+
+            stepItem.appendChild(stepTextarea);
+            stepItem.appendChild(buttonGroup);
+
+            stepList.appendChild(stepItem);
+
+            setupSortable();
+        }
+
+        function createStepItemAfter(targetItem) {
+            const stepItem = document.createElement("li");
+            stepItem.classList.add("list-group-item");
+
+            const stepTextarea = document.createElement("textarea");
+            stepTextarea.classList.add("form-control", "mb-2");
+            stepTextarea.setAttribute("name", `steps[${stepIndex}]`);
+            stepTextarea.setAttribute("placeholder", "Enter step");
+            stepIndex++;
+
+            const buttonGroup = document.createElement("div");
+            buttonGroup.classList.add("btn-group");
+
+            const addButton = document.createElement("button");
+            addButton.classList.add("btn", "btn-success", "drag-handle");
+            addButton.setAttribute("type", "button"); // Set type to button
+            addButton.innerHTML = '<i class="fas fa-bars"></i>';
+            addButton.addEventListener("click", function () {
+                createStepItemAfter(stepItem);
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("btn", "btn-danger");
+            addButton.setAttribute("type", "button"); // Set type to button
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener("click", function () {
+                removeStepItem(stepItem);
+            });
+
+            buttonGroup.appendChild(addButton);
+            buttonGroup.appendChild(deleteButton);
+
+            stepItem.appendChild(stepTextarea);
+            stepItem.appendChild(buttonGroup);
+
+            // Insert new step item after the target item
+            stepList.insertBefore(stepItem, targetItem.nextSibling);
+
+            // Update indices and setup sortable
+            updateStepIndices();
+            setupSortable();
+        }
+
+
+        function removeStepItem(targetItem) {
+            stepList.removeChild(targetItem);
+            updateStepIndices();
+        }
+
+        function updateStepIndices() {
+            const stepItems = Array.from(stepList.children);
+            stepItems.forEach((item, index) => {
+                const textarea = item.querySelector("textarea");
+                if (textarea) {
+                    textarea.setAttribute("name", `steps[${index + 1}]`);
+                }
+            });
+            stepIndex = stepItems.length + 1;
+        }
+
+        function setupSortable() {
+            new Sortable(stepList, {
+                handle: ".drag-handle",
+                animation: 150,
+                onEnd: updateStepIndices
+            });
+        }
+
+        // Initial step item
+        createStepItem();
+
+
+    }else{
+        console.log('The item with id does not exist');
     }
+    });
 
-    function createTagElement(tagValue) {
-        const tagElement = document.createElement("div");
-        tagElement.classList.add("input-group", "mb-2");
+//Ingredients
+document.addEventListener("DOMContentLoaded", function () {
+    const ingredientList = document.getElementById("ingredient-list");
+    let ingredientIndex = 1;
 
-        const tagSpan = document.createElement("span");
-        tagSpan.classList.add("form-control");
-        tagSpan.textContent = tagValue;
 
-        const deleteTagIconContainer = document.createElement("div");
-        deleteTagIconContainer.classList.add("input-group-append");
+    if (ingredientList) {
+        function createIngredientItem() {
+            const ingredientItem = document.createElement("li");
+            ingredientItem.classList.add("list-group-item");
 
-        const deleteTagIcon = document.createElement("button");
-        deleteTagIcon.classList.add("btn", "btn-danger", "rounded-circle", "ml-2");
-        deleteTagIcon.type = "button";
-        deleteTagIcon.innerHTML = '<i class="fas fa-times"></i>';
-        deleteTagIcon.addEventListener("click", function () {
-            const index = tagsArray.indexOf(tagValue);
-            if (index !== -1) {
-                tagsArray.splice(index, 1);
-                updateTagsInput(); // Update the hidden input field
-            }
-            tagElement.remove();
-        });
+            const ingredientSelect = createIngredientSelect(ingredientItem);
 
-        tagElement.appendChild(tagSpan);
-        deleteTagIconContainer.appendChild(deleteTagIcon);
-        tagElement.appendChild(deleteTagIconContainer);
+            const buttonGroup = createButtonGroup(ingredientItem);
 
-        tagContainer.appendChild(tagElement);
+            ingredientItem.appendChild(ingredientSelect);
+            ingredientItem.appendChild(buttonGroup);
 
-        // Update the hidden input field when a new tag is added
-        updateTagsInput();
+            ingredientList.appendChild(ingredientItem);
+
+            setupSortable();
+        }
+
+        function createIngredientItemAfter(targetItem) {
+            const ingredientItem = document.createElement("li");
+            ingredientItem.classList.add("list-group-item");
+
+            const ingredientSelect = createIngredientSelect(ingredientItem);
+
+            const buttonGroup = createButtonGroup(ingredientItem);
+
+            ingredientItem.appendChild(ingredientSelect);
+            ingredientItem.appendChild(buttonGroup);
+
+            ingredientList.insertBefore(ingredientItem, targetItem.nextSibling);
+
+            updateIngredientIndices();
+            setupSortable();
+        }
+
+        function createIngredientSelect(ingredientItem) {
+            const ingredientSelectHTML = `
+                <select name="ingredients[${ingredientIndex}]" id="ingredient-select-${ingredientIndex}" class="form-control mb-2">
+
+                    @if(!empty($ingredients))
+                        @foreach ($ingredients as $ingredient)
+                            <option value="{{ $ingredient->id }}">{{ $ingredient->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            `;
+
+            const tempContainer = document.createElement("div");
+            tempContainer.innerHTML = ingredientSelectHTML;
+
+            const ingredientSelect = tempContainer.querySelector("select");
+
+            ingredientIndex++;
+
+            return ingredientSelect;
+        }
+
+        function createButtonGroup(ingredientItem) {
+            const buttonGroup = document.createElement("div");
+            buttonGroup.classList.add("btn-group");
+
+            const addButton = document.createElement("button");
+            addButton.classList.add("btn", "btn-success", "drag-handle");
+            addButton.setAttribute("type", "button"); // Set type to button
+            addButton.innerHTML = '<i class="fas fa-bars"></i>';
+            addButton.addEventListener("click", function () {
+                createIngredientItemAfter(ingredientItem);
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("btn", "btn-danger");
+            addButton.setAttribute("type", "button"); // Set type to button
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener("click", function () {
+                removeIngredientItem(ingredientItem);
+            });
+
+            buttonGroup.appendChild(addButton);
+            buttonGroup.appendChild(deleteButton);
+
+            return buttonGroup;
+
+
+        }
+
+
+        function createButton(innerHtml, clickHandler) {
+            const button = document.createElement("button");
+            button.classList.add("btn");
+            button.setAttribute("type", "button");
+            button.innerHTML = innerHtml;
+            button.addEventListener("click", clickHandler);
+            return button;
+        }
+
+        function removeIngredientItem(targetItem) {
+            ingredientList.removeChild(targetItem);
+            updateIngredientIndices();
+        }
+
+        function updateIngredientIndices() {
+            const ingredientItems = Array.from(ingredientList.children);
+            ingredientItems.forEach((item, index) => {
+                const select = item.querySelector("select");
+                if (select) {
+                    select.name = `ingredients[${index + 1}]`;
+                    select.id = `ingredient-select-${index + 1}`;
+                }
+            });
+            ingredientIndex = ingredientItems.length + 1;
+        }
+
+        function setupSortable() {
+            new Sortable(ingredientList, {
+                handle: ".drag-handle",
+                animation: 150,
+                onEnd: updateIngredientIndices
+            });
+        }
+
+        createIngredientItem();
+
+    } else {
+        console.log('The item with id "ingredient-list" does not exist');
     }
-
-    function updateTagsInput() {
-        const tagsInput = document.getElementById("tagsInput");
-        tagsInput.value = tagsArray.join(","); // Convert array to a comma-separated string
-    }
-
-    createTagInput(); // Initial tag input
 });
+
+    //Tags
+    document.addEventListener("DOMContentLoaded", function () {
+        const tagList = document.getElementById("tag-list");
+        let tagIndex = 1;
+        if(tagList){
+
+        function createTagItem() {
+            const tagItem = document.createElement("li");
+            tagItem.classList.add("list-group-item");
+
+            const tagInput = document.createElement("input");
+            tagInput.setAttribute("type", "text"); // Set type to text
+            tagInput.classList.add("form-control", "mb-2");
+            tagInput.setAttribute("name", `tags[${tagIndex}]`);
+            tagInput.setAttribute("placeholder", "Enter tag");
+            tagIndex++;
+
+            const buttonGroup = document.createElement("div");
+            buttonGroup.classList.add("btn-group");
+
+            const addButton = document.createElement("button");
+            addButton.classList.add("btn", "btn-success", "drag-handle");
+            addButton.setAttribute("type", "button"); // Set type to button
+            addButton.innerHTML = '<i class="fas fa-bars"></i>';
+            addButton.addEventListener("click", function () {
+                createTagItemAfter(tagItem);
+            });
+
+            const deleteButton = document.createElement("button");
+            addButton.setAttribute("type", "button"); // Set type to button
+            deleteButton.classList.add("btn", "btn-danger");
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener("click", function () {
+                removeTagItem(tagItem);
+            });
+
+            buttonGroup.appendChild(addButton);
+            buttonGroup.appendChild(deleteButton);
+
+            tagItem.appendChild(tagInput);
+            tagItem.appendChild(buttonGroup);
+
+            tagList.appendChild(tagItem);
+
+            setupSortable();
+        }
+
+        function createTagItemAfter(targetItem) {
+            const tagItem = document.createElement("li");
+            tagItem.classList.add("list-group-item");
+
+            const tagInput = document.createElement("input");
+            tagInput.setAttribute("type", "text"); // Set type to text
+            tagInput.classList.add("form-control", "mb-2");
+            tagInput.setAttribute("name", `tags[${tagIndex}]`);
+            tagInput.setAttribute("placeholder", "Enter tag");
+            tagIndex++;
+
+            const buttonGroup = document.createElement("div");
+            buttonGroup.classList.add("btn-group");
+
+            const addButton = document.createElement("button");
+            addButton.classList.add("btn", "btn-success", "drag-handle");
+            addButton.setAttribute("type", "button"); // Set type to button
+            addButton.innerHTML = '<i class="fas fa-bars"></i>';
+            addButton.addEventListener("click", function () {
+                createTagItemAfter(tagItem);
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("btn", "btn-danger");
+            addButton.setAttribute("type", "button"); // Set type to button
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener("click", function () {
+                removeTagItem(tagItem);
+            });
+
+            buttonGroup.appendChild(addButton);
+            buttonGroup.appendChild(deleteButton);
+
+            tagItem.appendChild(tagInput);
+            tagItem.appendChild(buttonGroup);
+
+            // Insert new tag item after the target item
+            tagList.insertBefore(tagItem, targetItem.nextSibling);
+
+            // Update indices and setup sortable
+            updateTagIndices();
+            setupSortable();
+        }
+
+
+        function removeTagItem(targetItem) {
+            tagList.removeChild(targetItem);
+            updateTagIndices();
+        }
+
+        function updateTagIndices() {
+            const tagItems = Array.from(tagList.children);
+            tagItems.forEach((item, index) => {
+                const input = item.querySelector("input");
+                if (input) {
+                    input.setAttribute("name", `tags[${index + 1}]`);
+                }
+            });
+            tagIndex = tagItems.length + 1;
+        }
+
+        function setupSortable() {
+            new Sortable(tagList, {
+                handle: ".drag-handle",
+                animation: 150,
+                onEnd: updateTagIndices
+            });
+        }
+
+        // Initial tag item
+        createTagItem();
+
+
+
+    }else{
+        console.log('The item with taglist doesnot exist');
+    }
+    });
+
 
 
 </script>

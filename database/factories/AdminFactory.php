@@ -22,7 +22,8 @@ class AdminFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'phone_number' => $this->faker->unique()->numberBetween(1000, 2000),
+            'email'=> $this->faker->safeEmail,
+            'phone_number' => $this->faker->unique()->numberBetween(9800000000, 9899999999),
             'status' => rand(0, 1),
             'role' => $this->faker->randomElement([2, 1]), // Randomly set the role to 0 or 1
             'password' => 'password', // You might want to use a more secure password generation method

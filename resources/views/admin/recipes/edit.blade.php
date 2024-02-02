@@ -43,13 +43,14 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="description">Description</label>
-                                        <textarea name="description" id="description" cols="30" rows="10" class="summernote" placeholder="Description">{{ $recipe->description }}</textarea>
+                                        <textarea name="description" class="form-control" id="description" cols="30" rows="10"  placeholder="Description">{{ $recipe->description }}</textarea>
                                         <p></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="card mb-3">
                         <div class="card-body">
                             <h2 class="h4 mb-3">Media</h2>
@@ -68,12 +69,87 @@
                                     <div class="card" >
                                         <img src="{{ asset('uploads/recipes/small/'.$img->image) }}" class="card-img-top" alt="...">
                                         <div class="card-body">
-                                            <a href="javascript:void(0)" onClick="deleteImage({{ $img->id }})" class="btn btn-danger">Delete</a>
+                                            <a href="javascript:void(0)" onClick="deleteImage('{{ $img->id }}')" class="btn btn-danger">Delete</a>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
                         @endif
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">Nutrients</h2>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="calories">Calories</label>
+                                        <input type="float" name="calories" id="calories" class="form-control" placeholder="Calories" value="{{ $recipe->calories }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="protein">Protein</label>
+                                        <input type="float" name="protein" id="protein" class="form-control" placeholder="Protein" value="{{ $recipe->protein }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="total_fat">Total Fat</label>
+                                        <input type="float" name="total_fat" id="total_fat" class="form-control" placeholder="Total Fat" value="{{ $recipe->total_fat }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="saturated_fat">Saturated Fat</label>
+                                        <input type="float" name="saturated_fat" id="saturated_fat" class="form-control" placeholder="Saturated Fat" value="{{ $recipe->saturated_fat }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="sodium">Sodium</label>
+                                        <input type="float" name="sodium" id="sodium" class="form-control" placeholder="Sodium" value="{{ $recipe->sodium }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="sugar">Sugar</label>
+                                        <input type="float" name="sugar" id="sugar" class="form-control" placeholder="Sugar" value="{{ $recipe->sugar }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="carbohydrates">Carbohydrates</label>
+                                        <input type="float" name="carbohydrates" id="carbohydrates" class="form-control" placeholder="Carbohydrates" value="{{ $recipe->carbohydrates }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="protein">Protein</label>
+                                        <input type="float" name="protein" id="protein" class="form-control" placeholder="Protein" value="{{ $recipe->protein }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div id="card">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">Steps</h2>
+                            <ul id="step-list" class="list-group">
+                                @foreach($recipe->steps as $index => $step)
+                                    <li class="list-group-item">
+                                        <textarea name="steps[{{ $index + 1 }}]" class="form-control mb-2" placeholder="Enter step">{{ $step }}</textarea>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-success drag-handle" onclick="createStepItemAfter(this.parentNode.parentNode)"><i class="fas fa-bars"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="removeStepItem(this.parentNode.parentNode)"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
 
                 </div>
@@ -83,8 +159,8 @@
                             <h2 class="h4 mb-3">Recipe status</h2>
                             <div class="mb-3">
                                 <select name="status" id="status" class="form-control">
-                                    <option {{ ($recipe->status == 1) ? 'selected' : '' }} value="1">Active</option>
-                                    <option {{ ($recipe->status == 0) ? 'selected' : '' }} value="0">Block</option>
+                                    <option value="1" {{ $recipe->status == 1 ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ $recipe->status == 0 ? 'selected' : '' }}>Block</option>
                                 </select>
                                 <p></p>
                             </div>
@@ -92,25 +168,38 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <h2 class="h4  mb-3">Recipe cuisine</h2>
+                            <h2 class="h4  mb-3">Recipe category</h2>
                             <div class="mb-3">
-                                <label for="cuisine">Category</label>
+                                <label for="meal_type_id">Meal Type</label>
+                                <select name="meal_type_id" id="meal_type_id" class="form-control">
+                                    <option value="">Select a meal type</option>
+                                    @if(!empty($mealTypes))
+                                        @foreach ($mealTypes as $mealType)
+                                            <option {{ $recipe->meal_type_id == $mealType->id ? 'selected' : '' }} value="{{ $mealType->id }}">{{ $mealType->name }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                <p></p>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cuisine_id">Cuisine</label>
                                 <select name="cuisine_id" id="cuisine_id" class="form-control">
                                     <option value="">Select a cuisine</option>
-                                    @if(!empty($cuisines))                                        @foreach ($cuisines as $cuisine)
-                                            <option {{ ($recipe->cuisine_id == $cuisine->id) ? 'selected' : '' }} value="{{ $cuisine->id }}">{{ $cuisine->name }}</option>
+                                    @if(!empty($cuisines))
+                                        @foreach ($cuisines as $cuisine)
+                                            <option {{ $recipe->cuisine_id == $cuisine->id ? 'selected' : '' }} value="{{ $cuisine->id }}">{{ $cuisine->name }}</option>
                                         @endforeach
                                     @endif
                                 </select>
                                 <p></p>
                             </div>
                             <div class="mb-3">
-                                <label for="cuisine">Sub cuisine</label>
-                                <select name="meal_type_id" id="meal_type_id" class="form-control">
-                                    <option value="">Select a sub cuisine</option>
-                                    @if(!empty($mealTypes))
-                                    @foreach ($mealTypes as $meal_type)
-                                            <option {{ ($recipe->meal_type_id == $meal_type->id) ? 'selected' : '' }} value="{{ $meal_type->id }}">{{ $meal_type->name }}</option>
+                                <label for="category_id">Category</label>
+                                <select name="category_id" id="category_id" class="form-control">
+                                    <option value="">Select a category</option>
+                                    @if(!empty($categories))
+                                        @foreach ($categories as $category)
+                                            <option {{ $recipe->category_id == $category->id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -118,26 +207,118 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Allergen Recommendation -->
                     <div class="card">
                         <div class="card-body">
-                            <h2 class="h4 mb-3">Tags</h2>
-                            <div id="tag-container">
-                                <input type="hidden" name="tags" id="tagsInput" value="">
+                            <h2 class="h4 mb-3">Allergen Recommendation</h2>
+                            <div class="mb-3">
+                                <label for="allergens">Allergens</label>
+
+                                <!-- Loop through allergens and create checkbox inputs -->
+                                @if(!empty($allergens))
+                                    @foreach ($allergens as $allergen)
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input type="checkbox" id="allergen{{ $allergen->id }}" name="allergens[]" value="{{ $allergen->id }}" {{ in_array($allergen->id, $recipe->allergenRecipes->pluck('allergen_id')->toArray()) ? 'checked' : '' }} aria-label="Checkbox for following text input">
+                                                </div>
+                                            </div>
+                                            <label class="form-control" for="allergen{{ $allergen->id }}">{{ $allergen->name }}</label>
+                                        </div>
+                                    @endforeach
+                                @endif
+
+                                <p></p>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Health Condition Recommendation -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">Health Condition Recommendation</h2>
+                            <div class="mb-3">
+                                <label for="healthConditions">Health Conditions</label>
 
+                                <!-- Loop through healthConditions and create checkbox inputs -->
+                                @if(!empty($healthConditions))
+                                    @foreach ($healthConditions as $healthCondition)
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <input type="checkbox" id="healthCondition{{ $healthCondition->id }}" name="healthConditions[]" value="{{ $healthCondition->id }}" {{ in_array($healthCondition->id, $recipe->healthConditionRecipes->pluck('health_condition_id')->toArray()) ? 'checked' : '' }} aria-label="Checkbox for following text input">
+                                                </div>
+                                            </div>
+                                            <label class="form-control" for="healthCondition{{ $healthCondition->id }}">{{ $healthCondition->name }}</label>
+                                        </div>
+                                    @endforeach
+                                @endif
+
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="card">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">Tags</h2>
+                            <ul id="tag-list" class="list-group">
+                                @if ($recipe->tags != null)
+
+
+                                @foreach($recipe->tags as $index => $tag)
+                                    <li class="list-group-item">
+                                        <input type="text" name="tags[{{ $index + 1 }}]" class="form-control mb-2" placeholder="Enter tag" value="{{ $tag }}">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-success" onclick="createTagItemAfter(this.parentNode.parentNode)"><i class="fas fa-bars"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="removeTagItem(this.parentNode.parentNode)"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </li>
+                                @endforeach
+
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="card" class="col-md-12">
+                        <div class="card-body">
+                            <h2 class="h4 mb-3">Ingredients</h2>
+
+                            <ul id="ingredient-list" class="list-group">
+                                @if ($recipe->recipeIngredients != null)
+
+                                @foreach($recipe->recipeIngredients as $index => $item)
+                                    <li class="list-group-item ingredient" setupSortable()>
+                                        <select name="ingredients[{{ $index + 1 }}]" id="ingredient-select-${ingredientIndex}" class="form-control mb-2">
+                                            @if(!empty($ingredients))
+                                                @foreach ($ingredients as $ingredient)
+                                                    <option value="{{ $ingredient->id }}" {{ $ingredient->id == $item->ingredient_id ? 'selected' : '' }}>{{ $ingredient->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-success drag-handle" onclick="createIngredientItemAfter(this.parentNode.parentNode)"><i class="fas fa-bars"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="removeIngredientItem(this.parentNode.parentNode)"><i class="fas fa-trash"></i></button>
+                                        </div>
+
+                                    </li>
+                                @endforeach
+
+                                @endif
+
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="pb-5 pt-3">
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">Save</button>
                 <a href="{{ route('recipes.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
             </div>
 
-            <!-- Add this modal for confirming deletion  -->
-            <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+             <!-- Add this modal for confirming deletion  -->
+             <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -168,6 +349,142 @@
 @section('customJs')
 
 <script>
+
+    //Ingredients
+    const ingredientList = document.getElementById("ingredient-list");
+    console.log(ingredientList);
+    let ingredientIndex =1;
+
+
+    if (ingredientList) {
+        function createIngredientItem() {
+            const ingredientItem = document.createElement("li");
+            ingredientItem.classList.add("list-group-item");
+
+            const ingredientSelect = createIngredientSelect(ingredientItem);
+
+            const buttonGroup = createButtonGroup(ingredientItem);
+
+            ingredientItem.appendChild(ingredientSelect);
+            ingredientItem.appendChild(buttonGroup);
+
+            ingredientList.appendChild(ingredientItem);
+
+            setupSortable();
+        }
+
+        function createIngredientItemAfter(targetItem) {
+            const ingredientItem = document.createElement("li");
+            ingredientItem.classList.add("list-group-item");
+
+            const ingredientSelect = createIngredientSelect(ingredientItem);
+
+            const buttonGroup = createButtonGroup(ingredientItem);
+
+            ingredientItem.appendChild(ingredientSelect);
+            ingredientItem.appendChild(buttonGroup);
+
+            ingredientList.insertBefore(ingredientItem, targetItem.nextSibling);
+
+            updateIngredientIndices();
+            setupSortable();
+        }
+
+        function createIngredientSelect(ingredientItem) {
+            const ingredientSelectHTML = `
+                <select name="ingredients[${ingredientIndex}]" id="ingredient-select-${ingredientIndex}" class="form-control mb-2">
+
+                    @if(!empty($ingredients))
+                        @foreach ($ingredients as $ingredient)
+                            <option value="{{ $ingredient->id }}">{{ $ingredient->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
+            `;
+
+            const tempContainer = document.createElement("div");
+            tempContainer.innerHTML = ingredientSelectHTML;
+
+            const ingredientSelect = tempContainer.querySelector("select");
+
+            ingredientIndex++;
+
+            return ingredientSelect;
+        }
+
+        function createButtonGroup(ingredientItem) {
+            const buttonGroup = document.createElement("div");
+            buttonGroup.classList.add("btn-group");
+
+            const addButton = document.createElement("button");
+            addButton.classList.add("btn", "btn-success", "drag-handle");
+            addButton.setAttribute("type", "button"); // Set type to button
+            addButton.innerHTML = '<i class="fas fa-bars"></i>';
+            addButton.addEventListener("click", function () {
+                createIngredientItemAfter(ingredientItem);
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("btn", "btn-danger");
+            addButton.setAttribute("type", "button"); // Set type to button
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener("click", function () {
+                removeIngredientItem(ingredientItem);
+            });
+
+            buttonGroup.appendChild(addButton);
+            buttonGroup.appendChild(deleteButton);
+
+            return buttonGroup;
+
+
+        }
+
+
+        function createButton(innerHtml, clickHandler) {
+            const button = document.createElement("button");
+            button.classList.add("btn");
+            button.setAttribute("type", "button");
+            button.innerHTML = innerHtml;
+            button.addEventListener("click", clickHandler);
+            return button;
+        }
+
+        function removeIngredientItem(targetItem) {
+            ingredientList.removeChild(targetItem);
+            updateIngredientIndices();
+        }
+
+        function updateIngredientIndices() {
+            const ingredientItems = Array.from(ingredientList.children);
+            ingredientItems.forEach((item, index) => {
+                const select = item.querySelector("select");
+                if (select) {
+                    select.name = `ingredients[${index + 1}]`;
+                    select.id = `ingredient-select-${index + 1}`;
+                }
+            });
+            ingredientIndex = ingredientItems.length + 1;
+        }
+
+        function setupSortable() {
+            new Sortable(ingredientList, {
+                handle: ".drag-handle",
+                animation: 150,
+                onEnd: updateIngredientIndices
+            });
+        }
+
+        // Wait for the DOM to be ready
+        document.addEventListener("DOMContentLoaded", function () {
+            setupSortable();
+
+        });
+
+
+    } else {
+        console.log('The item with id "ingredient-list" does not exist');
+    }
 
     $("#title").change(function(){
         $("#slug").removeClass('is-invalid')
@@ -209,14 +526,14 @@
             //$("#image_id"). val(response.image_id);
 
             var html = `<div class="col-md-3" id="image-row-${response.image_id}">
-                        <input type="hidden" name="image_array[]" value="${response.image_id}">
-                        <div class="card" >
-                            <img src="${response['imagePath']}" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <a href="javascript:void(0)" onClick="deleteImage(${response.image_id})" class="btn btn-danger">Delete</a>
-                            </div>
-                        </div>
-                        </div>`;
+                <input type="hidden" name="image_array[]" value="${response.image_id}">
+                <div class="card">
+                    <img src="${response['imagePath']}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <button type="button" onclick="deleteImage('${response.image_id}')" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>`;
 
 
             $("#recipe-gallery").append(html);
@@ -228,6 +545,7 @@
     });
 
     function deleteImage(id) {
+        console.log("okay");
         // Make an AJAX request to delete the image
        // Show the delete confirmation modal
        $('#deleteConfirmationModal').modal('show');
@@ -312,93 +630,259 @@
         }).change(); // Trigger the change event once to handle the initial state
     });
 
-    document.addEventListener("DOMContentLoaded", function () {
-    const tagContainer = document.getElementById("tag-container");
-    const tagsArray = [];
+    //Steps
+    const stepList = document.getElementById("step-list");
+        let stepIndex = 1;
 
-    function createTagInput() {
-        const outerCardDiv = document.createElement("div");
-        outerCardDiv.classList.add("card", "mb-1");
+        if(stepList){
 
-        const outerCardBodyDiv = document.createElement("div");
-        outerCardBodyDiv.classList.add("card-body");
+        function createStepItem() {
+            const stepItem = document.createElement("li");
+            stepItem.classList.add("list-group-item");
 
-        const tagInputDiv = document.createElement("div");
-        tagInputDiv.classList.add("input-group", "mb-1");
+            const stepTextarea = document.createElement("textarea");
+            stepTextarea.classList.add("form-control", "mb-2");
+            stepTextarea.setAttribute("name", `steps[${stepIndex}]`);
+            stepTextarea.setAttribute("placeholder", "Enter step");
+            stepIndex++;
 
-        const tagInput = document.createElement("input");
-        tagInput.classList.add("form-control");
-        tagInput.setAttribute("type", "text");
-        tagInput.setAttribute("placeholder", "Enter tag");
-        tagInput.addEventListener("input", function () {
-            this.value = this.value.toLowerCase(); // Convert to lowercase
+            const buttonGroup = document.createElement("div");
+            buttonGroup.classList.add("btn-group");
+
+            const addButton = document.createElement("button");
+            addButton.classList.add("btn", "btn-success", "drag-handle");
+            addButton.setAttribute("type", "button"); // Set type to button
+            addButton.innerHTML = '<i class="fas fa-bars"></i>';
+            addButton.addEventListener("click", function () {
+                createStepItemAfter(stepItem);
+            });
+
+            const deleteButton = document.createElement("button");
+            addButton.setAttribute("type", "button"); // Set type to button
+            deleteButton.classList.add("btn", "btn-danger");
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener("click", function () {
+                removeStepItem(stepItem);
+            });
+
+            buttonGroup.appendChild(addButton);
+            buttonGroup.appendChild(deleteButton);
+
+            stepItem.appendChild(stepTextarea);
+            stepItem.appendChild(buttonGroup);
+
+            stepList.appendChild(stepItem);
+
+            setupSortable();
+        }
+
+        function createStepItemAfter(targetItem) {
+            const stepItem = document.createElement("li");
+            stepItem.classList.add("list-group-item");
+
+            const stepTextarea = document.createElement("textarea");
+            stepTextarea.classList.add("form-control", "mb-2");
+            stepTextarea.setAttribute("name", `steps[${stepIndex}]`);
+            stepTextarea.setAttribute("placeholder", "Enter step");
+            stepIndex++;
+
+            const buttonGroup = document.createElement("div");
+            buttonGroup.classList.add("btn-group");
+
+            const addButton = document.createElement("button");
+            addButton.classList.add("btn", "btn-success", "drag-handle");
+            addButton.setAttribute("type", "button"); // Set type to button
+            addButton.innerHTML = '<i class="fas fa-bars"></i>';
+            addButton.addEventListener("click", function () {
+                createStepItemAfter(stepItem);
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("btn", "btn-danger");
+            addButton.setAttribute("type", "button"); // Set type to button
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener("click", function () {
+                removeStepItem(stepItem);
+            });
+
+            buttonGroup.appendChild(addButton);
+            buttonGroup.appendChild(deleteButton);
+
+            stepItem.appendChild(stepTextarea);
+            stepItem.appendChild(buttonGroup);
+
+            // Insert new step item after the target item
+            stepList.insertBefore(stepItem, targetItem.nextSibling);
+
+            // Update indices and setup sortable
+            updateStepIndices();
+            setupSortable();
+        }
+
+
+        function removeStepItem(targetItem) {
+            stepList.removeChild(targetItem);
+            updateStepIndices();
+        }
+
+        function updateStepIndices() {
+            const stepItems = Array.from(stepList.children);
+            stepItems.forEach((item, index) => {
+                const textarea = item.querySelector("textarea");
+                if (textarea) {
+                    textarea.setAttribute("name", `steps[${index + 1}]`);
+                }
+            });
+            stepIndex = stepItems.length + 1;
+        }
+
+        function setupSortable() {
+            new Sortable(stepList, {
+                handle: ".drag-handle",
+                animation: 150,
+                onEnd: updateStepIndices
+            });
+        }
+
+        // Wait for the DOM to be ready
+        document.addEventListener("DOMContentLoaded", function () {
+            setupSortable();
+
         });
-
-        const addTagIconContainer = document.createElement("div");
-        addTagIconContainer.classList.add("input-group-append");
-
-        const addTagIcon = document.createElement("button");
-        addTagIcon.classList.add("btn", "btn-success", "rounded-circle", "ml-2");
-        addTagIcon.type = "button";
-        addTagIcon.innerHTML = '<i class="fas fa-plus"></i>';
-        addTagIcon.addEventListener("click", function () {
-            const tagValue = tagInput.value.trim();
-            if (tagValue !== "") {
-                tagsArray.push(tagValue);
-                createTagElement(tagValue);
-            }
-            tagInput.value = "";
-        });
-
-        tagInputDiv.appendChild(tagInput);
-        addTagIconContainer.appendChild(addTagIcon);
-        tagInputDiv.appendChild(addTagIconContainer);
-        outerCardBodyDiv.appendChild(tagInputDiv);
-        outerCardDiv.appendChild(outerCardBodyDiv);
-        tagContainer.appendChild(outerCardDiv);
+    }else{
+        console.log('The item with id does not exist');
     }
 
-    function createTagElement(tagValue) {
-        const tagElement = document.createElement("div");
-        tagElement.classList.add("input-group", "mb-2");
 
-        const tagSpan = document.createElement("span");
-        tagSpan.classList.add("form-control");
-        tagSpan.textContent = tagValue;
 
-        const deleteTagIconContainer = document.createElement("div");
-        deleteTagIconContainer.classList.add("input-group-append");
+    //Tags
+        const tagList = document.getElementById("tag-list");
+        let tagIndex = {{ count($recipe->tags) ?? 1 }}; // Set the initial index based on existing tags
+        if(tagList){
 
-        const deleteTagIcon = document.createElement("button");
-        deleteTagIcon.classList.add("btn", "btn-danger", "rounded-circle", "ml-2");
-        deleteTagIcon.type = "button";
-        deleteTagIcon.innerHTML = '<i class="fas fa-times"></i>';
-        deleteTagIcon.addEventListener("click", function () {
-            const index = tagsArray.indexOf(tagValue);
-            if (index !== -1) {
-                tagsArray.splice(index, 1);
-                updateTagsInput(); // Update the hidden input field
-            }
-            tagElement.remove();
+        function createTagItem() {
+            const tagItem = document.createElement("li");
+            tagItem.classList.add("list-group-item");
+
+            const tagInput = document.createElement("input");
+            tagInput.setAttribute("type", "text"); // Set type to text
+            tagInput.classList.add("form-control", "mb-2");
+            tagInput.setAttribute("name", `tags[${tagIndex}]`);
+            tagInput.setAttribute("placeholder", "Enter tag");
+            tagIndex++;
+
+            const buttonGroup = document.createElement("div");
+            buttonGroup.classList.add("btn-group");
+
+            const addButton = document.createElement("button");
+            addButton.classList.add("btn", "btn-success", "drag-handle");
+            addButton.setAttribute("type", "button"); // Set type to button
+            addButton.innerHTML = '<i class="fas fa-bars"></i>';
+            addButton.addEventListener("click", function () {
+                createTagItemAfter(tagItem);
+            });
+
+            const deleteButton = document.createElement("button");
+            addButton.setAttribute("type", "button"); // Set type to button
+            deleteButton.classList.add("btn", "btn-danger");
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener("click", function () {
+                removeTagItem(tagItem);
+            });
+
+            buttonGroup.appendChild(addButton);
+            buttonGroup.appendChild(deleteButton);
+
+            tagItem.appendChild(tagInput);
+            tagItem.appendChild(buttonGroup);
+
+            tagList.appendChild(tagItem);
+
+            setupSortable();
+        }
+
+        function createTagItemAfter(targetItem) {
+            const tagItem = document.createElement("li");
+            tagItem.classList.add("list-group-item");
+
+            const tagInput = document.createElement("input");
+            tagInput.setAttribute("type", "text"); // Set type to text
+            tagInput.classList.add("form-control", "mb-2");
+            tagInput.setAttribute("name", `tags[${tagIndex}]`);
+            tagInput.setAttribute("placeholder", "Enter tag");
+            tagIndex++;
+
+            const buttonGroup = document.createElement("div");
+            buttonGroup.classList.add("btn-group");
+
+            const addButton = document.createElement("button");
+            addButton.classList.add("btn", "btn-success", "drag-handle");
+            addButton.setAttribute("type", "button"); // Set type to button
+            addButton.innerHTML = '<i class="fas fa-bars"></i>';
+            addButton.addEventListener("click", function () {
+                createTagItemAfter(tagItem);
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("btn", "btn-danger");
+            addButton.setAttribute("type", "button"); // Set type to button
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener("click", function () {
+                removeTagItem(tagItem);
+            });
+
+            buttonGroup.appendChild(addButton);
+            buttonGroup.appendChild(deleteButton);
+
+            tagItem.appendChild(tagInput);
+            tagItem.appendChild(buttonGroup);
+
+            // Insert new tag item after the target item
+            tagList.insertBefore(tagItem, targetItem.nextSibling);
+
+            // Update indices and setup sortable
+            updateTagIndices();
+            setupSortable();
+        }
+
+
+        function removeTagItem(targetItem) {
+            tagList.removeChild(targetItem);
+            updateTagIndices();
+        }
+
+        function updateTagIndices() {
+            const tagItems = Array.from(tagList.children);
+            tagItems.forEach((item, index) => {
+                const input = item.querySelector("input");
+                if (input) {
+                    input.setAttribute("name", `tags[${index + 1}]`);
+                }
+            });
+            tagIndex = tagItems.length + 1;
+        }
+
+        function setupSortable() {
+            new Sortable(tagList, {
+                handle: ".drag-handle",
+                animation: 150,
+                onEnd: updateTagIndices
+            });
+        }
+
+        // Wait for the DOM to be ready
+        document.addEventListener("DOMContentLoaded", function () {
+            setupSortable();
+
         });
+        if (tagList.children.length === 0) {
+            createTagItem();
+        }
 
-        tagElement.appendChild(tagSpan);
-        deleteTagIconContainer.appendChild(deleteTagIcon);
-        tagElement.appendChild(deleteTagIconContainer);
-
-        tagContainer.appendChild(tagElement);
-
-        // Update the hidden input field when a new tag is added
-        updateTagsInput();
+    }else{
+        console.log('The item with taglist doesnot exist');
     }
 
-    function updateTagsInput() {
-        const tagsInput = document.getElementById("tagsInput");
-        tagsInput.value = tagsArray.join(","); // Convert array to a comma-separated string
-    }
-
-    createTagInput(); // Initial tag input
-});
 
 
 </script>

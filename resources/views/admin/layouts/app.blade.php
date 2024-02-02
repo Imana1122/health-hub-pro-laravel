@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote-bs4.min.css') }}">
 
 		<link rel="stylesheet" href="{{asset('admin-assets/css/custom.css')}}">
+        <link rel="stylesheet" href="{{ asset('admin-assets/css/datetimepicker.css') }}">
 
 
 
@@ -54,6 +55,9 @@
 							<div class="mb-3">{{ Auth::guard('admin')->user()->phone_number }}</div>
 							<div class="dropdown-divider"></div>
 							<div class="dropdown-divider"></div>
+							<a href="{{ route('admin.profile') }}" class="dropdown-item">
+								<i class="fas fa-user-cog mr-2"></i> Settings
+							</a>
 							<a href="{{ route('admin.showChangePasswordForm') }}" class="dropdown-item">
 								<i class="fas fa-lock mr-2"></i> Change Password
 							</a>
@@ -75,14 +79,19 @@
 
 			<!-- /.content-wrapper -->
 			<footer class="main-footer">
-
-				<strong>Copyright &copy; 2014-2022 HealthHub Pro All rights reserved.
+		        <div class="col-12 mt-3">
+					<div class="copy-right text-center">
+						<p>© Copyright 2022 Health Hub Pro. All Rights Reserved <br> Made With 🩷 By Imana</p>
+					</div>
+				</div>
 			</footer>
 
 		</div>
 		<!-- ./wrapper -->
 		<!-- jQuery -->
 		<script src="{{asset('admin-assets/plugins/jquery/jquery.min.js')}}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
 		<!-- Bootstrap 4 -->
 		<script src="{{asset('admin-assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 		<!-- AdminLTE App -->
@@ -93,6 +102,7 @@
 		<script src="{{asset('admin-assets/js/demo.js')}}"></script>
         <!-- Dropzone -->
         <script src="{{asset('admin-assets/plugins/dropzone/min/dropzone.min.js')}}"></script>
+        <script src="{{ asset('admin-assets/js/datetimepicker.js') }}"></script>
 
         <script type="text/javascript">
             $.ajaxSetup({

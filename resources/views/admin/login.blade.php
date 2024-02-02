@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
     	<title><?php echo (!empty($title)) ? 'Title-'.$title: 'HealthHub Pro'; ?></title>
-    	<link rel="icon" type="image/png" href="{{ asset('/front-assets/images/logo.png') }}">
+    	<link rel="icon" type="image/gif" href="{{ asset('admin-assets/img/logo.gif') }}">
     	<!-- Google Font: Source Sans Pro -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 		<!-- Font Awesome -->

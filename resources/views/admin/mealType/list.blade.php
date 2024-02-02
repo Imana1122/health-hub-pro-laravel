@@ -7,7 +7,7 @@
     <div class="container-fluid my-2">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Categories</h1>
+                <h1>Meal Types</h1>
             </div>
             <div class="col-sm-6 text-right">
                 <a href="{{ route("mealTypes.create") }}" class="btn btn-primary">New Meal Type</a>
@@ -45,7 +45,6 @@
                 <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
-                            <th width="60">ID</th>
                             <th>Name</th>
                             <th>Slug</th>
                             <th>Thumbnail</th>
@@ -57,7 +56,6 @@
                         @if($mealTypes->isNotEmpty())
                             @foreach ( $mealTypes as $mealType)
                             <tr>
-                                <td>{{ $mealType->id }}</td>
                                 <td>{{ $mealType->name }}</td>
                                 <td>{{ $mealType->slug }}</td>
                                 <td>

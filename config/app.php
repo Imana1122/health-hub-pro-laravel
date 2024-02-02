@@ -156,6 +156,7 @@ return [
     */
 
     'providers' => ServiceProvider::defaultProviders()->merge([
+        Laravel\Passport\PassportServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -168,6 +169,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
     ])->toArray(),
 
     /*
