@@ -65,10 +65,6 @@ class MealTypeController extends Controller
 
                 $mealType->image = $newImageName;
                 $mealType->save();
-
-
-
-
             }
 
             session()->flash("success","MealType added successfully");

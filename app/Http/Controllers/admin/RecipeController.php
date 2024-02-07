@@ -73,8 +73,9 @@ class RecipeController extends Controller
                 $query->where('health_condition_id', $request->input('health_condition'));
             });
         }
+        $recipes = $recipes->paginate(10);
 
-        $recipes = $recipes->doesntHave('images')->paginate(10);
+        // $recipes = $recipes->doesntHave('images')->paginate(10);
 
         return view("admin.recipes.list", compact('recipes', 'allergens', 'mealTypes', 'cuisines', 'healthConditions','categories'));
     }

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
+use Intervention\Image\ImageManager;
 
 class DieticianAuthController extends Controller
 {
@@ -22,14 +22,13 @@ class DieticianAuthController extends Controller
             'last_name' => 'required',
             'email'=> 'required|email|unique:dieticians',
             'phone_number' => 'required|unique:dieticians',
-            'cv' => 'required',
+            'image'=>'required|file|mimes:png,jpg,jpeg,svg',
+            'cv' => 'required|file|mimes:pdf',
             'speciality' => 'required',
             'description' => 'required|max:255',
-            'esewaId' => 'required',
+            'esewa_id' => 'required',
             'booking_amount' => 'required|numeric',
             'bio' => 'required',
-            'status' => 'required',
-
         ]);
 
         if ($validator->passes()){
@@ -42,8 +41,49 @@ class DieticianAuthController extends Controller
                 'esewaId' => $request->esewaId,
                 'booking_amount'=> $request->booking_amount,
                 'bio' => $request->bio,
-                'status' => $request->status
                 ]);
+
+            //Save Image Here
+            if($request->image){
+                $image = $request->image;
+                $ext = $image->getClientOriginalExtension();
+                $newName = $dietician->id.'.'.$ext;
+
+                $dietician->image =$newName;
+                $dietician->save();
+
+                $image->move(public_path().'/uploads/dietician/profile/',$newName);
+
+                //Generate thumbnail
+                $sourcePath = public_path().'/uploads/dietician/profile/'.$newName; // Fix the path
+                $destPath = public_path().'/uploads/dietician/profile/thumb/'.$newName; // Fix the path
+
+                $image = ImageManager::gd()->read($sourcePath);
+                $image->resize(450, 600);
+                $image->save($destPath);
+
+            }
+
+            //Save Image Here
+            if($request->convert_cyr_string){
+                $cv = $request->cv;
+                $ext = $cv->getClientOriginalExtension();
+                $newName = $dietician->id.'.'.$ext;
+
+                $dietician->cv =$newName;
+                $dietician->save();
+
+                $cv->move(public_path().'/uploads/dietician/cv/',$newName);
+
+                //Generate thumbnail
+                $sourcePath = public_path().'/uploads/dietician/cv/'.$newName; // Fix the path
+                $destPath = public_path().'/uploads/dietician/thumb/cv/'.$newName; // Fix the path
+
+                $cv = ImageManager::gd()->read($sourcePath);
+                $cv->resize(450, 600);
+                $cv->save($destPath);
+
+            }
             if($dietician){
                 $token = $dietician->createToken('auth_token')->accessToken;
 
@@ -75,7 +115,7 @@ class DieticianAuthController extends Controller
     ]);
 
     if ($validator->passes()) {
-        $dietician = Dietician::where('phone_number', $request->phone_number)->first();
+        $dietician = Dietician::where('phone_number', $request->phone_number)->where('approved_status', 1)->first();
 
         if (!$dietician) {
             return response()->json([
@@ -107,19 +147,19 @@ class DieticianAuthController extends Controller
     }
 }
 
-    public function logout(Request $request){
-        try {
-            $request->user()->token()->revoke();
-            return response()->json([
-                'status' => true
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'error' => $e
-            ]);
-        }
+public function logout(Request $request){
+    try {
+        $request->user()->token()->revoke();
+        return response()->json([
+            'status' => true
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'error' => $e
+        ]);
     }
+}
 
 
     public function changePassword(Request $request){

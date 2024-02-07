@@ -67,7 +67,7 @@ class IngredientController extends Controller
             }
         }
 
-        $ingredients = $ingredients->where('image',null)->paginate(10);
+        $ingredients = $ingredients->paginate(10);
 
         return view("admin.ingredient.list", compact('ingredients'));
     }

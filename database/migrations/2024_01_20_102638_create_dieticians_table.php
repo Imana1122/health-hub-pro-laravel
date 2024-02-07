@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('speciality');
             $table->string('bio')->nullable();
             $table->string('description');
-            $table->string('esewaId');
+            $table->string('esewa_id');
             $table->string('booking_amount');
             $table->string('password');
             $table->integer('status')->default(1);

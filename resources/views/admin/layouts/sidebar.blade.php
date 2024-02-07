@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('admin.dashboard') }}" class="brand-link">
-        <img src="{{asset('/admin-assets/img/logo.gif') }}" style="height: 100px; opacity: .8"/>
+        <img src="{{asset('/admin-assets/img/logo.gif') }}" style="width: 14rem; opacity: .8"/>
     </a>
     <!-- Sidebar -->
     <div class="sidebar">

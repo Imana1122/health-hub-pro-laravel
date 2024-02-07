@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 
 class RecipeRecommendationController extends Controller
 {
-    public function getRecipeRecommendations(Request $request){
-        $recipes = Recipe::with('images')->orderBy('title','ASC')->get();
+    public function getRecipeRecommendations(Request $request, $meal_type_id){
+        $recipes = Recipe::with('images')->where('meal_type_id',$meal_type_id)->orderBy('title','ASC')->get();
 
         return response()->json([
             'status' => true,
