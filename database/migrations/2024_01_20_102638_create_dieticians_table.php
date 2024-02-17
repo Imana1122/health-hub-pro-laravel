@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('bio')->nullable();
             $table->string('description');
             $table->string('esewa_id');
-            $table->string('booking_amount');
+            $table->double('booking_amount');
             $table->string('password');
             $table->integer('status')->default(1);
 

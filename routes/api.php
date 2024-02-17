@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\dietician\DieticianAuthController;
 use App\Http\Controllers\RecipeRecommendationController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\UserRecipeLogController;
 use App\Http\Controllers\WorkoutRecommendationController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,9 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('account')->group(function () {
-
-
-    // // Routes accessible by guests
+    // Routes accessible by guests
     Route::middleware('guest')->group(function () {
         Route::post('/process-register', [AuthController::class, 'processRegister'])->name('account.processRegister');
         Route::post('/process-login', [AuthController::class, 'authenticate'])->name('account.authenticate');
@@ -55,6 +54,12 @@ Route::prefix('account')->group(function () {
 
         //Workout Recommendations
         Route::get('/workout-recommendations', [WorkoutRecommendationController::class, 'getWorkoutRecommendations'])->name('account.getWorkoutRecommendations');
+
+        //meal logs
+        Route::post('/log-meal', [UserRecipeLogController::class, 'logMeal'])->name('account.logMeal');
+        Route::get('/get-meal-logs/{now}', [UserRecipeLogController::class, 'getMealLogs'])->name('account.getMealLogs');
+        Route::get('/get-linechart-details/{type}', [UserRecipeLogController::class, 'getLineGraphDetails'])->name('account.getLineGraphDetails');
+        Route::delete('/deleteMealLog/{id}', [UserRecipeLogController::class, 'deleteMealLog'])->name('account.deleteMealLog');
 
     });
 

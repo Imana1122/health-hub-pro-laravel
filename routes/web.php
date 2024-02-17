@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\RecipeController;
 use App\Http\Controllers\admin\RecipeImageController;
 use App\Http\Controllers\admin\AllergenController;
 use App\Http\Controllers\admin\ContactController;
+use App\Http\Controllers\admin\DieticianController;
 use App\Http\Controllers\admin\HealthConditionController;
 use App\Http\Controllers\admin\IngredientController;
 use App\Http\Controllers\admin\RecipeCategoryController;
@@ -180,6 +181,12 @@ Route::group(['prefix'=> 'admin'], function () {
         Route::get('/weightPlans/{id}/edit', [WeightPlanController::class,'edit'])->name('weightPlans.edit');
         Route::put('/weightPlans/{id}', [WeightPlanController::class,'update'])->name('weightPlans.update');
         Route::delete('/weightPlans/{id}', [WeightPlanController::class,'destroy'])->name('weightPlans.destroy');
+
+        //Meal Types Routes
+        Route::get('/dieticians', [DieticianController::class,'index'])->name('dieticians.index');
+        Route::delete('/dieticians/{id}', [DieticianController::class,'destroy'])->name('dieticians.destroy');
+        Route::get('/dieticians/detail/{id}', [DieticianController::class,'detail'])->name('dieticians.detail');
+        Route::put('/dieticians/approve-status/{id}', [DieticianController::class,'approveStatus'])->name('dieticians.approveStatus');
 
         Route::get('/getSlug', function (Request $request) {
             $slug = '';

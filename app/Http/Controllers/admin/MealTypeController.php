@@ -168,7 +168,7 @@ class MealTypeController extends Controller
             session()->flash('error','MealType not found');
             return response()->json([
                 'status' => false,
-                'message' => 'MealType not fpund'
+                'message' => 'MealType not found'
             ]);
         }
 

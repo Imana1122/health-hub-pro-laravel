@@ -102,25 +102,35 @@ class UserProfileController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'cuisines' => "required|array",
+            'cuisines' => "nullable|array",
         ]);
 
-        $user->userCuisines()->delete();
 
         if($validator->passes()){
-
-            $user->userCuisines()->createMany(
-                collect($request->cuisines)->map(function ($cuisine) use ($request) {
-                    return ['cuisine_id' => $cuisine];
-                })->all()
-            );
+            $user->userCuisines()->delete();
 
             $userCuisines = $user->cuisines()->get();
 
-            return response()->json([
-                'status' => true,
-                'userCuisines' => $userCuisines,
-            ]);
+            if($request->cuisines != null){
+                $user->userCuisines()->createMany(
+                    collect($request->cuisines)->map(function ($cuisine) use ($request) {
+                        return ['cuisine_id' => $cuisine];
+                    })->all()
+                );
+                $userCuisines = $user->cuisines()->get();
+
+                return response()->json([
+                    'status' => true,
+                    'userCuisines' => $userCuisines,
+                ]);
+            }else{
+                return response()->json([
+                    'status' => true,
+                    'userCuisines' => $userCuisines,
+                ]);
+            }
+
+
 
         }else{
             return response()->json([
@@ -144,25 +154,35 @@ class UserProfileController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'allergens' => "required|array",
+            'allergens' => "nullable|array",
         ]);
 
         $user->userAllergens()->delete();
 
-        if($validator->passes()){
+        if($validator->passes() ){
+            $userAllergens = $user->allergens()->get();
+
+            if($request->allergens != []){
 
             $user->userAllergens()->createMany(
                 collect($request->allergens)->map(function ($allergen) use ($request) {
                     return ['allergen_id' => $allergen];
                 })->all()
             );
-
             $userAllergens = $user->allergens()->get();
+
 
             return response()->json([
                 'status' => true,
                 'userAllergens' => $userAllergens
             ]);
+        }
+        else{
+            return response()->json([
+                'status' => true,
+                'userAllergens' => $userAllergens
+            ]);
+        }
 
         }else{
             return response()->json([
@@ -186,22 +206,31 @@ class UserProfileController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'healthConditions' => "required|array",
+            'healthConditions' => "nullable|array",
         ]);
         $user->userHealthConditions()->delete();
 
         if($validator->passes()){
+        $userHealthConditions = $user->healthConditions()->get();
 
+        if($request->healthConditions != null){
             $user->userHealthConditions()->createMany(
                 collect($request->healthConditions)->map(function ($healthConditon) {
                     return ['health_condition_id' => $healthConditon];
                 })->all()
             );
             $userHealthConditions = $user->healthConditions()->get();
+
             return response()->json([
                 'status' => true,
                 'userHealthConditions' => $userHealthConditions
             ]);
+        }else{
+            return response()->json([
+                'status' => true,
+                'userHealthConditions' => $userHealthConditions
+            ]);
+        }
 
         }else{
             return response()->json([

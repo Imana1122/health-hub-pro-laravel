@@ -205,8 +205,83 @@ class HomeController extends Controller
         }
     }
 
+    public function deleteUnusedDieticianCV() {
+        // Get all images in the folder
+        $allFiles = File::files(public_path('/uploads/dietician/cv/'));
+
+        // Get all dieticians
+        $dieticians = Dietician::all();
+
+        // Extract image names from the dieticians
+        $dieticianFiles = $dieticians->pluck('cv')->toArray();
+
+        // Identify images in the folder that are not in the database
+        $unusedFiles = array_diff(
+            array_map('basename', $allFiles),
+            $dieticianFiles
+        );
+
+        // Delete unused images
+        foreach ($unusedFiles as $unusedFile) {
+            $filePath = public_path('/uploads/dietician/cv/') . $unusedFile;
+
+            // Delete the file from the folder
+            File::delete($filePath);
+        }
+    }
+
+    public function deleteUnusedDieticianProfileImage() {
+        // Get all images in the folder
+        $allImages = File::files(public_path('/uploads/dietician/profile/'));
+
+        // Get all dieticians
+        $dieticians = Dietician::all();
+
+        // Extract image names from the dieticians
+        $dieticianImages = $dieticians->pluck('image')->toArray();
+
+        // Identify images in the folder that are not in the database
+        $unusedImages = array_diff(
+            array_map('basename', $allImages),
+            $dieticianImages
+        );
+
+        // Delete unused images
+        foreach ($unusedImages as $unusedImage) {
+            $imagePath = public_path('/uploads/dietician/profile/') . $unusedImage;
+            $thumbPath = public_path('/uploads/dietician/profile/thumb/') . $unusedImage;
+
+            // Delete the image and its thumbnail from the folder
+            File::delete($imagePath, $thumbPath);
+        }
+    }
+    public function reindexAllRecipeSteps()
+    {
+        $recipes = Recipe::all();
+
+        foreach ($recipes as $recipe) {
+            $reindexedSteps = $this->reindexSteps($recipe->steps);
+            $recipe->steps = $reindexedSteps;
+            $recipe->save();
+        }
+    }
+
+    public function reindexSteps(array $steps): array
+    {
+        // Reindexing steps starting from 1
+        $reindexedSteps = [];
+        $index = 1;
+        foreach ($steps as $step) {
+            $reindexedSteps[$index++] = $step;
+        }
+
+        return $reindexedSteps;
+    }
+
+
     public function index()
     {
+        $this->reindexAllRecipeSteps();
         $this->deleteUnusedIngredientImages();
         $this->deleteUnusedMealTypeImages();
         $this->deleteUnusedRecipeCategoryImages();
@@ -214,6 +289,8 @@ class HomeController extends Controller
         $this->deleteUnusedExerciseImages();
         $this->deleteUnusedWorkoutImages();
         $this->deleteUnusedWeightPlanImages();
+        $this->deleteUnusedDieticianProfileImage();
+        $this->deleteUnusedDieticianCV();
 
 
         $recipesCount = Recipe::count();

@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 use App\Models\PasswordResetToken;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Models\UserRecipeLog;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -60,7 +62,7 @@ class AuthController extends Controller
 {
     $validator = Validator::make($request->all(), [
         "phone_number" => "required|string",
-        "password" => "required"
+        "password" => "required",
     ]);
 
     if ($validator->passes()) {
@@ -69,7 +71,7 @@ class AuthController extends Controller
         if (!$user) {
             return response()->json([
                 'status' => false,
-                'errors' => "Phone Number is incorrect."
+                'error' => "Phone Number is incorrect."
             ]);
         } else {
             // Use Hash::check to compare the provided password with the hashed password in the database
@@ -79,12 +81,14 @@ class AuthController extends Controller
                 if(empty($userProfile)){
                     return response()->json([
                         'status' => false,
-                        'errors' => "Profile not setup."
+                        'error' => "Profile not setup."
                     ]);
                 }
                 $userCuisines = $user->cuisines()->get();
                 $userHealthConditions = $user->healthConditions()->get();
                 $userAllergens = $user->allergens()->get();
+
+
                 return response()->json([
                     'status' => true,
                     'user' => $user,
@@ -92,12 +96,12 @@ class AuthController extends Controller
                     'userProfile'=>$userProfile,
                     'userCuisines' => $userCuisines,
                     'userHealthConditions' => $userHealthConditions,
-                    'userAllergens' => $userAllergens
+                    'userAllergens' => $userAllergens,
                 ]);
             } else {
                 return response()->json([
                     'status' => false,
-                    'errors' => "Password incorrect."
+                    'error' => "Password incorrect."
                 ]);
             }
         }
@@ -147,7 +151,7 @@ class AuthController extends Controller
                 $message = 'Old password is incorrect. Please try again.';
                 return response()->json([
                     'status'=> false,
-                    'error'=> Hash::make($request->old_password)
+                    'error'=> $message
                 ]);
             }
 

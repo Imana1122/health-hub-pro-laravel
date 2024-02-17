@@ -74,6 +74,10 @@ class User extends Authenticatable
         return $this->hasMany(UserHealthCondition::class);
     }
 
+    public function userMealLogs(){
+        return $this->hasMany(UserRecipeLog::class,"user_id");
+    }
+
     public function allergens()
     {
         return $this->belongsToMany(Allergen::class, 'user_allergens', 'user_id', 'allergen_id')

@@ -32,13 +32,15 @@ class DieticianAuthController extends Controller
         ]);
 
         if ($validator->passes()){
+
             $dietician = Dietician::create([
-                'name' => $request->name,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
                 'email'=> $request->email,
                 'phone_number' => $request->phone_number,
                 'speciality' => $request->speciality,
                 'description' => $request->description,
-                'esewaId' => $request->esewaId,
+                'esewa_id' => $request->esewa_id,
                 'booking_amount'=> $request->booking_amount,
                 'bio' => $request->bio,
                 ]);
@@ -65,7 +67,7 @@ class DieticianAuthController extends Controller
             }
 
             //Save Image Here
-            if($request->convert_cyr_string){
+            if($request->cv){
                 $cv = $request->cv;
                 $ext = $cv->getClientOriginalExtension();
                 $newName = $dietician->id.'.'.$ext;
@@ -75,22 +77,14 @@ class DieticianAuthController extends Controller
 
                 $cv->move(public_path().'/uploads/dietician/cv/',$newName);
 
-                //Generate thumbnail
-                $sourcePath = public_path().'/uploads/dietician/cv/'.$newName; // Fix the path
-                $destPath = public_path().'/uploads/dietician/thumb/cv/'.$newName; // Fix the path
 
-                $cv = ImageManager::gd()->read($sourcePath);
-                $cv->resize(450, 600);
-                $cv->save($destPath);
 
             }
             if($dietician){
-                $token = $dietician->createToken('auth_token')->accessToken;
 
                 return response()->json([
                     'status'=> true,
                     'dietician' => $dietician,
-                    'token' => $token,
                 ]);
 
             }else{
@@ -120,7 +114,7 @@ class DieticianAuthController extends Controller
         if (!$dietician) {
             return response()->json([
                 'status' => false,
-                'errors' => "Phone Number is incorrect."
+                'error' => "Phone number is not found or is not approved."
             ]);
         } else {
             // Use Hash::check to compare the provided password with the hashed password in the database
@@ -135,7 +129,7 @@ class DieticianAuthController extends Controller
             } else {
                 return response()->json([
                     'status' => false,
-                    'errors' => "Password incorrect."
+                    'error' => "Password incorrect."
                 ]);
             }
         }

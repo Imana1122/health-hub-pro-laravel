@@ -41,4 +41,14 @@ class Dietician extends Model
             $model->{$model->getKeyName()} = Str::uuid();
         });
     }
+
+        /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }
