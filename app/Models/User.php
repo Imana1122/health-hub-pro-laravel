@@ -99,4 +99,8 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function dieticianBookings(){
+        return $this->hasMany(DieticianBooking::class,'user_id');
+    }
+
 }

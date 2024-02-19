@@ -10,7 +10,7 @@ class Exercise extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug','description', 'metabolic_equivalent', 'status'];
+    protected $fillable = ['name', 'slug','description', 'metabolic_equivalent', 'status','image'];
 
     protected $primaryKey = 'id';
     public $incrementing = false;

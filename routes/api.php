@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\dietician\DieticianAuthController;
+use App\Http\Controllers\DieticianBookingController;
 use App\Http\Controllers\RecipeRecommendationController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserRecipeLogController;
+use App\Http\Controllers\WorkoutLogController;
 use App\Http\Controllers\WorkoutRecommendationController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,12 +56,23 @@ Route::prefix('account')->group(function () {
 
         //Workout Recommendations
         Route::get('/workout-recommendations', [WorkoutRecommendationController::class, 'getWorkoutRecommendations'])->name('account.getWorkoutRecommendations');
+        Route::get('workout-exercises/{id}', [WorkoutRecommendationController::class, 'getWorkoutwithExercise'])->name('account.getWorkoutExercises');
 
         //meal logs
         Route::post('/log-meal', [UserRecipeLogController::class, 'logMeal'])->name('account.logMeal');
         Route::get('/get-meal-logs/{now}', [UserRecipeLogController::class, 'getMealLogs'])->name('account.getMealLogs');
         Route::get('/get-linechart-details/{type}', [UserRecipeLogController::class, 'getLineGraphDetails'])->name('account.getLineGraphDetails');
         Route::delete('/deleteMealLog/{id}', [UserRecipeLogController::class, 'deleteMealLog'])->name('account.deleteMealLog');
+
+        Route::get('/get-dieticians', [DieticianBookingController::class, 'getDieticians'])->name('account.getDieticians');
+        Route::post('/book-dieticians', [DieticianBookingController::class, 'bookDietician'])->name('account.bookDietician');
+        Route::post('/verify-booking-payment', [DieticianBookingController::class, 'verifyBookingPayment'])->name('account.verifyBookingPayment');
+
+        Route::post('/log-workout', [WorkoutLogController::class, 'logWorkout'])->name('account.logWorkout');
+        Route::get('/get-workout-logs/{now}', [WorkoutLogController::class, 'getWorkoutLogs'])->name('account.getWorkoutLogs');
+
+        Route::get('/get-workout-linechart-details/{type}', [WorkoutLogController::class, 'getWorkoutLineGraphDetails'])->name('account.getWorkoutLineGraphDetails');
+        Route::delete('/deleteWorkoutLog/{id}', [WorkoutLogController::class, 'deleteWorkoutLog'])->name('account.deleteWorkoutLog');
 
     });
 

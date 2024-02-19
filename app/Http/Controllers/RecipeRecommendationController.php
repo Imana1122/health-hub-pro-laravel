@@ -5,11 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\MealType;
 use App\Models\Recipe;
 use App\Models\RecipeCategory;
+use App\Models\UserAllergen;
+use App\Models\UserCuisine;
 use Illuminate\Http\Request;
 
 class RecipeRecommendationController extends Controller
 {
     public function getRecipeRecommendations(Request $request, $meal_type_id){
+        // Retrieve all UserAllergen records for the authenticated user
+        $userAllergens = UserAllergen::where('user_id', auth()->user()->id)->get();
+
+        // Extract allergen_id values from the collection
+        $allergenIds = $userAllergens->pluck('allergen_id')->toArray();
+
+        // Retrieve all UserAllergen records for the authenticated user
+        $userCuisines = UserCuisine::where('user_id', auth()->user()->id)->get();
+
+        // Extract allergen_id values from the collection
+        $cuisineIds = $userCuisines->pluck('cuisine_id')->toArray();
+
+        // Retrieve all UserAllergen records for the authenticated user
+        $userHealthConditions = UserAllergen::where('user_id', auth()->user()->id)->get();
+
+        // Extract allergen_id values from the collection
+        $healthConditionIds = $userHealthConditions->pluck('health_condition_id')->toArray();
+
         $recipes = Recipe::with('images')->with('ingredient')->where('meal_type_id',$meal_type_id)->orderBy('title','ASC');
         if ($request->get('keyword') != '') {
             $recipes = $recipes->where('recipes.title', 'like', '%' . $request->input('keyword') . '%');
@@ -28,24 +48,24 @@ class RecipeRecommendationController extends Controller
         }
 
         // Filter by cuisine
-        if ($request->get('cuisine') != '') {
-            $recipes = $recipes->where('cuisine_id', $request->input('cuisine'));
+        if (!empty($cuisineIds)) {
+            $recipes = $recipes->whereIn('cuisine_id', $cuisineIds);
         }
 
         // Filter by allergens
-        if ($request->get('allergen') != '') {
-            $recipes = $recipes->whereHas('allergenRecipes', function ($query) use ($request) {
-                $query->where('allergen_id', $request->input('allergen'));
+        if (!empty($allergenIds)) {
+            $recipes = $recipes->whereHas('allergenRecipes', function ($query) use ($allergenIds) {
+                $query->whereIn('allergen_id', $allergenIds);
             });
         }
 
         // Filter by healthConditions
-        if ($request->get('health_condition') != '') {
-            $recipes = $recipes->whereHas('healthConditionRecipes', function ($query) use ($request) {
-                $query->where('health_condition_id', $request->input('health_condition'));
+        if (!empty($healthConditionIds)) {
+            $recipes = $recipes->whereHas('healthConditionRecipes', function ($query) use ($healthConditionIds) {
+                $query->whereIn('health_condition_id', $healthConditionIds);
             });
         }
-        $recipes = $recipes->paginate(10);
+        $recipes = $recipes->paginate(5);
 
         return response()->json([
             'status' => true,

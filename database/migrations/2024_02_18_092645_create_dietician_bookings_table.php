@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('workout_logs', function (Blueprint $table) {
-            $table->id();
+        Schema::create('dietician_bookings', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('workout_id')->constrained()->onDelete('cascade');
-            $table->string('workout_name');
-            $table->timestamp('start_at');
-            $table->timestamp('end_at')->nullable();
-            $table->double('calories_burned');
-            $table->integer('completion_status');
+            $table->foreignUuid('dietician_id')->constrained()->onDelete('cascade');
+            $table->double('total_amount');
+            $table->integer('payment_status');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('workout_logs');
+        Schema::dropIfExists('dietician_bookings');
     }
 };
