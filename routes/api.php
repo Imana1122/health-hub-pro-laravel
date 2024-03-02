@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\dietician\DieticianAuthController;
-use App\Http\Controllers\DieticianBookingController;
+use App\Http\Controllers\DieticianSubscriptionController;
+use App\Http\Controllers\MealPlanController;
+use App\Http\Controllers\PusherAuthController;
 use App\Http\Controllers\RecipeRecommendationController;
+use App\Http\Controllers\UserMealPlanController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserRecipeLogController;
 use App\Http\Controllers\WorkoutLogController;
@@ -20,6 +24,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('/', function () {
+    // Authentication failed
+    return response()->json(['status'=>false,'authenticated' => false]);
+})->name('login');
+Route::get('/meal-plans', [MealPlanController::class, 'index'])->name('mealplans.index');
 
 Route::prefix('account')->group(function () {
     // Routes accessible by guests
@@ -32,6 +41,8 @@ Route::prefix('account')->group(function () {
 
     // Routes accessible by authenticated customers with Passport token
     Route::middleware('auth:customer')->group(function () {
+        Route::post('/pusher/auth', [PusherAuthController::class,'authenticate'])->middleware('account.pusher.auth');
+
         Route::post('/update-info', [AuthController::class, 'updateInfo'])->name('account.updateInfo');
         Route::post('/complete-profile', [AuthController::class, 'completeProfile'])->name('account.completeProfile');
 
@@ -53,6 +64,7 @@ Route::prefix('account')->group(function () {
         Route::get('/recipe-meal-types', [RecipeRecommendationController::class, 'getMealTypes'])->name('account.getMealTypes');
 
         Route::get('/recipe-recommendations/{meal_type_id}', [RecipeRecommendationController::class, 'getRecipeRecommendations'])->name('account.getRecipeRecommendations');
+        Route::get('/meal-plan-recommendations', [UserMealPlanController::class, 'mealPlans'])->name('account.mealPlans');
 
         //Workout Recommendations
         Route::get('/workout-recommendations', [WorkoutRecommendationController::class, 'getWorkoutRecommendations'])->name('account.getWorkoutRecommendations');
@@ -64,15 +76,20 @@ Route::prefix('account')->group(function () {
         Route::get('/get-linechart-details/{type}', [UserRecipeLogController::class, 'getLineGraphDetails'])->name('account.getLineGraphDetails');
         Route::delete('/deleteMealLog/{id}', [UserRecipeLogController::class, 'deleteMealLog'])->name('account.deleteMealLog');
 
-        Route::get('/get-dieticians', [DieticianBookingController::class, 'getDieticians'])->name('account.getDieticians');
-        Route::post('/book-dieticians', [DieticianBookingController::class, 'bookDietician'])->name('account.bookDietician');
-        Route::post('/verify-booking-payment', [DieticianBookingController::class, 'verifyBookingPayment'])->name('account.verifyBookingPayment');
+        Route::get('/get-dieticians', [DieticianSubscriptionController::class, 'getDieticians'])->name('account.getDieticians');
+        Route::post('/book-dieticians', [DieticianSubscriptionController::class, 'bookDietician'])->name('account.bookDietician');
+        Route::post('/verify-booking-payment', [DieticianSubscriptionController::class, 'verifyBookingPayment'])->name('account.verifyBookingPayment');
 
         Route::post('/log-workout', [WorkoutLogController::class, 'logWorkout'])->name('account.logWorkout');
         Route::get('/get-workout-logs/{now}', [WorkoutLogController::class, 'getWorkoutLogs'])->name('account.getWorkoutLogs');
 
         Route::get('/get-workout-linechart-details/{type}', [WorkoutLogController::class, 'getWorkoutLineGraphDetails'])->name('account.getWorkoutLineGraphDetails');
         Route::delete('/deleteWorkoutLog/{id}', [WorkoutLogController::class, 'deleteWorkoutLog'])->name('account.deleteWorkoutLog');
+
+
+        Route::get('/chats/participants', [ChatMessageController::class, 'getChatDieticians'])->name('account.chats.dieticians');
+        Route::post('/chats/store', [ChatMessageController::class, 'storeByUser'])->name('account.chats.store');
+
 
     });
 
@@ -91,9 +108,14 @@ Route::prefix('dietician')->group(function () {
 
     // Routes accessible by authenticated customers with Passport token
     Route::middleware('auth:dietician')->group(function () {
+        Route::post('/pusher/auth', [PusherAuthController::class,'authenticate'])->middleware('dietician.pusher.auth');
+
         Route::post('/update-profile', [DieticianAuthController::class, 'updateProfile'])->name('dietician.updateProfile');
         Route::get('/logout', [DieticianAuthController::class, 'logout'])->name('dietician.logout');
         Route::post('/process-change-password', [DieticianAuthController::class, 'changePassword'])->name('dietician.changePassword');
+
+        Route::get('/chats/participants', [ChatMessageController::class, 'getChatUsers'])->name('dietician.chats.users');
+        Route::post('/chats/store', [ChatMessageController::class, 'storeByDietician'])->name('dietician.chats.store');
     });
 
 });

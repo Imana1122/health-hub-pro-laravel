@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class UserProfile extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
     protected $fillable = [
         'height',
         'weight',
@@ -19,7 +20,8 @@ class UserProfile extends Model
         'age',
         'gender',
         'user_id',
-        'weight_plan_id'
+        'weight_plan_id',
+        'activity_level'
     ];
 
     public function user(){
@@ -30,16 +32,5 @@ class UserProfile extends Model
     {
         return $this->belongsTo(WeightPlan::class);
     }
-    protected $primaryKey = 'id';
-    public $incrementing = false;
-    protected $keyType = 'string';
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->{$model->getKeyName()} = Str::uuid();
-        });
-    }
 }

@@ -298,6 +298,45 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/api' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'login',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/meal-plans' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'mealplans.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/api/account/process-register' => 
       array (
         0 => 
@@ -343,6 +382,25 @@ app('router')->setCompiledRoutes(
           0 => 
           array (
             '_route' => 'account.sendcode',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/pusher/auth' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'generated::nwjI8nZM8IyxTrAX',
           ),
           1 => NULL,
           2 => 
@@ -627,6 +685,26 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/api/account/meal-plan-recommendations' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.mealPlans',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/api/account/workout-recommendations' => 
       array (
         0 => 
@@ -743,6 +821,45 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/api/account/chats/participants' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.chats.dieticians',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/chats/store' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.chats.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/api/dietician/process-register' => 
       array (
         0 => 
@@ -788,6 +905,25 @@ app('router')->setCompiledRoutes(
           0 => 
           array (
             '_route' => 'dietician.sendcode',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/dietician/pusher/auth' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'generated::gm405NGCA4my7XhV',
           ),
           1 => NULL,
           2 => 
@@ -858,13 +994,52 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/api/dietician/chats/participants' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.chats.users',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/dietician/chats/store' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.chats.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/' => 
       array (
         0 => 
         array (
           0 => 
           array (
-            '_route' => 'generated::AV3vrXSMmwMso74y',
+            '_route' => 'generated::ZUPfDb24U9ZSiQ0R',
           ),
           1 => NULL,
           2 => 
@@ -3833,6 +4008,81 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'login' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+        ),
+        'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:118:"function () {
+    // Authentication failed
+    return \\response()->json([\'status\'=>false,\'authenticated\' => false]);
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004460000000000000000";}}',
+        'namespace' => NULL,
+        'prefix' => 'api',
+        'where' => 
+        array (
+        ),
+        'as' => 'login',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'mealplans.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/meal-plans',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+        ),
+        'uses' => 'App\\Http\\Controllers\\MealPlanController@index',
+        'controller' => 'App\\Http\\Controllers\\MealPlanController@index',
+        'namespace' => NULL,
+        'prefix' => 'api',
+        'where' => 
+        array (
+        ),
+        'as' => 'mealplans.index',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'account.processRegister' => 
     array (
       'methods' => 
@@ -3929,6 +4179,44 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'account.sendcode',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'generated::nwjI8nZM8IyxTrAX' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/account/pusher/auth',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+          2 => 'account.pusher.auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\PusherAuthController@authenticate',
+        'controller' => 'App\\Http\\Controllers\\PusherAuthController@authenticate',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'generated::nwjI8nZM8IyxTrAX',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4506,6 +4794,44 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'account.mealPlans' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/account/meal-plan-recommendations',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\UserMealPlanController@mealPlans',
+        'controller' => 'App\\Http\\Controllers\\UserMealPlanController@mealPlans',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.mealPlans',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'account.getWorkoutRecommendations' => 
     array (
       'methods' => 
@@ -4747,8 +5073,8 @@ app('router')->setCompiledRoutes(
           0 => 'api',
           1 => 'auth:customer',
         ),
-        'uses' => 'App\\Http\\Controllers\\DieticianBookingController@getDieticians',
-        'controller' => 'App\\Http\\Controllers\\DieticianBookingController@getDieticians',
+        'uses' => 'App\\Http\\Controllers\\DieticianSubscriptionController@getDieticians',
+        'controller' => 'App\\Http\\Controllers\\DieticianSubscriptionController@getDieticians',
         'namespace' => NULL,
         'prefix' => 'api/account',
         'where' => 
@@ -4784,8 +5110,8 @@ app('router')->setCompiledRoutes(
           0 => 'api',
           1 => 'auth:customer',
         ),
-        'uses' => 'App\\Http\\Controllers\\DieticianBookingController@bookDietician',
-        'controller' => 'App\\Http\\Controllers\\DieticianBookingController@bookDietician',
+        'uses' => 'App\\Http\\Controllers\\DieticianSubscriptionController@bookDietician',
+        'controller' => 'App\\Http\\Controllers\\DieticianSubscriptionController@bookDietician',
         'namespace' => NULL,
         'prefix' => 'api/account',
         'where' => 
@@ -4821,8 +5147,8 @@ app('router')->setCompiledRoutes(
           0 => 'api',
           1 => 'auth:customer',
         ),
-        'uses' => 'App\\Http\\Controllers\\DieticianBookingController@verifyBookingPayment',
-        'controller' => 'App\\Http\\Controllers\\DieticianBookingController@verifyBookingPayment',
+        'uses' => 'App\\Http\\Controllers\\DieticianSubscriptionController@verifyBookingPayment',
+        'controller' => 'App\\Http\\Controllers\\DieticianSubscriptionController@verifyBookingPayment',
         'namespace' => NULL,
         'prefix' => 'api/account',
         'where' => 
@@ -4994,6 +5320,81 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'account.chats.dieticians' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/account/chats/participants',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ChatMessageController@getChatDieticians',
+        'controller' => 'App\\Http\\Controllers\\ChatMessageController@getChatDieticians',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.chats.dieticians',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.chats.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/account/chats/store',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ChatMessageController@storeByUser',
+        'controller' => 'App\\Http\\Controllers\\ChatMessageController@storeByUser',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.chats.store',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'dietician.processRegister' => 
     array (
       'methods' => 
@@ -5090,6 +5491,44 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'dietician.sendcode',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'generated::gm405NGCA4my7XhV' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/dietician/pusher/auth',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:dietician',
+          2 => 'dietician.pusher.auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\PusherAuthController@authenticate',
+        'controller' => 'App\\Http\\Controllers\\PusherAuthController@authenticate',
+        'namespace' => NULL,
+        'prefix' => 'api/dietician',
+        'where' => 
+        array (
+        ),
+        'as' => 'generated::gm405NGCA4my7XhV',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5217,7 +5656,82 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::AV3vrXSMmwMso74y' => 
+    'dietician.chats.users' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/dietician/chats/participants',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:dietician',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ChatMessageController@getChatUsers',
+        'controller' => 'App\\Http\\Controllers\\ChatMessageController@getChatUsers',
+        'namespace' => NULL,
+        'prefix' => 'api/dietician',
+        'where' => 
+        array (
+        ),
+        'as' => 'dietician.chats.users',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'dietician.chats.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/dietician/chats/store',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:dietician',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ChatMessageController@storeByDietician',
+        'controller' => 'App\\Http\\Controllers\\ChatMessageController@storeByDietician',
+        'namespace' => NULL,
+        'prefix' => 'api/dietician',
+        'where' => 
+        array (
+        ),
+        'as' => 'dietician.chats.store',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'generated::ZUPfDb24U9ZSiQ0R' => 
     array (
       'methods' => 
       array (
@@ -5233,13 +5747,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:48:"function () {
     return \\view(\'admin.login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004390000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000044a0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::AV3vrXSMmwMso74y',
+        'as' => 'generated::ZUPfDb24U9ZSiQ0R',
       ),
       'fallback' => false,
       'defaults' => 
@@ -8875,7 +9389,7 @@ app('router')->setCompiledRoutes(
                 \'status\'=>true,
                 \'slug\'=>$slug
             ]);
-        }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004c20000000000000000";}}',
+        }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004da0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '/admin',
         'where' => 

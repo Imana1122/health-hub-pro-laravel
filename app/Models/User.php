@@ -3,15 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable,HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -45,18 +48,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected $primaryKey = 'id';
-    public $incrementing = false;
-    protected $keyType = 'string';
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->{$model->getKeyName()} = Str::uuid();
-        });
-    }
 
     public function workoutLogs(){
         return $this->hasMany(WorkoutLog::class);
@@ -102,5 +94,24 @@ class User extends Authenticatable
     public function dieticianBookings(){
         return $this->hasMany(DieticianBooking::class,'user_id');
     }
+
+
+    public function sentMessages()
+    {
+        return $this->morphMany(ChatMessage::class, 'sender');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->morphMany(ChatMessage::class, 'receiver');
+    }
+
+
+
+
+
+
+
+
 
 }

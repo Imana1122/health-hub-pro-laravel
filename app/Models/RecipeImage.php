@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -9,7 +10,7 @@ use Illuminate\Support\Str;
 
 class RecipeImage extends Model
 {
-    use HasFactory;
+    use HasFactory,HasUuids;
     protected $table ='recipe_images';
     protected $fillable = [
         'recipe_id',
@@ -23,16 +24,5 @@ class RecipeImage extends Model
         return $this->belongsTo(Recipe::class, 'recipe_id');
     }
 
-    protected $primaryKey = 'id';
-    public $incrementing = false;
-    protected $keyType = 'string';
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->{$model->getKeyName()} = Str::uuid();
-        });
-    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChatUser;
 use App\Models\Dietician;
 use App\Models\DieticianBooking;
 use App\Models\User;
@@ -9,23 +10,24 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class DieticianBookingController extends Controller
+class DieticianSubscriptionController extends Controller
 {
     public function getDieticians() {
         $userId = auth()->user()->id;
 
         $dieticianIdsWithRecentBookings = DieticianBooking::where('user_id', $userId)
-        ->whereDate('created_at', '>', Carbon::now()->subDays(30))
-        ->pluck('dietician_id')
-        ->toArray();
+            ->whereDate('created_at', '>', Carbon::now()->subDays(30))
+            ->where('payment_status',1)
+            ->pluck('dietician_id')
+            ->toArray();
 
-    $dieticians = Dietician::where('approved_status', 1)
-        ->whereNotIn('id', $dieticianIdsWithRecentBookings)
-        ->paginate(4);
+        $dieticians = Dietician::where('approved_status', 1)
+            ->whereNotIn('id', $dieticianIdsWithRecentBookings)
+            ->paginate(4);
 
         return response()->json([
             'status' => true,
-            'dieticians' => $dieticians
+            'data' => $dieticians
         ]);
     }
 
@@ -42,13 +44,14 @@ class DieticianBookingController extends Controller
                 $booking = $user->dieticianBookings()
                 ->where('dietician_id', $dietician->id)
                 ->latest('created_at')
+                ->where('payment_status',1)
                 ->first();
                 // Check if booking exists and was created less than 30 days ago
                 if ($booking) {
                     if($booking->created_at->diffInDays(now()) < 30){
                         return response()->json([
                             'status' => false,
-                            'error'=> 'Dietician already booked'
+                            'message'=> 'Dietician already booked'
                         ]);
                     }else{
                         $booking = DieticianBooking::create([
@@ -83,7 +86,7 @@ class DieticianBookingController extends Controller
             }else{
                 return response()->json([
                     'status' => false,
-                    'error'=> 'Dietician not found.'
+                    'message'=> 'Dietician not found.'
                 ]);
             }
         }else{
@@ -115,11 +118,10 @@ class DieticianBookingController extends Controller
 
                     $booking->save();
 
-                    // $dieticianBooking = DieticianBooking::with('dietician')->find($booking->id);
 
                     return response()->json([
                         'status' => true,
-                        // 'data'=> $dieticianBooking
+                        'message'=>'Dietician  booked successfully'
                     ]);
 
                 }else{
@@ -127,13 +129,13 @@ class DieticianBookingController extends Controller
 
                     return response()->json([
                         'status' => false,
-                        'error'=> "Payment not successful for booking"
+                        'message'=> "Payment not successful for booking"
                     ]);
                 }
             }else{
                 return response()->json([
                     'status' => false,
-                    'error'=> 'Booking not found.'
+                    'message'=> 'Booking not found.'
                 ]);
             }
         }else{

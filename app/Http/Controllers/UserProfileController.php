@@ -19,7 +19,7 @@ class UserProfileController extends Controller
 
         return response()->json([
             'status' => true,
-            'weightPlans' => $weightPlans
+            'data' => $weightPlans
         ]);
     }
 
@@ -28,7 +28,7 @@ class UserProfileController extends Controller
 
         return response()->json([
             'status' => true,
-            'cuisines' => $cuisines
+            'data' => $cuisines
         ]);
     }
 
@@ -37,7 +37,7 @@ class UserProfileController extends Controller
 
         return response()->json([
             'status' => true,
-            'allergens' => $allergens
+            'data' => $allergens
         ]);
     }
 
@@ -46,7 +46,7 @@ class UserProfileController extends Controller
 
         return response()->json([
             'status' => true,
-            'healthConditions' => $healthConditions
+            'data' => $healthConditions
         ]);
     }
 
@@ -55,7 +55,7 @@ class UserProfileController extends Controller
 
         if(!$userId){
             return response()->json([
-                'error'=> 'User not found',
+                'message'=> 'User not found',
                 'status'=>false
             ]);
         }
@@ -76,7 +76,7 @@ class UserProfileController extends Controller
 
             return response()->json([
                 'status' => true,
-                'userProfile' => $userProfile
+                'data' => $userProfile
             ]);
 
         }else{
@@ -96,7 +96,7 @@ class UserProfileController extends Controller
 
         if(!$userId){
             return response()->json([
-                'error'=> 'User not found',
+                'message'=> 'User not found',
                 'status'=>false
             ]);
         }
@@ -121,12 +121,12 @@ class UserProfileController extends Controller
 
                 return response()->json([
                     'status' => true,
-                    'userCuisines' => $userCuisines,
+                    'data' => $userCuisines,
                 ]);
             }else{
                 return response()->json([
                     'status' => true,
-                    'userCuisines' => $userCuisines,
+                    'data' => $userCuisines,
                 ]);
             }
 
@@ -148,7 +148,7 @@ class UserProfileController extends Controller
 
         if(!$userId){
             return response()->json([
-                'error'=> 'User not found',
+                'message'=> 'User not found',
                 'status'=>false
             ]);
         }
@@ -174,13 +174,13 @@ class UserProfileController extends Controller
 
             return response()->json([
                 'status' => true,
-                'userAllergens' => $userAllergens
+                'data' => $userAllergens
             ]);
         }
         else{
             return response()->json([
                 'status' => true,
-                'userAllergens' => $userAllergens
+                'data' => $userAllergens
             ]);
         }
 
@@ -200,7 +200,7 @@ class UserProfileController extends Controller
 
         if(!$userId){
             return response()->json([
-                'error'=> 'User not found',
+                'message'=> 'User not found',
                 'status'=>false
             ]);
         }
@@ -223,12 +223,12 @@ class UserProfileController extends Controller
 
             return response()->json([
                 'status' => true,
-                'userHealthConditions' => $userHealthConditions
+                'data' => $userHealthConditions
             ]);
         }else{
             return response()->json([
                 'status' => true,
-                'userHealthConditions' => $userHealthConditions
+                'data' => $userHealthConditions
             ]);
         }
 

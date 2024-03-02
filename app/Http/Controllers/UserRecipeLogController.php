@@ -35,7 +35,7 @@ class UserRecipeLogController extends Controller
                     ->get();
                 return response()->json([
                     'status' => true,
-                    'mealLogs' => $recipeLogs
+                    'data' => $recipeLogs
                 ]);
             }else{
                 return response()->json([
@@ -65,7 +65,7 @@ class UserRecipeLogController extends Controller
             ->get();
         return response()->json([
             'status' => true,
-            'mealLogs' => $recipeLogs
+            'data' => $recipeLogs
         ]);
 
 
@@ -87,12 +87,12 @@ class UserRecipeLogController extends Controller
 
             return response()->json([
                 'status' => true,
-                'mealLogs' => $recipeLogs
+                'data' => $recipeLogs
             ]);
         }else{
             return response()->json([
                 'status' => false,
-                'error' => "Recipe log not found"
+                'message' => "Recipe log not found"
             ]);
         }
 
@@ -106,7 +106,7 @@ class UserRecipeLogController extends Controller
         if ($userRecipeLogs->isEmpty()) {
             return response()->json([
                 'status' => false,
-                'error' => 'No user logs found'
+                'message' => 'No user logs found'
             ]);
         }
         // Step 3: Group the data based on the $type parameter
@@ -124,7 +124,7 @@ class UserRecipeLogController extends Controller
             default:
                 return response()->json([
                     'status' => false,
-                    'error' => 'Invalid type. Please provide "daily", "weekly", or "monthly".'
+                    'message' => 'Invalid type. Please provide "daily", "weekly", or "monthly".'
                 ]);
         }
 

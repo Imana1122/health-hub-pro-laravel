@@ -21,9 +21,10 @@ class WorkoutRecommendationController extends Controller
     });
         return response()->json([
             'status' => true,
-            'workouts' => $workouts
+            'data' => $workouts
         ]);
     }
+
     public function getWorkoutwithExercise($id){
         $workout = Workout::where('id',$id)->first();
         // Fetch all exercises
@@ -36,7 +37,7 @@ class WorkoutRecommendationController extends Controller
         });
         return response()->json([
             'status' => true,
-            'workout' => $workout
+            'data' => $workout
         ]);
     }
 }

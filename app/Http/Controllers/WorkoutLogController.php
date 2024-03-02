@@ -23,6 +23,7 @@ class WorkoutLogController extends Controller
         if ($validator->passes()) {
             $workoutLog = WorkoutLog::create([
                 'user_id'=> auth()->user()->id,
+                'exercises' => $request->exercises,
                 'workout_id' => $request->workout_id,
                 'start_at' => $request->start_at,
                 'end_at' => $request->end_at,
@@ -42,7 +43,7 @@ class WorkoutLogController extends Controller
                     ->get();
                 return response()->json([
                     'status' => true,
-                    'workoutLogs' => $workoutLogs
+                    'data' => $workoutLogs
                 ]);
             }else{
                 return response()->json([
@@ -71,7 +72,7 @@ class WorkoutLogController extends Controller
             ->get();
         return response()->json([
             'status' => true,
-            'workoutLogs' => $workoutLogs
+            'data' => $workoutLogs
         ]);
 
 
@@ -92,26 +93,25 @@ class WorkoutLogController extends Controller
 
             return response()->json([
                 'status' => true,
-                'workoutLogs' => $workoutLogs
+                'data' => $workoutLogs
             ]);
         }else{
             return response()->json([
                 'status' => false,
-                'error' => "Workout log not found"
+                'message' => "Workout log not found"
             ]);
         }
 
     }
 
-    public function getLineGraphDetails($type)
+    public function getWorkoutLineGraphDetails($type)
     {
         // Step 1: Query UserWorkoutLog to retrieve the logs of workouts logged by the user
         $userWorkoutLogs = WorkoutLog::with('workout')->where('user_id', auth()->user()->id)->get();
-
         if ($userWorkoutLogs->isEmpty()) {
             return response()->json([
                 'status' => false,
-                'error' => 'No user logs found'
+                'message' => 'No user logs found'
             ]);
         }
         // Step 3: Group the data based on the $type parameter
@@ -129,7 +129,7 @@ class WorkoutLogController extends Controller
             default:
                 return response()->json([
                     'status' => false,
-                    'error' => 'Invalid type. Please provide "daily", "weekly", or "monthly".'
+                    'message' => 'Invalid type. Please provide "daily", "weekly", or "monthly".'
                 ]);
         }
 
@@ -147,6 +147,7 @@ class WorkoutLogController extends Controller
         foreach ($workoutLogs as $log) {
             $date = $log->created_at->format('Y-m-d');
             $calories_burned = $log->workout->calories_burned;
+            // dd($calories_burned);
             if (!isset($dailyData[$date])) {
                 $dailyData[$date] = 0;
             }
@@ -154,7 +155,7 @@ class WorkoutLogController extends Controller
         }
         $formattedData = [];
         foreach ($dailyData as $date => $calories_burned) {
-            $formattedData[] = ['x' => $date, 'y' => $calories_burned];
+            $formattedData[] = ['x' => $date, 'y' => 23.0];
         }
         return $formattedData;
     }

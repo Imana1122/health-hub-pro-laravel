@@ -26,15 +26,15 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="title">Name</label>
-                                <input type="text" name="title" id="title" class="form-control" placeholder="Title" value="{{ $weightPlan->title }}">
+                                <label for="name">Name</label>
+                                <input type="text" name="title" id="name" class="form-control" placeholder="Title" value="{{ $weightPlan->title }}">
                                 <p></p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="slug">Slug</label>
-                                <input type="text" name="slug" readOnly id="slug" class="form-control" placeholder="Slug" value="{{ $weightPlan->slug }}">
+                                <input type="text" name="slug" id="slug" readOnly id="slug" class="form-control" placeholder="Slug" value="{{ $weightPlan->slug }}">
                                 <p></p>
                             </div>
                         </div>

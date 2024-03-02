@@ -7,6 +7,9 @@ use App\Models\Recipe;
 use App\Models\RecipeCategory;
 use App\Models\UserAllergen;
 use App\Models\UserCuisine;
+use App\Models\UserMealPlan;
+use App\Models\UserProfile;
+use App\Models\WeightPlan;
 use Illuminate\Http\Request;
 
 class RecipeRecommendationController extends Controller
@@ -67,18 +70,24 @@ class RecipeRecommendationController extends Controller
         }
         $recipes = $recipes->paginate(5);
 
+
+
         return response()->json([
             'status' => true,
             'recipes' => $recipes
         ]);
     }
 
+
+
+
+
     public function getRecipeCategories(Request $request){
         $recipeCategories = RecipeCategory::orderBy('name','ASC')->get();
 
         return response()->json([
             'status' => true,
-            'recipeCategories' => $recipeCategories
+            'data' => $recipeCategories
         ]);
     }
 
@@ -90,8 +99,12 @@ class RecipeRecommendationController extends Controller
 
         return response()->json([
             'status' => true,
-            'recipeMealTypes' => $mealTypes
+            'data' => $mealTypes
         ]);
     }
+
+
+
+
 
 }
