@@ -28,7 +28,7 @@ Route::post('/', function () {
     // Authentication failed
     return response()->json(['status'=>false,'authenticated' => false]);
 })->name('login');
-Route::get('/meal-plans', [MealPlanController::class, 'index'])->name('mealplans.index');
+// Route::get('/meal-plans', [MealPlanController::class, 'index'])->name('mealplans.index');
 
 Route::prefix('account')->group(function () {
     // Routes accessible by guests

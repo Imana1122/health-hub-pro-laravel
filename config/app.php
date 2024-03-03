@@ -15,6 +15,9 @@ return [
     | any other location as required by the application or its packages.
     |
     */
+    'http' => [
+        'timeout' => 180,
+    ],
 
     'name' => env('APP_NAME', 'Laravel'),
 
@@ -143,6 +146,7 @@ return [
         'driver' => 'file',
         // 'store' => 'redis',
     ],
+
 
     /*
     |--------------------------------------------------------------------------

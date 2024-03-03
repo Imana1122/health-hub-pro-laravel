@@ -317,26 +317,6 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      '/api/meal-plans' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'mealplans.index',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
       '/api/account/process-register' => 
       array (
         0 => 
@@ -400,7 +380,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::nwjI8nZM8IyxTrAX',
+            '_route' => 'generated::MZHCXhjLkymqxBIK',
           ),
           1 => NULL,
           2 => 
@@ -923,7 +903,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::gm405NGCA4my7XhV',
+            '_route' => 'generated::TIeTh0STvswaTbnZ',
           ),
           1 => NULL,
           2 => 
@@ -1039,7 +1019,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::ZUPfDb24U9ZSiQ0R',
+            '_route' => 'generated::q7BAh9k8adggeCZY',
           ),
           1 => NULL,
           2 => 
@@ -4024,50 +4004,13 @@ app('router')->setCompiledRoutes(
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:118:"function () {
     // Authentication failed
     return \\response()->json([\'status\'=>false,\'authenticated\' => false]);
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004460000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004450000000000000000";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
         array (
         ),
         'as' => 'login',
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
-    'mealplans.index' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'GET',
-        1 => 'HEAD',
-      ),
-      'uri' => 'api/meal-plans',
-      'action' => 
-      array (
-        'middleware' => 
-        array (
-          0 => 'api',
-        ),
-        'uses' => 'App\\Http\\Controllers\\MealPlanController@index',
-        'controller' => 'App\\Http\\Controllers\\MealPlanController@index',
-        'namespace' => NULL,
-        'prefix' => 'api',
-        'where' => 
-        array (
-        ),
-        'as' => 'mealplans.index',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4194,7 +4137,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::nwjI8nZM8IyxTrAX' => 
+    'generated::MZHCXhjLkymqxBIK' => 
     array (
       'methods' => 
       array (
@@ -4216,7 +4159,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::nwjI8nZM8IyxTrAX',
+        'as' => 'generated::MZHCXhjLkymqxBIK',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5506,7 +5449,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::gm405NGCA4my7XhV' => 
+    'generated::TIeTh0STvswaTbnZ' => 
     array (
       'methods' => 
       array (
@@ -5528,7 +5471,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::gm405NGCA4my7XhV',
+        'as' => 'generated::TIeTh0STvswaTbnZ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5731,7 +5674,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::ZUPfDb24U9ZSiQ0R' => 
+    'generated::q7BAh9k8adggeCZY' => 
     array (
       'methods' => 
       array (
@@ -5747,13 +5690,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:48:"function () {
     return \\view(\'admin.login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000044a0000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004480000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::ZUPfDb24U9ZSiQ0R',
+        'as' => 'generated::q7BAh9k8adggeCZY',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9389,7 +9332,7 @@ app('router')->setCompiledRoutes(
                 \'status\'=>true,
                 \'slug\'=>$slug
             ]);
-        }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004da0000000000000000";}}',
+        }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004d80000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '/admin',
         'where' => 

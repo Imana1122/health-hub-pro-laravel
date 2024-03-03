@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('meal_plans', function (Blueprint $table) {
+        Schema::create('user_meal_plans', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('breakfast')->constrained('recipes')->onDelete('cascade');
-            $table->foreignUuid('lunch')->constrained('recipes')->onDelete('cascade');
-            $table->foreignUuid('snack')->constrained('recipes')->onDelete('cascade');
-            $table->foreignUuid('dinner')->constrained('recipes')->onDelete('cascade');
+            $table->foreignUuid('meal_plan_id')->constrained()->onDeleteCascade();
             $table->double('calories');
             $table->double('carbohydrates');
             $table->double('protein');
@@ -24,8 +21,6 @@ return new class extends Migration
             $table->double('saturated_fat');
             $table->double('sodium');
             $table->double('sugar');
-
-
             $table->timestamps();
         });
     }
@@ -35,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('meal_plans');
+        Schema::dropIfExists('user_meal_plans');
     }
 };
