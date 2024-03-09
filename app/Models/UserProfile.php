@@ -21,7 +21,15 @@ class UserProfile extends Model
         'gender',
         'user_id',
         'weight_plan_id',
-        'activity_level'
+        'activity_level',
+        'calories',
+        'carbohydrates',
+        'protein',
+        'total_fat',
+        'sodium',
+        'sugar',
+        'bmi',
+        'notification'
     ];
 
     public function user(){

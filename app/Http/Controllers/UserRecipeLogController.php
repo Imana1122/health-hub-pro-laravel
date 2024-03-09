@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recipe;
+use App\Models\UserMealPlan;
+use App\Models\UserProfile;
 use App\Models\UserRecipeLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -16,6 +18,33 @@ class UserRecipeLogController extends Controller
         ]);
 
         if ($validator->passes()) {
+            $userMealPlan = UserMealPlan::where('user_id',auth()->user()->id)->whereDate('created_at',$request->created_at)->first();
+            $userProfile = UserProfile::where('user_id',auth()->user()->id)->first();
+            if (empty($userMealPlan)) {
+                $userMealPlan = UserMealPlan::create([
+                    'user_id' => auth()->user()->id,
+                    'calories' => $userProfile->calories,
+
+                    'carbohydrates' => $userProfile->carbohydrates,
+                    'protein' => $userProfile->protein,
+                    'total_fat' => $userProfile->total_fat,
+                    'saturated_fat' => $userProfile->saturated_fat,
+                    'sodium' => $userProfile->sodium,
+                    'sugar' => $userProfile->sugar,
+                ]);
+            } else {
+                $userMealPlan->update([
+                    'calories' => $userProfile->calories,
+
+                    'carbohydrates' => $userProfile->carbohydrates,
+                    'protein' => $userProfile->protein,
+                    'total_fat' => $userProfile->total_fat,
+                    'saturated_fat' => $userProfile->saturated_fat,
+                    'sodium' => $userProfile->sodium,
+                    'sugar' => $userProfile->sugar,
+                ]);
+            }
+
             $recipeLog = UserRecipeLog::create([
                 'user_id'=> auth()->user()->id,
                 'recipe_id' => $request->recipe_id,
@@ -35,12 +64,15 @@ class UserRecipeLogController extends Controller
                     ->get();
                 return response()->json([
                     'status' => true,
-                    'data' => $recipeLogs
+                    'data' => [
+                        'recipeLogs'=>$recipeLogs,
+                        'userNutrients'=>$userMealPlan
+                    ]
                 ]);
             }else{
                 return response()->json([
                     'status' => false,
-                    'errors' => $validator->errors()
+                    'errors' => 'Recipe log not found'
                 ]);
             }
 
@@ -50,9 +82,14 @@ class UserRecipeLogController extends Controller
                 'errors' => $validator->errors()
             ]);
         }
+
+
+
+
     }
 
     public function getMealLogs($now){
+        $userMealPlan = UserMealPlan::where('user_id',auth()->user()->id)->whereDate('created_at',$now)->first();
 
 
         // Extract the date part from the provided datetime string
@@ -63,10 +100,14 @@ class UserRecipeLogController extends Controller
             ->where('user_id', auth()->user()->id)
             ->whereRaw('DATE(created_at) = ?', [$providedDate])
             ->get();
-        return response()->json([
-            'status' => true,
-            'data' => $recipeLogs
-        ]);
+
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'recipeLogs'=>$recipeLogs,
+                    'userNutrients'=>$userMealPlan
+                ]
+            ]);
 
 
     }
@@ -101,7 +142,7 @@ class UserRecipeLogController extends Controller
     public function getLineGraphDetails($type)
     {
         // Step 1: Query UserRecipeLog to retrieve the logs of recipes logged by the user
-        $userRecipeLogs = UserRecipeLog::with('recipe')->where('user_id', auth()->user()->id)->get();
+        $userRecipeLogs = UserRecipeLog::with('recipe')->where('user_id', auth()->user()->id)->orderBy('created_at')->get();
 
         if ($userRecipeLogs->isEmpty()) {
             return response()->json([

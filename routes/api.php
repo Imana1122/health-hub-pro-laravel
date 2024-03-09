@@ -4,8 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\dietician\DieticianAuthController;
 use App\Http\Controllers\DieticianSubscriptionController;
-use App\Http\Controllers\MealPlanController;
-use App\Http\Controllers\PusherAuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RecipeRecommendationController;
 use App\Http\Controllers\UserMealPlanController;
 use App\Http\Controllers\UserProfileController;
@@ -41,7 +40,6 @@ Route::prefix('account')->group(function () {
 
     // Routes accessible by authenticated customers with Passport token
     Route::middleware('auth:customer')->group(function () {
-        Route::post('/pusher/auth', [PusherAuthController::class,'authenticate'])->middleware('account.pusher.auth');
 
         Route::post('/update-info', [AuthController::class, 'updateInfo'])->name('account.updateInfo');
         Route::post('/complete-profile', [AuthController::class, 'completeProfile'])->name('account.completeProfile');
@@ -59,22 +57,30 @@ Route::prefix('account')->group(function () {
         Route::post('/set-allergens', [UserProfileController::class, 'setAllergens'])->name('account.setAllergens');
         Route::post('/set-health-conditions', [UserProfileController::class, 'setHealthConditions'])->name('account.setHealthConditions');
 
+        //Home
+        Route::get('/home-details/{now}', [HomeController::class, 'index'])->name('account.home');
+
+        //Meal Plans
+        Route::get('/meal-plans', [UserMealPlanController::class, 'index'])->name('account.getMealPlans');
+        Route::post('/select-meal-plan', [UserMealPlanController::class, 'selectMealPlan'])->name('account.selectMealPlan');
+
         //Recipe Recommendations
         Route::get('/recipe-categories', [RecipeRecommendationController::class, 'getRecipeCategories'])->name('account.getRecipeCategories');
         Route::get('/recipe-meal-types', [RecipeRecommendationController::class, 'getMealTypes'])->name('account.getMealTypes');
-
         Route::get('/recipe-recommendations/{meal_type_id}', [RecipeRecommendationController::class, 'getRecipeRecommendations'])->name('account.getRecipeRecommendations');
-        Route::get('/meal-plan-recommendations', [UserMealPlanController::class, 'mealPlans'])->name('account.mealPlans');
-
-        //Workout Recommendations
-        Route::get('/workout-recommendations', [WorkoutRecommendationController::class, 'getWorkoutRecommendations'])->name('account.getWorkoutRecommendations');
-        Route::get('workout-exercises/{id}', [WorkoutRecommendationController::class, 'getWorkoutwithExercise'])->name('account.getWorkoutExercises');
-
+        Route::get('/setTodayGoal', [UserMealPlanController::class, 'setTodayGoal'])->name('account.setTodayGoal');
+        Route::get('/meal-plan-recommendations', [UserMealPlanController::class, 'index'])->name('account.mealPlans');
         //meal logs
         Route::post('/log-meal', [UserRecipeLogController::class, 'logMeal'])->name('account.logMeal');
         Route::get('/get-meal-logs/{now}', [UserRecipeLogController::class, 'getMealLogs'])->name('account.getMealLogs');
         Route::get('/get-linechart-details/{type}', [UserRecipeLogController::class, 'getLineGraphDetails'])->name('account.getLineGraphDetails');
         Route::delete('/deleteMealLog/{id}', [UserRecipeLogController::class, 'deleteMealLog'])->name('account.deleteMealLog');
+
+        //Workout Recommendations
+        Route::get('/workout-recommendations', [WorkoutRecommendationController::class, 'getWorkoutRecommendations'])->name('account.getWorkoutRecommendations');
+        Route::get('workout-exercises/{id}', [WorkoutRecommendationController::class, 'getWorkoutwithExercise'])->name('account.getWorkoutExercises');
+
+
 
         Route::get('/get-dieticians', [DieticianSubscriptionController::class, 'getDieticians'])->name('account.getDieticians');
         Route::post('/book-dieticians', [DieticianSubscriptionController::class, 'bookDietician'])->name('account.bookDietician');
@@ -88,7 +94,10 @@ Route::prefix('account')->group(function () {
 
 
         Route::get('/chats/participants', [ChatMessageController::class, 'getChatDieticians'])->name('account.chats.dieticians');
+        Route::get('/chats/{id}', [ChatMessageController::class, 'loadMoreMessages'])->name('account.chats.loadMore');
+
         Route::post('/chats/store', [ChatMessageController::class, 'storeByUser'])->name('account.chats.store');
+        Route::post('/chats/read', [ChatMessageController::class, 'setChatMessagesRead'])->name('account.chats.read');
 
 
     });
@@ -108,7 +117,6 @@ Route::prefix('dietician')->group(function () {
 
     // Routes accessible by authenticated customers with Passport token
     Route::middleware('auth:dietician')->group(function () {
-        Route::post('/pusher/auth', [PusherAuthController::class,'authenticate'])->middleware('dietician.pusher.auth');
 
         Route::post('/update-profile', [DieticianAuthController::class, 'updateProfile'])->name('dietician.updateProfile');
         Route::get('/logout', [DieticianAuthController::class, 'logout'])->name('dietician.logout');
@@ -116,6 +124,8 @@ Route::prefix('dietician')->group(function () {
 
         Route::get('/chats/participants', [ChatMessageController::class, 'getChatUsers'])->name('dietician.chats.users');
         Route::post('/chats/store', [ChatMessageController::class, 'storeByDietician'])->name('dietician.chats.store');
+        Route::post('/chats/read', [ChatMessageController::class, 'setChatMessagesRead'])->name('dietician.chats.read');
+
     });
 
 });

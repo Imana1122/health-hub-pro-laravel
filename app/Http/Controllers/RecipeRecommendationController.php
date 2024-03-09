@@ -68,13 +68,13 @@ class RecipeRecommendationController extends Controller
                 $query->whereIn('health_condition_id', $healthConditionIds);
             });
         }
-        $recipes = $recipes->paginate(5);
+        $recipes = $recipes->paginate(4);
 
 
 
         return response()->json([
             'status' => true,
-            'recipes' => $recipes
+            'data' => $recipes
         ]);
     }
 

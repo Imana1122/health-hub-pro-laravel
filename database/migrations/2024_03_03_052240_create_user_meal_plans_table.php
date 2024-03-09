@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_meal_plans', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('meal_plan_id')->constrained()->onDeleteCascade();
+            $table->foreignUuid('user_id')->constrained()->onDeleteCascade();
+            $table->foreignUuid('meal_plan_id')->constrained()->onDeleteCascade()->nullable()->default(null);
             $table->double('calories');
             $table->double('carbohydrates');
             $table->double('protein');

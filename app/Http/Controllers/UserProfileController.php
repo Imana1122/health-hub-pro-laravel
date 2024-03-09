@@ -73,6 +73,21 @@ class UserProfileController extends Controller
                 ]
             );
 
+            $userGoals = $this->getTodayGoal();
+
+            // dd($userGoals);
+            $userProfile->update(
+                [
+                    'calories' => $userGoals['calories'],
+                    'protein' => $userGoals['protein'],
+                    'carbohydrates' => $userGoals['carbohydrates'],
+                    'total_fat' => $userGoals['total_fat'],
+                    'sodium' => $userGoals['sodium'],
+                    'sugar' => $userGoals['sugar'],
+                    'bmi'=>$userGoals['bmi'],
+
+                ]
+            );
 
             return response()->json([
                 'status' => true,
@@ -87,6 +102,133 @@ class UserProfileController extends Controller
         }
 
 
+    }
+
+    public function getTodayGoal(){
+
+        // Assuming $userProfile contains the user's profile data
+
+        $userProfile = UserProfile::where('user_id',auth()->user()->id)->first();
+        $userGoal = WeightPlan::where('id',$userProfile->weight_plan_id)->first()->slug;
+
+        // Step 2: Calculate BMR
+        $bmr = $this->calculateBMR($userProfile);
+        $bmi = $this->calculateBMI($userProfile);
+
+        // Step 3: Adjust BMR for Activity Level to get TDEE
+        $tdee = $this->calculateTDEE($bmr, $userProfile->activity_level);
+
+        // Step 4: Set Calorie Goals based on user's goal (e.g., weight loss, muscle gain)
+        $calorieGoal = $this->calculateCalorieGoal($tdee, $userGoal);
+
+        // Step 5: Calculate Macronutrient Requirements based on predefined ratios
+        $macronutrientGoals = $this->calculateMacronutrientGoals($calorieGoal, $userGoal);
+
+        // Step 6: Adjust for Individual Needs (optional)
+
+        // Step 7: Calculate Sodium and Sugar Intake limits
+        $sodiumLimit = $this->calculateSodiumLimit();
+        if($userProfile->gender == 'female'){
+            $sugarLimit = $this->calculateSugarLimitForWomen();
+
+        }else{
+            $sugarLimit = $this->calculateSugarLimitForMen();
+
+        }
+
+        // Step 8: Store calculated goals in user's profile or a separate table
+        $userMealPlan =
+            [
+                'calories' => $calorieGoal,
+                'protein' => $macronutrientGoals['protein'],
+                'carbohydrates' => $macronutrientGoals['carbohydrate'],
+                'total_fat' => $macronutrientGoals['fat'],
+                'sodium' => $sodiumLimit,
+                'sugar' => $sugarLimit,
+                'bmi'=>$bmi
+            ];
+
+
+        // Return the list of meal plans
+        return $userMealPlan;
+    }
+
+
+    function calculateSugarLimitForMen() {
+        // Define sugar limit based on dietary guidelines for men
+        return 36; // Example: Daily sugar limit in grams for men
+    }
+
+    function calculateSugarLimitForWomen() {
+        // Define sugar limit based on dietary guidelines for women
+        return 25; // Example: Daily sugar limit in grams for women
+    }
+
+        // Step 2: Calculate BMR
+    function calculateBMR($userProfile) {
+        $bmr = 0;
+        if ($userProfile->gender === 'male') {
+            $bmr = 10 * $userProfile->weight + 6.25 * $userProfile->height - 5 * $userProfile->age + 5;
+        } elseif ($userProfile->gender === 'female') {
+            $bmr = 10 * $userProfile->weight + 6.25 * $userProfile->height - 5 * $userProfile->age - 161;
+        }
+        return $bmr;
+    }
+    function calculateBMI($userProfile) {
+        $heightInMeters = $userProfile->height / 100;
+        return $userProfile->weight / ($heightInMeters * $heightInMeters);
+    }
+
+
+    // Step 3: Adjust BMR for Activity Level to get TDEE
+    function calculateTDEE($bmr, $activityLevel) {
+        $activityFactors = [
+            'sedentary' => 1.2,
+            'lightly_active' => 1.375,
+            'moderately_active' => 1.55,
+            'very_active' => 1.725,
+            'extra_active' => 1.9,
+        ];
+        return $bmr * $activityFactors[$activityLevel];
+    }
+
+    // Step 4: Set Calorie Goals based on user's goal
+    function calculateCalorieGoal($tdee, $userGoal) {
+        switch ($userGoal) {
+            case 'muscle-gain':
+                return $tdee + 200;
+            case 'weight-loss':
+                return $tdee - 200;
+            case 'fat-loss':
+                return $tdee - 200;
+            case 'maintain-weight':
+            default:
+                return $tdee; // Maintain weight
+        }
+    }
+
+    // Step 5: Calculate Macronutrient Requirements based on predefined ratios
+    function calculateMacronutrientGoals($calorieGoal, $goalType) {
+        // Define macronutrient ratios based on goal type
+        $macronutrientRatios = [
+            'muscle-gain' => ['protein' => 0.3, 'carbohydrate' => 0.5, 'fat' => 0.2],
+            'weight-loss' => ['protein' => 0.35, 'carbohydrate' => 0.4, 'fat' => 0.25],
+            'fat-loss' => ['protein' => 0.4, 'carbohydrate' => 0.3, 'fat' => 0.3],
+            'maintain-weight' => ['protein' => 0.25, 'carbohydrate' => 0.45, 'fat' => 0.3],
+        ];
+
+        // Calculate macronutrient goals
+        $macronutrientGoals = [];
+        foreach ($macronutrientRatios[$goalType] as $macronutrient => $ratio) {
+            $macronutrientGoals[$macronutrient] = $calorieGoal * $ratio;
+        }
+        return $macronutrientGoals;
+    }
+
+    // Step 7: Calculate Sodium and Sugar Intake limits
+    function calculateSodiumLimit() {
+        // Define sodium limit based on dietary guidelines
+        return 2300; // Example: Daily sodium limit in milligrams
     }
 
 
@@ -241,6 +383,4 @@ class UserProfileController extends Controller
 
 
     }
-
-
 }

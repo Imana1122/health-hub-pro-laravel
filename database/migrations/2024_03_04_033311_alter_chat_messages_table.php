@@ -6,14 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-/**
+    /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table('workout_logs', function (Blueprint $table) {
-            $table->json('exercises');
-
+        Schema::table('chat_messages', function (Blueprint $table) {
+            $table->integer('read')->after('file')->default(0);
         });
     }
 
@@ -22,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('workout_logs', function (Blueprint $table) {
-            $table->dropColumn('exercises');
-
+        Schema::table('dieticians', function (Blueprint $table) {
+            $table->dropColumn('read');
         });
     }
 };

@@ -26,8 +26,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="title">Name</label>
-                                <input type="text" name="title" id="title" class="form-control" placeholder="Title">
+                                <label for="name">Name</label>
+                                <input type="text" name="title" id="name" class="form-control" placeholder="Title">
                                 <p></p>
                             </div>
                         </div>

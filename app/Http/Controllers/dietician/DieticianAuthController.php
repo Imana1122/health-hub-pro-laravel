@@ -26,7 +26,9 @@ class DieticianAuthController extends Controller
             'cv' => 'required|file|mimes:pdf',
             'speciality' => 'required',
             'description' => 'required|max:255',
-            'esewa_id' => 'required',
+            'esewa_client_id' => 'required',
+            'esewa_secret_key' => 'required',
+
             'booking_amount' => 'required|numeric',
             'bio' => 'required',
         ]);
@@ -40,7 +42,9 @@ class DieticianAuthController extends Controller
                 'phone_number' => $request->phone_number,
                 'speciality' => $request->speciality,
                 'description' => $request->description,
-                'esewa_id' => $request->esewa_id,
+                'esewa_client_id' => $request->esewa_client_id,
+                'esewa_secret_key' => $request->esewa_secret_key,
+
                 'booking_amount'=> $request->booking_amount,
                 'bio' => $request->bio,
                 ]);

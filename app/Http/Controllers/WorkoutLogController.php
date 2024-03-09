@@ -16,14 +16,12 @@ class WorkoutLogController extends Controller
             'workout_name' => 'required',
             'completion_status' => 'required',
             'calories_burned' => 'required',
-            'exercises' => 'required',
 
         ]);
 
         if ($validator->passes()) {
             $workoutLog = WorkoutLog::create([
                 'user_id'=> auth()->user()->id,
-                'exercises' => $request->exercises,
                 'workout_id' => $request->workout_id,
                 'start_at' => $request->start_at,
                 'end_at' => $request->end_at,
@@ -70,6 +68,7 @@ class WorkoutLogController extends Controller
         $workoutLogs = WorkoutLog::where('user_id', auth()->user()->id)
             ->whereRaw('DATE(created_at) = ?', [$providedDate])
             ->get();
+
         return response()->json([
             'status' => true,
             'data' => $workoutLogs
@@ -146,8 +145,7 @@ class WorkoutLogController extends Controller
         $dailyData = [];
         foreach ($workoutLogs as $log) {
             $date = $log->created_at->format('Y-m-d');
-            $calories_burned = $log->workout->calories_burned;
-            // dd($calories_burned);
+            $calories_burned = $log->calories_burned;
             if (!isset($dailyData[$date])) {
                 $dailyData[$date] = 0;
             }
@@ -155,7 +153,7 @@ class WorkoutLogController extends Controller
         }
         $formattedData = [];
         foreach ($dailyData as $date => $calories_burned) {
-            $formattedData[] = ['x' => $date, 'y' => 23.0];
+            $formattedData[] = ['x' => $date, 'y' =>$calories_burned ];
         }
         return $formattedData;
     }
@@ -168,7 +166,7 @@ class WorkoutLogController extends Controller
         $weeklyData = [];
         foreach ($logDetails as $log) {
             $week = $log->created_at->format('W');
-            $calories_burned = $log->workout->calories_burned;
+            $calories_burned = $log->calories_burned;
             if (!isset($weeklyData[$week])) {
                 $weeklyData[$week] = 0;
             }
@@ -189,7 +187,7 @@ class WorkoutLogController extends Controller
         $monthlyData = [];
         foreach ($logDetails as $log) {
             $month = $log->created_at->format('Y-m');
-            $calories_burned = $log->workout->calories_burned;
+            $calories_burned = $log->calories_burned;
             if (!isset($monthlyData[$month])) {
                 $monthlyData[$month] = 0;
             }

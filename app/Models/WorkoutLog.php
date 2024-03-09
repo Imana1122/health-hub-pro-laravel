@@ -16,7 +16,6 @@ class WorkoutLog extends Model
         'completion_status',
         'user_id',
         'workout_name',
-        'exercises',
         'workout_id',
     ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageRead;
 use App\Events\MessageSent;
 use App\Events\MessageSentToDietician;
 use App\Models\ChatMessage;
@@ -29,20 +30,32 @@ class ChatMessageController extends Controller
             ->paginate(4);
 
         foreach ($dieticians as $dietician) {
-            $messages = ChatMessage::where(function ($query) use ($dietician, $userId) {
+            $messagesQuery = ChatMessage::where(function ($query) use ($dietician, $userId) {
                 $query->where('sender_id', $userId)
                       ->where('receiver_id', $dietician->id);
             })
             ->orWhere(function ($query) use ($dietician, $userId) {
                 $query->where('sender_id', $dietician->id)
                       ->where('receiver_id', $userId);
-            })
-            ->latest();
+            });
 
+            // Get the total number of messages
+            $totalMessages = $messagesQuery->count();
 
-            $dietician->messages = $messages->get();
+            // Define the number of messages per page
+            $perPage = 10;
+
+            // Calculate the total number of pages
+            $totalPages = ceil($totalMessages / $perPage);
+
+            // Determine the page number to retrieve (default to last page)
+            $pageNumber = max(1, min($totalPages, request()->query('page', $totalPages)));
+
+            // Retrieve messages for the requested page
+            $messages = $messagesQuery->paginate($perPage, ['*'], 'page', $pageNumber);
+            $dietician->messages=$messages;
             // Attach the last message to the user model
-            $dietician->last_message = $messages->first();
+            $dietician->last_message = $messagesQuery->first();
             $dietician->otherUserId = $userId;
         }
 
@@ -52,6 +65,39 @@ class ChatMessageController extends Controller
             'data'=>$dieticians
         ]);
 
+    }
+
+    public function loadMoreMessages($id){
+        $userId = auth()->user()->id;
+
+        $messagesQuery = ChatMessage::where(function ($query) use ($id, $userId) {
+            $query->where('sender_id', $userId)
+                    ->where('receiver_id', $id);
+        })
+        ->orWhere(function ($query) use ($id, $userId) {
+            $query->where('sender_id', $id)
+                    ->where('receiver_id', $userId);
+        });
+
+        // Get the total number of messages
+        $totalMessages = $messagesQuery->count();
+
+        // Define the number of messages per page
+        $perPage = 10;
+
+        // Calculate the total number of pages
+        $totalPages = ceil($totalMessages / $perPage);
+
+        // Determine the page number to retrieve (default to last page)
+        $pageNumber = max(1, min($totalPages, request()->query('page', $totalPages)));
+
+        // Retrieve messages for the requested page
+        $messages = $messagesQuery->orderBy('created_at')->paginate($perPage, ['*'], 'page', $pageNumber);
+
+        return response()->json([
+            'status'=>true,
+            'data'=>$messages
+        ]);
     }
 
     public function getChatUsers(){
@@ -68,20 +114,30 @@ class ChatMessageController extends Controller
         ->paginate(4);
 
         foreach ($users as $user) {
-            $messages = ChatMessage::where(function ($query) use ($dieticianId, $user) {
+            $messagesQuery = ChatMessage::where(function ($query) use ($dieticianId, $user) {
                 $query->where('sender_id', $dieticianId)
                       ->where('receiver_id', $user->id);
             })
             ->orWhere(function ($query) use ($user, $dieticianId) {
                 $query->where('sender_id', $user->id)
                       ->where('receiver_id', $dieticianId);
-            })
-            ->latest();
+            });
+            // Get the total number of messages
+            $totalMessages = $messagesQuery->count();
 
+            // Define the number of messages per page
+            $perPage = 10;
 
-            // Attach the last message to the user model
-            $user->messages = $messages->get();
-            $user->last_message = $messages->first();
+            // Calculate the total number of pages
+            $totalPages = ceil($totalMessages / $perPage);
+
+            // Determine the page number to retrieve (default to last page)
+            $pageNumber = max(1, min($totalPages, request()->query('page', $totalPages)));
+
+            // Retrieve messages for the requested page
+            $messages = $messagesQuery->paginate($perPage, ['*'], 'page', $pageNumber);
+            $user->messages=$messages;
+            $user->last_message = $messagesQuery->latest()->first();
             $user->otherUserId = $dieticianId;
 
         }
@@ -93,12 +149,6 @@ class ChatMessageController extends Controller
         ]);
 
     }
-
-    public function loadChatMessages(){
-
-    }
-
-
 
 
     public function storeByUser(Request $request){
@@ -130,6 +180,7 @@ class ChatMessageController extends Controller
                     $chatMessage->sender()->associate($user);
                     $chatMessage->receiver()->associate($dietician);
                     $chatMessage->save();
+                    $chatMessage = ChatMessage::where('id',$chatMessage->id)->first();
 
                     event(new MessageSentToDietician($chatMessage));
 
@@ -182,6 +233,7 @@ class ChatMessageController extends Controller
                     $chatMessage->sender()->associate($dietician);
                     $chatMessage->receiver()->associate($user);
                     $chatMessage->save();
+                    $chatMessage = ChatMessage::where('id',$chatMessage->id)->first();
 
                     event(new MessageSent($chatMessage));
 
@@ -204,5 +256,41 @@ class ChatMessageController extends Controller
             ]);
 
         }
+    }
+
+    public function setChatMessagesRead(Request $request){
+        $validator = Validator::make($request->all(), [
+            'sender_id'=> 'required',
+        ]);
+        $receiverId = auth()->user()->id;
+
+        if ($validator->passes()){
+           $senderId=$request->sender_id;
+        // Perform the update operation
+        $count = ChatMessage::where('sender_id', $senderId)
+            ->where('receiver_id', $receiverId)
+            ->where('read', 0)
+            ->update(['read' => 1]);
+
+        // Check if the updated chat messages count is greater than 1
+        // if ($count > 1) {
+            // Trigger the event
+            event(new MessageRead($receiverId, $senderId));
+        // }
+
+
+
+            return response()->json([
+                'status' => true,
+            ]);
+         }else{
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ]);
+
+        }
+
+
     }
 }
