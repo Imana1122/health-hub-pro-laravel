@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\CustomizedWorkoutController;
 use App\Http\Controllers\dietician\DieticianAuthController;
+use App\Http\Controllers\DieticianRatingController;
 use App\Http\Controllers\DieticianSubscriptionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RecipeRecommendationController;
@@ -11,6 +13,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserRecipeLogController;
 use App\Http\Controllers\WorkoutLogController;
 use App\Http\Controllers\WorkoutRecommendationController;
+use App\Http\Controllers\WorkoutScheduleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,10 +26,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::post('/', function () {
+Route::get('/', function () {
     // Authentication failed
-    return response()->json(['status'=>false,'authenticated' => false]);
+    return response()->json(['status'=>false,'message'=>'Not authenticated','authenticated' => false]);
 })->name('login');
+
 // Route::get('/meal-plans', [MealPlanController::class, 'index'])->name('mealplans.index');
 
 Route::prefix('account')->group(function () {
@@ -80,22 +84,32 @@ Route::prefix('account')->group(function () {
         Route::get('/workout-recommendations', [WorkoutRecommendationController::class, 'getWorkoutRecommendations'])->name('account.getWorkoutRecommendations');
         Route::get('workout-exercises/{id}', [WorkoutRecommendationController::class, 'getWorkoutwithExercise'])->name('account.getWorkoutExercises');
 
-
-
+        //Dietician
         Route::get('/get-dieticians', [DieticianSubscriptionController::class, 'getDieticians'])->name('account.getDieticians');
+        Route::get('/get-booked-dieticians', [DieticianSubscriptionController::class, 'getBookedDieticians'])->name('account.getBookedDieticians');
         Route::post('/book-dieticians', [DieticianSubscriptionController::class, 'bookDietician'])->name('account.bookDietician');
         Route::post('/verify-booking-payment', [DieticianSubscriptionController::class, 'verifyBookingPayment'])->name('account.verifyBookingPayment');
+        Route::post('/save-rating/{id}', [DieticianRatingController::class, 'saveRating'])->name('account.dietician.saveRating');
 
+        //Customize Workout
+        Route::get('/get-customized-workouts', [CustomizedWorkoutController::class, 'getCustomizedWorkouts'])->name('account.getCustomizedWorkouts');
+        Route::get('/get-exercises', [CustomizedWorkoutController::class, 'getExercises'])->name('account.getExercises');
+        Route::post('/customized-workout/store', [CustomizedWorkoutController::class, 'store'])->name('account.customizedWorkout.store');
+        Route::post('/schedule-workout', [WorkoutScheduleController::class, 'scheduleWorkout'])->name('account.scheduleWorkout');
+        Route::get('/get-scheduled-workouts/{now}', [WorkoutScheduleController::class, 'getScheduledWorkouts'])->name('account.getScheduledWorkouts');
+        Route::get('/get-upcoming-workouts', [WorkoutScheduleController::class, 'getUpcomingWorkouts'])->name('account.getUpcomingWorkouts');
+        Route::put('/update-workout-notifiable', [WorkoutScheduleController::class, 'updateNotifiable'])->name('account.updateNotifiable');
+        Route::put('/update-workout-done', [WorkoutScheduleController::class, 'updateDone'])->name('account.updateDone');
+
+        //Workout
         Route::post('/log-workout', [WorkoutLogController::class, 'logWorkout'])->name('account.logWorkout');
         Route::get('/get-workout-logs/{now}', [WorkoutLogController::class, 'getWorkoutLogs'])->name('account.getWorkoutLogs');
-
         Route::get('/get-workout-linechart-details/{type}', [WorkoutLogController::class, 'getWorkoutLineGraphDetails'])->name('account.getWorkoutLineGraphDetails');
         Route::delete('/deleteWorkoutLog/{id}', [WorkoutLogController::class, 'deleteWorkoutLog'])->name('account.deleteWorkoutLog');
 
-
+        //Chat
         Route::get('/chats/participants', [ChatMessageController::class, 'getChatDieticians'])->name('account.chats.dieticians');
         Route::get('/chats/{id}', [ChatMessageController::class, 'loadMoreMessages'])->name('account.chats.loadMore');
-
         Route::post('/chats/store', [ChatMessageController::class, 'storeByUser'])->name('account.chats.store');
         Route::post('/chats/read', [ChatMessageController::class, 'setChatMessagesRead'])->name('account.chats.read');
 

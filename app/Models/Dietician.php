@@ -65,6 +65,10 @@ class Dietician extends Authenticatable
         return $sentMessages->union($receivedMessages)->orderBy('created_at', 'desc');
     }
 
+    public function ratings(){
+        return $this->hasMany(DieticianRating::class,'dietician_id')->where('status',1);
+    }
+
 
 
 }

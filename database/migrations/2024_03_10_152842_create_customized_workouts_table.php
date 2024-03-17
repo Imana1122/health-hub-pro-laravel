@@ -11,16 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('workout_logs', function (Blueprint $table) {
-            $table->id();
+        Schema::create('customized_workouts', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->uuidMorphs('workout');
-            $table->string('workout_name');
-            $table->timestamp('start_at');
-            $table->timestamp('end_at')->nullable();
-            $table->double('calories_burned');
-            $table->integer('completion_status');
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('image')->nullable();
+            $table->json('exercises');
+            $table->string('description',1000)->nullable();
+            $table->integer('duration');
             $table->timestamps();
+
         });
     }
 
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('workout_logs');
+        Schema::dropIfExists('customized_workouts');
     }
 };

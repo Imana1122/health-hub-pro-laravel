@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('workout_schedules', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->uuidMorphs('workout');
+            $table->integer('done')->default(0);
+
+            $table->integer('notifiable');
+            $table->timestamp('scheduled_time')->nullable();
+            $table->timestamp('finished_time')->nullable();
+
             $table->timestamps();
         });
     }

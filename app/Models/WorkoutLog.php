@@ -17,15 +17,16 @@ class WorkoutLog extends Model
         'user_id',
         'workout_name',
         'workout_id',
+        'workout_type'
     ];
 
     public function user(){
         return $this->belongsTo(User::class);
     }
-    public function workout(){
-        return $this->belongsTo(Workout::class);
+    public function workout()
+    {
+        return $this->morphTo();
     }
-
 
     protected $casts = [
         'exercises' => 'json',

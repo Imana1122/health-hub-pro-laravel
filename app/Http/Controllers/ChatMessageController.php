@@ -172,11 +172,12 @@ class ChatMessageController extends Controller
                     'message'=>'You cannot send message to this dietician'
                 ]);
             }else{
+
                 if($request->message != '' || $request->message != null){
                     $chatMessage = new ChatMessage([
                         'message'=>$request->message
                     ]);
-                // Assuming $user is the User model instance and $dietician is the Dietician model instance
+                    // Assuming $user is the User model instance and $dietician is the Dietician model instance
                     $chatMessage->sender()->associate($user);
                     $chatMessage->receiver()->associate($dietician);
                     $chatMessage->save();
@@ -191,9 +192,39 @@ class ChatMessageController extends Controller
                     ]);
 
 
-                }else{
+                }
+                if($request->file){
+                    $chatMessage = new ChatMessage();
+                    $chatMessage->sender()->associate($user);
+                    $chatMessage->receiver()->associate($dietician);
+                    $chatMessage->save();
+
+                    $file = $request->file;
+                    $ext = $file->extension(); // Get the file extension, fallback to extension() method if getOriginalExtension() fails
+                    $newName = $chatMessage->id.'.'.$ext;
+                    // Assuming $user is the User model instance and $dietician is the Dietician model instance
+
+                    $chatMessage->file =$newName;
+                    $chatMessage->save();
+
+                    $file->move(public_path().'/uploads/chats/files/',$newName);
+
+                    $chatMessage = ChatMessage::where('id',$chatMessage->id)->first();
+
+                    event(new MessageSentToDietician($chatMessage));
+
+                    return response()->json([
+                        'status'=>true,
+
+                        'data'=>$chatMessage
+                    ]);
 
                 }
+                return response()->json([
+                    'status'=>false,
+
+                    'message'=>'Send something!'
+                ]);
             }
         }else{
             return response()->json([
@@ -245,9 +276,40 @@ class ChatMessageController extends Controller
                     ]);
 
 
-                }else{
+                }
+                if($request->file){
+                    $chatMessage = new ChatMessage();
+                    // Assuming $user is the User model instance and $dietician is the Dietician model instance
+                    $chatMessage->sender()->associate($dietician);
+                    $chatMessage->receiver()->associate($user);
+                    $chatMessage->save();
+
+                    $file = $request->file;
+                    $ext = $file->getClientOriginalExtension();
+                    $newName = $chatMessage->id.'.'.$ext;
+
+                    $chatMessage->file =$newName;
+                    $chatMessage->save();
+
+                    $file->move(public_path().'/uploads/chats/files/',$newName);
+
+                    $chatMessage = ChatMessage::where('id',$chatMessage->id)->first();
+
+                    event(new MessageSent($chatMessage));
+
+
+
+                    return response()->json([
+                        'status'=>true,
+                        'data'=>$chatMessage
+                    ]);
 
                 }
+                return response()->json([
+                    'status'=>false,
+
+                    'message'=>'Send something!'
+                ]);
             }
         }else{
             return response()->json([
@@ -277,9 +339,6 @@ class ChatMessageController extends Controller
             // Trigger the event
             event(new MessageRead($receiverId, $senderId));
         // }
-
-
-
             return response()->json([
                 'status' => true,
             ]);

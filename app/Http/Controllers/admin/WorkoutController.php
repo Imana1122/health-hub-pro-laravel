@@ -35,12 +35,11 @@ class WorkoutController extends Controller
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             "name"=> "required",
-            "slug"=> "required|unique:meal_types",
+            "slug"=> "required|unique:workouts",
             "description" =>"required|string|max:1000",
             "exercises"=> "required|array",
             'status' => 'required|in:0,1',
         ]);
-
         if ($validator->passes()) {
 
             $workout =  Workout::create([

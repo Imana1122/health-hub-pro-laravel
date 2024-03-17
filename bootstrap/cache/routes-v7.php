@@ -309,7 +309,8 @@ app('router')->setCompiledRoutes(
           1 => NULL,
           2 => 
           array (
-            'POST' => 0,
+            'GET' => 0,
+            'HEAD' => 1,
           ),
           3 => NULL,
           4 => false,
@@ -784,6 +785,26 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/api/account/get-booked-dieticians' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.getBookedDieticians',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/api/account/book-dieticians' => 
       array (
         0 => 
@@ -815,6 +836,142 @@ app('router')->setCompiledRoutes(
           2 => 
           array (
             'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/get-customized-workouts' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.getCustomizedWorkouts',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/get-exercises' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.getExercises',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/customized-workout/store' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.customizedWorkout.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/schedule-workout' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.scheduleWorkout',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/get-upcoming-workouts' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.getUpcomingWorkouts',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/update-workout-notifiable' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.updateNotifiable',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/update-workout-done' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.updateDone',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'PUT' => 0,
           ),
           3 => NULL,
           4 => false,
@@ -1040,7 +1197,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::1aivPuBrl9owguH1',
+            '_route' => 'generated::HOQbtcKpKgXJOa0u',
           ),
           1 => NULL,
           2 => 
@@ -2213,7 +2370,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/oauth/(?|tokens/([^/]++)(*:32)|clients/([^/]++)(?|(*:58))|personal\\-access\\-tokens/([^/]++)(*:99))|/a(?|pi/account/(?|home\\-details/([^/]++)(*:148)|recipe\\-recommendations/([^/]++)(*:188)|get\\-(?|meal\\-logs/([^/]++)(*:223)|linechart\\-details/([^/]++)(*:258)|workout\\-l(?|ogs/([^/]++)(*:291)|inechart\\-details/([^/]++)(*:325)))|delete(?|MealLog/([^/]++)(*:360)|WorkoutLog/([^/]++)(*:387))|workout\\-exercises/([^/]++)(*:423)|chats/(?|([^/]++)(*:448)|store(*:461)|read(*:473)))|dmin/(?|mealTypes/([^/]++)(?|/edit(*:517)|(*:525))|a(?|llergens/([^/]++)(?|/edit(*:563)|(*:571))|dmins/([^/]++)(?|/edit(*:602)|(*:610)))|ingredients/([^/]++)(?|(*:643))|recipe(?|Categories/([^/]++)(?|/edit(*:688)|(*:696))|s/([^/]++)(?|/edit(*:723)|(*:731)))|healthConditions/([^/]++)(?|/edit(*:774)|(*:782))|cuisines/([^/]++)(?|/edit(*:816)|(*:824))|users/([^/]++)(?|/edit(*:855)|(*:863))|exercises/([^/]++)(?|/edit(*:898)|(*:906))|w(?|orkouts/([^/]++)(?|/edit(*:943)|(*:951))|eightPlans/([^/]++)(?|/edit(*:987)|(*:995)))|dieticians/(?|([^/]++)(*:1027)|detail/([^/]++)(*:1051)|approve\\-status/([^/]++)(*:1084)))))/?$}sDu',
+      0 => '{^(?|/oauth/(?|tokens/([^/]++)(*:32)|clients/([^/]++)(?|(*:58))|personal\\-access\\-tokens/([^/]++)(*:99))|/a(?|pi/account/(?|home\\-details/([^/]++)(*:148)|recipe\\-recommendations/([^/]++)(*:188)|get\\-(?|meal\\-logs/([^/]++)(*:223)|linechart\\-details/([^/]++)(*:258)|scheduled\\-workouts/([^/]++)(*:294)|workout\\-l(?|ogs/([^/]++)(*:327)|inechart\\-details/([^/]++)(*:361)))|delete(?|MealLog/([^/]++)(*:396)|WorkoutLog/([^/]++)(*:423))|workout\\-exercises/([^/]++)(*:459)|save\\-rating/([^/]++)(*:488)|chats/(?|([^/]++)(*:513)|store(*:526)|read(*:538)))|dmin/(?|mealTypes/([^/]++)(?|/edit(*:582)|(*:590))|a(?|llergens/([^/]++)(?|/edit(*:628)|(*:636))|dmins/([^/]++)(?|/edit(*:667)|(*:675)))|ingredients/([^/]++)(?|(*:708))|recipe(?|Categories/([^/]++)(?|/edit(*:753)|(*:761))|s/([^/]++)(?|/edit(*:788)|(*:796)))|healthConditions/([^/]++)(?|/edit(*:839)|(*:847))|cuisines/([^/]++)(?|/edit(*:881)|(*:889))|users/([^/]++)(?|/edit(*:920)|(*:928))|exercises/([^/]++)(?|/edit(*:963)|(*:971))|w(?|orkouts/([^/]++)(?|/edit(*:1008)|(*:1017))|eightPlans/([^/]++)(?|/edit(*:1054)|(*:1063)))|dieticians/(?|([^/]++)(*:1096)|detail/([^/]++)(*:1120)|approve\\-status/([^/]++)(*:1153)))))/?$}sDu',
     ),
     3 => 
     array (
@@ -2394,7 +2551,30 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      291 => 
+      294 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.getScheduledWorkouts',
+          ),
+          1 => 
+          array (
+            0 => 'now',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      327 => 
       array (
         0 => 
         array (
@@ -2417,7 +2597,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      325 => 
+      361 => 
       array (
         0 => 
         array (
@@ -2440,7 +2620,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      360 => 
+      396 => 
       array (
         0 => 
         array (
@@ -2462,7 +2642,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      387 => 
+      423 => 
       array (
         0 => 
         array (
@@ -2484,7 +2664,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      423 => 
+      459 => 
       array (
         0 => 
         array (
@@ -2507,7 +2687,29 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      448 => 
+      488 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.dietician.saveRating',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      513 => 
       array (
         0 => 
         array (
@@ -2530,7 +2732,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      461 => 
+      526 => 
       array (
         0 => 
         array (
@@ -2551,7 +2753,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      473 => 
+      538 => 
       array (
         0 => 
         array (
@@ -2572,7 +2774,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      517 => 
+      582 => 
       array (
         0 => 
         array (
@@ -2595,7 +2797,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      525 => 
+      590 => 
       array (
         0 => 
         array (
@@ -2636,7 +2838,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      563 => 
+      628 => 
       array (
         0 => 
         array (
@@ -2659,7 +2861,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      571 => 
+      636 => 
       array (
         0 => 
         array (
@@ -2700,7 +2902,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      602 => 
+      667 => 
       array (
         0 => 
         array (
@@ -2723,7 +2925,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      610 => 
+      675 => 
       array (
         0 => 
         array (
@@ -2764,7 +2966,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      643 => 
+      708 => 
       array (
         0 => 
         array (
@@ -2805,7 +3007,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      688 => 
+      753 => 
       array (
         0 => 
         array (
@@ -2828,7 +3030,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      696 => 
+      761 => 
       array (
         0 => 
         array (
@@ -2869,7 +3071,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      723 => 
+      788 => 
       array (
         0 => 
         array (
@@ -2892,7 +3094,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      731 => 
+      796 => 
       array (
         0 => 
         array (
@@ -2933,7 +3135,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      774 => 
+      839 => 
       array (
         0 => 
         array (
@@ -2956,7 +3158,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      782 => 
+      847 => 
       array (
         0 => 
         array (
@@ -2997,7 +3199,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      816 => 
+      881 => 
       array (
         0 => 
         array (
@@ -3020,7 +3222,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      824 => 
+      889 => 
       array (
         0 => 
         array (
@@ -3061,7 +3263,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      855 => 
+      920 => 
       array (
         0 => 
         array (
@@ -3084,7 +3286,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      863 => 
+      928 => 
       array (
         0 => 
         array (
@@ -3125,7 +3327,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      898 => 
+      963 => 
       array (
         0 => 
         array (
@@ -3148,7 +3350,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      906 => 
+      971 => 
       array (
         0 => 
         array (
@@ -3189,7 +3391,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      943 => 
+      1008 => 
       array (
         0 => 
         array (
@@ -3212,7 +3414,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      951 => 
+      1017 => 
       array (
         0 => 
         array (
@@ -3253,7 +3455,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      987 => 
+      1054 => 
       array (
         0 => 
         array (
@@ -3276,7 +3478,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      995 => 
+      1063 => 
       array (
         0 => 
         array (
@@ -3317,7 +3519,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1027 => 
+      1096 => 
       array (
         0 => 
         array (
@@ -3339,7 +3541,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1051 => 
+      1120 => 
       array (
         0 => 
         array (
@@ -3362,7 +3564,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1084 => 
+      1153 => 
       array (
         0 => 
         array (
@@ -4101,7 +4303,8 @@ app('router')->setCompiledRoutes(
     array (
       'methods' => 
       array (
-        0 => 'POST',
+        0 => 'GET',
+        1 => 'HEAD',
       ),
       'uri' => 'api',
       'action' => 
@@ -4110,10 +4313,10 @@ app('router')->setCompiledRoutes(
         array (
           0 => 'api',
         ),
-        'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:118:"function () {
+        'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:149:"function () {
     // Authentication failed
-    return \\response()->json([\'status\'=>false,\'authenticated\' => false]);
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000044a0000000000000000";}}',
+    return \\response()->json([\'status\'=>false,\'message\'=>\'Not authenticated\',\'authenticated\' => false]);
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004540000000000000000";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
@@ -5261,6 +5464,44 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'account.getBookedDieticians' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/account/get-booked-dieticians',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\DieticianSubscriptionController@getBookedDieticians',
+        'controller' => 'App\\Http\\Controllers\\DieticianSubscriptionController@getBookedDieticians',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.getBookedDieticians',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'account.bookDietician' => 
     array (
       'methods' => 
@@ -5320,6 +5561,343 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'account.verifyBookingPayment',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.dietician.saveRating' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/account/save-rating/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\DieticianRatingController@saveRating',
+        'controller' => 'App\\Http\\Controllers\\DieticianRatingController@saveRating',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.dietician.saveRating',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.getCustomizedWorkouts' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/account/get-customized-workouts',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomizedWorkoutController@getCustomizedWorkouts',
+        'controller' => 'App\\Http\\Controllers\\CustomizedWorkoutController@getCustomizedWorkouts',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.getCustomizedWorkouts',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.getExercises' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/account/get-exercises',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomizedWorkoutController@getExercises',
+        'controller' => 'App\\Http\\Controllers\\CustomizedWorkoutController@getExercises',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.getExercises',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.customizedWorkout.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/account/customized-workout/store',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomizedWorkoutController@store',
+        'controller' => 'App\\Http\\Controllers\\CustomizedWorkoutController@store',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.customizedWorkout.store',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.scheduleWorkout' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/account/schedule-workout',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\WorkoutScheduleController@scheduleWorkout',
+        'controller' => 'App\\Http\\Controllers\\WorkoutScheduleController@scheduleWorkout',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.scheduleWorkout',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.getScheduledWorkouts' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/account/get-scheduled-workouts/{now}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\WorkoutScheduleController@getScheduledWorkouts',
+        'controller' => 'App\\Http\\Controllers\\WorkoutScheduleController@getScheduledWorkouts',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.getScheduledWorkouts',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.getUpcomingWorkouts' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/account/get-upcoming-workouts',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\WorkoutScheduleController@getUpcomingWorkouts',
+        'controller' => 'App\\Http\\Controllers\\WorkoutScheduleController@getUpcomingWorkouts',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.getUpcomingWorkouts',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.updateNotifiable' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'api/account/update-workout-notifiable',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\WorkoutScheduleController@updateNotifiable',
+        'controller' => 'App\\Http\\Controllers\\WorkoutScheduleController@updateNotifiable',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.updateNotifiable',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.updateDone' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'api/account/update-workout-done',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\WorkoutScheduleController@updateDone',
+        'controller' => 'App\\Http\\Controllers\\WorkoutScheduleController@updateDone',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.updateDone',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5970,7 +6548,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::1aivPuBrl9owguH1' => 
+    'generated::HOQbtcKpKgXJOa0u' => 
     array (
       'methods' => 
       array (
@@ -5986,13 +6564,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:48:"function () {
     return \\view(\'admin.login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000044d0000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004570000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::1aivPuBrl9owguH1',
+        'as' => 'generated::HOQbtcKpKgXJOa0u',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9628,7 +10206,7 @@ app('router')->setCompiledRoutes(
                 \'status\'=>true,
                 \'slug\'=>$slug
             ]);
-        }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004e20000000000000000";}}',
+        }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004f60000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '/admin',
         'where' => 

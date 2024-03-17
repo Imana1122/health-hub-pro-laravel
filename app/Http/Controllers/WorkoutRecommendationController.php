@@ -15,16 +15,17 @@ class WorkoutRecommendationController extends Controller
         $exercises = Exercise::all()->keyBy('id');
 
         // Manipulate the data to replace exercise IDs with exercise objects
+
         $workouts->each(function ($workout) use ($exercises) {
             $workout->exercises = collect($workout->exercises)->map(function ($exerciseId) use ($exercises) {
-                return $exercises->get($exerciseId);
+                return $exercises->get(intval($exerciseId));
             });
         });
         return response()->json([
             'status' => true,
             'data' => $workouts
         ]);
-        }
+    }
 
     public function getWorkoutwithExercise($id){
         $workout = Workout::where('id',$id)->first();

@@ -44,15 +44,10 @@ class HomeController extends Controller
 
         // Iterate over each workout log and its associated exercises
         foreach ($workoutLogs as $workoutLog) {
-            $exercises = Exercise::all()->keyBy('id');
 
-            // Manipulate the data to replace exercise IDs with exercise objects
-            $workoutLog->workout->exercises = collect($workoutLog->workout->exercises)->map(function ($exerciseId) use ($exercises) {
-                return $exercises->get($exerciseId);
-            });
 
             $totalCaloriesBurnedForWorkout = 0;
-            $exercises =[];
+
             // Iterate over each exercise and calculate calories burned
             foreach ($workoutLog->workout->exercises as $ex) {
                 $exercise = Exercise::where('id',$ex)->first();
@@ -62,29 +57,37 @@ class HomeController extends Controller
 
             // Attach the total calories burned for the workout
             $workoutLog->workout->total_calories_burned = $totalCaloriesBurnedForWorkout;
+            $exercises = Exercise::all()->keyBy('id');
+
+            // Manipulate the data to replace exercise IDs with exercise objects
+            $workoutLog->workout->exercises = collect($workoutLog->workout->exercises)->map(function ($exerciseId) use ($exercises) {
+                return $exercises->get(intval($exerciseId));
+            });
         }
         $userMealPlan = UserMealPlan::where('user_id',auth()->user()->id)->whereDate('created_at',now())->first();
-        if($userMealPlan->meal_plan_id != null){
-            $mealPlan = MealPlan::where('id',$userMealPlan->meal_plan_id)->with('breakfastRecipe.images','breakfastRecipe.meal_type','breakfastRecipe.ingredient')->with('snackRecipe.images','snackRecipe.meal_type','snackRecipe.ingredient')->with('lunchRecipe.images','lunchRecipe.meal_type','lunchRecipe.ingredient')->with('dinnerRecipe.images','dinnerRecipe.meal_type','dinnerRecipe.ingredient')->first();
-            // Now you have the sum of each nutrient value
-            return response()->json([
-                'status'=>true,
-                'data'=>[
-                    'workoutLogs'=>$workoutLogs,
-                    'mealData'=>[
-                        'calories'=>$caloriesSum,
-                        'protein'=>$proteinSum,
-                        'carbohydrates'=>$carbohydratesSum,
-                        'total_fat'=>$totalFatSum,
-                        'saturated_fat'=>$saturatedFatSum,
-                        'sodium'=>$sodiumSum,
-                        'sugar'=>$sugarSum,
+        if(!empty($userMealPlan)){
+            if($userMealPlan->meal_plan_id != null){
+                $mealPlan = MealPlan::where('id',$userMealPlan->meal_plan_id)->with('breakfastRecipe.images','breakfastRecipe.meal_type','breakfastRecipe.ingredient')->with('snackRecipe.images','snackRecipe.meal_type','snackRecipe.ingredient')->with('lunchRecipe.images','lunchRecipe.meal_type','lunchRecipe.ingredient')->with('dinnerRecipe.images','dinnerRecipe.meal_type','dinnerRecipe.ingredient')->first();
+                // Now you have the sum of each nutrient value
+                return response()->json([
+                    'status'=>true,
+                    'data'=>[
+                        'workoutLogs'=>$workoutLogs,
+                        'mealData'=>[
+                            'calories'=>$caloriesSum,
+                            'protein'=>$proteinSum,
+                            'carbohydrates'=>$carbohydratesSum,
+                            'total_fat'=>$totalFatSum,
+                            'saturated_fat'=>$saturatedFatSum,
+                            'sodium'=>$sodiumSum,
+                            'sugar'=>$sugarSum,
+                            ],
+                            'mealPlan'=>$mealPlan
                         ],
-                        'mealPlan'=>$mealPlan
-                    ],
 
 
-            ]);
+                ]);
+            }
         }
 
         // Now you have the sum of each nutrient value

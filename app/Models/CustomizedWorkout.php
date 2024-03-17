@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
-class Workout extends Model
+class CustomizedWorkout extends Model
 {
     use HasFactory,HasUuids;
-    protected $fillable = ['name', 'slug','description', 'exercises', 'status','duration','image'];
+
+    protected $fillable = ['name', 'slug','description', 'exercises', 'status','duration','image','user_id'];
     protected $casts = [
         'exercises' => 'json',
     ];

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomizedWorkout;
+use App\Models\Workout;
 use App\Models\WorkoutLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -20,9 +22,8 @@ class WorkoutLogController extends Controller
         ]);
 
         if ($validator->passes()) {
-            $workoutLog = WorkoutLog::create([
+            $workoutLog = new WorkoutLog([
                 'user_id'=> auth()->user()->id,
-                'workout_id' => $request->workout_id,
                 'start_at' => $request->start_at,
                 'end_at' => $request->end_at,
                 'workout_name' => $request->workout_name,
@@ -30,6 +31,16 @@ class WorkoutLogController extends Controller
                 'completion_status' => $request->completion_status,
 
             ]);
+            if($request->get('type')=='customized'){
+                $workout = CustomizedWorkout::where('id',$request->workout_id)->first();
+
+            }else{
+                $workout = Workout::where('id',$request->workout_id)->first();
+
+            }
+            $workoutLog->workout()->associate($workout);
+            $workoutLog->save();
+
             if($workoutLog){
 
                 // Extract the date part from the provided datetime string

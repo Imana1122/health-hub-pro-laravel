@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Allergen;
 use App\Models\Cuisine;
+use App\Models\CustomizedWorkout;
 use App\Models\Dietician;
 use App\Models\Exercise;
 use App\Models\HealthCondition;
@@ -156,17 +157,20 @@ class HomeController extends Controller
     public function deleteUnusedWorkoutImages() {
         // Get all images in the folder
         $allImages = File::files(public_path('/uploads/workout/'));
-
         // Get all workouts
         $workouts = Workout::all();
+        $customizedWorkouts = CustomizedWorkout::all();
 
-        // Extract image names from the workouts
-        $workoutImages = $workouts->pluck('image')->toArray();
+        // Extract image names from the workouts and merge them into one array
+        $workoutImages = $workouts->pluck('image');
+        $customizedWorkoutImages = $customizedWorkouts->pluck('image');
+        $allWorkoutImages = $workoutImages->merge($customizedWorkoutImages)->toArray();
+
 
         // Identify images in the folder that are not in the database
         $unusedImages = array_diff(
             array_map('basename', $allImages),
-            $workoutImages
+            $allWorkoutImages
         );
 
         // Delete unused images

@@ -50,7 +50,7 @@ class UserMealPlanController extends Controller
         ]);
 
         if ($validator->passes()) {
-            $userMealPlan = UserMealPlan::where('id',auth()->user()->id)->whereDate('created_at',$request->created_at)->first();
+            $userMealPlan = UserMealPlan::where('user_id',auth()->user()->id)->whereDate('created_at',$request->created_at)->first();
             $userProfile = UserProfile::where('user_id',auth()->user()->id)->first();
             if (empty($userMealPlan)) {
                 $userMealPlan = UserMealPlan::create([

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class DieticianSubscriptionController extends Controller
 {
-    public function getDieticians() {
+    public function getDieticians(Request $request) {
         $userId = auth()->user()->id;
 
         $dieticianIdsWithRecentBookings = DieticianBooking::where('user_id', $userId)
@@ -21,9 +21,60 @@ class DieticianSubscriptionController extends Controller
             ->pluck('dietician_id')
             ->toArray();
 
-        $dieticians = Dietician::where('approved_status', 1)
-            ->whereNotIn('id', $dieticianIdsWithRecentBookings)
-            ->paginate(4);
+
+        $dieticians = Dietician::where('approved_status', 1)->with('ratings.user')->withCount('ratings')
+        ->withSum('ratings','rating')
+        ->whereNotIn('id', $dieticianIdsWithRecentBookings);
+        if ($request->get('keyword') != '') {
+            $dieticians = $dieticians->where('dieticians.first_name', 'like', '%' . $request->input('keyword') . '%')->orWhere('dieticians.last_name', 'like', '%' . $request->input('keyword') . '%')->orWhere('dieticians.email', 'like', '%' . $request->input('keyword') . '%');
+        }
+        $dieticians= $dieticians->paginate(4);
+        foreach($dieticians as $dietician){
+            //Rating Calculation
+            $avgRating = '0.00';
+            if($dietician->ratings_count > 0){
+                $avgRating = number_format(($dietician->ratings_sum_rating/$dietician->ratings_count),2);
+
+            }
+            $dietician->avgRating = $avgRating;
+        }
+
+
+
+        return response()->json([
+            'status' => true,
+            'data' => $dieticians
+        ]);
+    }
+
+    public function getBookedDieticians(Request $request) {
+        $userId = auth()->user()->id;
+
+        $dieticianIdsWithRecentBookings = DieticianBooking::where('user_id', $userId)
+            ->whereDate('created_at', '>', Carbon::now()->subDays(30))
+            ->where('payment_status',1)
+            ->pluck('dietician_id')
+            ->toArray();
+
+
+        $dieticians = Dietician::where('approved_status', 1)->with('ratings.user')->withCount('ratings')
+            ->withSum('ratings','rating')
+            ->whereIn('id', $dieticianIdsWithRecentBookings);
+
+        if ($request->get('keyword') != '') {
+            $dieticians = $dieticians->where('dieticians.first_name', 'like', '%' . $request->input('keyword') . '%')->orWhere('dieticians.last_name', 'like', '%' . $request->input('keyword') . '%')->orWhere('dieticians.email', 'like', '%' . $request->input('keyword') . '%');
+        }
+        $dieticians= $dieticians->paginate(4);
+        foreach($dieticians as $dietician){
+            //Rating Calculation
+            $avgRating = '0.00';
+            if($dietician->ratings_count > 0){
+                $avgRating = number_format(($dietician->ratings_sum_rating/$dietician->ratings_count),2);
+
+            }
+            $dietician->avgRating = $avgRating;
+        }
+
 
         return response()->json([
             'status' => true,
