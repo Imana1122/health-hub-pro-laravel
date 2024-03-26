@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationSent;
 use App\Models\ChatUser;
 use App\Models\Dietician;
 use App\Models\DieticianBooking;
+use App\Models\Notification;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -112,7 +114,10 @@ class DieticianSubscriptionController extends Controller
                             'total_amount' => $dietician->booking_amount
 
                         ]);
+
                         $dieticianBooking = DieticianBooking::with('dietician')->find($booking->id);
+
+
 
                         return response()->json([
                             'status' => true,
@@ -168,7 +173,22 @@ class DieticianSubscriptionController extends Controller
                     $booking->updated_at = Carbon::now();
 
                     $booking->save();
+                    $dietician=Dietician::where('id',$booking->dietician_id)->first();
 
+                    $notification = new Notification([
+                        'image' => asset('uploads/dietician/profile/' . $dietician->image),
+                        'message' => $dietician->first_name .$dietician->last_name. " is booked.",
+                    ]);
+
+                    $user=User::where('id',auth()->user()->id)->first();
+
+                    // Assuming $user is the User model instance and $dietician is the Dietician model instance
+                    $notification->user()->associate($user);
+                    $notification->save();
+                    $notification = Notification::where('id',$notification->id)->first();
+                    $notification->to = 'user';
+
+                    event(new NotificationSent($notification));
 
                     return response()->json([
                         'status' => true,

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationSent;
 use App\Models\CustomizedWorkout;
+use App\Models\Notification;
+use App\Models\User;
 use App\Models\Workout;
 use App\Models\WorkoutLog;
 use Illuminate\Http\Request;
@@ -38,10 +41,24 @@ class WorkoutLogController extends Controller
                 $workout = Workout::where('id',$request->workout_id)->first();
 
             }
-            $workoutLog->workout()->associate($workout);
-            $workoutLog->save();
+            if($workout){
+                $workoutLog->workout()->associate($workout);
+                $workoutLog->save();
 
-            if($workoutLog){
+                $notification = new Notification([
+                    'image' => asset('uploads/workout/' . $workout->image),
+                    'message' => $workout->name . " is logged.",
+                ]);
+
+                $user=User::where('id',auth()->user()->id)->first();
+
+                // Assuming $user is the User model instance and $dietician is the Dietician model instance
+                $notification->user()->associate($user);
+                $notification->save();
+                $notification = Notification::where('id',$notification->id)->first();
+                $notification->to = 'user';
+
+                event(new NotificationSent($notification));
 
                 // Extract the date part from the provided datetime string
                 $providedDate = date('Y-m-d', strtotime($request->end_at));
@@ -79,6 +96,7 @@ class WorkoutLogController extends Controller
         $workoutLogs = WorkoutLog::where('user_id', auth()->user()->id)
             ->whereRaw('DATE(created_at) = ?', [$providedDate])
             ->get();
+
 
         return response()->json([
             'status' => true,
@@ -120,7 +138,7 @@ class WorkoutLogController extends Controller
         $userWorkoutLogs = WorkoutLog::with('workout')->where('user_id', auth()->user()->id)->get();
         if ($userWorkoutLogs->isEmpty()) {
             return response()->json([
-                'status' => false,
+                'status' => true,
                 'message' => 'No user logs found'
             ]);
         }

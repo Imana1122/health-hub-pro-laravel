@@ -20,6 +20,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\WeightPlanController;
 use App\Http\Controllers\admin\WorkoutController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -187,6 +188,9 @@ Route::group(['prefix'=> 'admin'], function () {
         Route::delete('/dieticians/{id}', [DieticianController::class,'destroy'])->name('dieticians.destroy');
         Route::get('/dieticians/detail/{id}', [DieticianController::class,'detail'])->name('dieticians.detail');
         Route::put('/dieticians/approve-status/{id}', [DieticianController::class,'approveStatus'])->name('dieticians.approveStatus');
+
+
+
 
         Route::get('/getSlug', function (Request $request) {
             $slug = '';

@@ -104,6 +104,11 @@ class User extends Authenticatable
         return $this->morphMany(ChatMessage::class, 'receiver');
     }
 
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'user');
+    }
+
 
 
 

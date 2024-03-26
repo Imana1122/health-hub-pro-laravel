@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationSent;
 use App\Models\CustomizedWorkout;
 use App\Models\Exercise;
+use App\Models\Notification;
+use App\Models\User;
 use App\Models\Workout;
 use App\Models\WorkoutSchedule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,6 +38,21 @@ class WorkoutScheduleController extends Controller
             }
             $workoutSchedule->workout()->associate($workout);
             $workoutSchedule->save();
+
+            $notification = new Notification([
+                'image' => asset('uploads/recipes/small/' . $workout->image),
+                'message' => $workout->name . " is scheduled for " . $request->scheduled_time,
+                'scheduled_at'=>$request->scheduled_time
+            ]);
+            $user=User::where('id',auth()->user()->id)->first();
+
+            // Assuming $user is the User model instance and $dietician is the Dietician model instance
+            $notification->user()->associate($user);
+            $notification->save();
+            $notification = Notification::where('id',$notification->id)->first();
+            $notification->to = 'user';
+            event(new NotificationSent($notification));
+
             return response()->json(['status'=>true,'message'=>'Workout is successfully scheduled.']);
 
         } else {

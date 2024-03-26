@@ -41,13 +41,13 @@ class HomeController extends Controller
         ->get();
 
         $userProfile=UserProfile::where('user_id',$userId)->first();
+        if(!empty($workoutLogs)){
 
         // Iterate over each workout log and its associated exercises
         foreach ($workoutLogs as $workoutLog) {
 
 
             $totalCaloriesBurnedForWorkout = 0;
-
             // Iterate over each exercise and calculate calories burned
             foreach ($workoutLog->workout->exercises as $ex) {
                 $exercise = Exercise::where('id',$ex)->first();
@@ -64,6 +64,8 @@ class HomeController extends Controller
                 return $exercises->get(intval($exerciseId));
             });
         }
+    }
+
         $userMealPlan = UserMealPlan::where('user_id',auth()->user()->id)->whereDate('created_at',now())->first();
         if(!empty($userMealPlan)){
             if($userMealPlan->meal_plan_id != null){

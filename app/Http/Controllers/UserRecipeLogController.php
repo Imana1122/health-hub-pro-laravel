@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationSent;
+use App\Models\Notification;
 use App\Models\Recipe;
+use App\Models\User;
 use App\Models\UserMealPlan;
 use App\Models\UserProfile;
 use App\Models\UserRecipeLog;
@@ -52,6 +55,23 @@ class UserRecipeLogController extends Controller
                 'updated_at' => $request->created_at,
 
             ]);
+
+
+            $recipe= Recipe::where('id',$request->recipe_id)->first();
+            $notification = new Notification([
+                'image' => asset('uploads/recipes/small/' . $recipe->images[0]->image),
+                'message' => $recipe->title . " is logged.",
+            ]);
+
+            $user=User::where('id',auth()->user()->id)->first();
+
+            // Assuming $user is the User model instance and $dietician is the Dietician model instance
+            $notification->user()->associate($user);
+            $notification->save();
+            $notification = Notification::where('id',$notification->id)->first();
+            $notification->to = 'user';
+            event(new NotificationSent($notification));
+
             if($recipeLog){
 
                 // Extract the date part from the provided datetime string

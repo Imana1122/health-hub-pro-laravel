@@ -7,6 +7,7 @@ use App\Http\Controllers\dietician\DieticianAuthController;
 use App\Http\Controllers\DieticianRatingController;
 use App\Http\Controllers\DieticianSubscriptionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RecipeRecommendationController;
 use App\Http\Controllers\UserMealPlanController;
 use App\Http\Controllers\UserProfileController;
@@ -113,6 +114,10 @@ Route::prefix('account')->group(function () {
         Route::post('/chats/store', [ChatMessageController::class, 'storeByUser'])->name('account.chats.store');
         Route::post('/chats/read', [ChatMessageController::class, 'setChatMessagesRead'])->name('account.chats.read');
 
+        //Notification Routes
+        Route::get('/notifications', [NotificationController::class,'getNotifications'])->name('account.notifications.index');
+
+        Route::put('/notifications/read', [NotificationController::class,'readNotifications'])->name('account.notifications.read');
 
     });
 
@@ -139,6 +144,9 @@ Route::prefix('dietician')->group(function () {
         Route::get('/chats/participants', [ChatMessageController::class, 'getChatUsers'])->name('dietician.chats.users');
         Route::post('/chats/store', [ChatMessageController::class, 'storeByDietician'])->name('dietician.chats.store');
         Route::post('/chats/read', [ChatMessageController::class, 'setChatMessagesRead'])->name('dietician.chats.read');
+
+        //Notification Routes
+        Route::get('/notifications', [NotificationController::class,'getNotifications'])->name('dietician.notifications.index');
 
     });
 

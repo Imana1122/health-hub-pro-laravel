@@ -69,6 +69,11 @@ class Dietician extends Authenticatable
         return $this->hasMany(DieticianRating::class,'dietician_id')->where('status',1);
     }
 
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'user');
+    }
+
 
 
 }
