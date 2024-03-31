@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('progress', function (Blueprint $table) {
             $table->id();
+            $table->string('front_image');
+            $table->string('back_image');
+            $table->string('left_image');
+            $table->string('right_image');
+            $table->double('weight');
             $table->timestamps();
         });
     }

@@ -189,8 +189,8 @@ class WorkoutController extends Controller
         // Check if workout has an existing image
         if (!empty($workout->image)) {
             // Remove the previous image and thumbnail (if they exist)
-            $oldImagePath = public_path('/uploads/workout/' . $workout->image);
-            $oldThumbnailPath = public_path('/uploads/workout/thumb/' . $workout->image);
+            $oldImagePath = public_path('/storage/uploads/workout/' . $workout->image);
+            $oldThumbnailPath = public_path('/storage/uploads/workout/thumb/' . $workout->image);
 
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath); // Delete the old image

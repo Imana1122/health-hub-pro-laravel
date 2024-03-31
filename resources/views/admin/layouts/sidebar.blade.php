@@ -131,14 +131,14 @@
                 <div class="card bg-dark">
                     <div class="card-header" id="headingConfigure">
                         <h2 class="mb-0">
-                            <button class="btn btn-link {{ Route::is('weightPlans.*') || Route::is('users.*') || Route::is('dieticians.*') || Route::is('contact.*') ? '' : 'collapsed' }}" type="button" data-toggle="collapse" data-target="#collapseConfigure" aria-expanded="{{ Route::is('weightPlans.*') || Route::is('dieticians.*') || Route::is('users.*') || Route::is('contact.*') ? 'true' : 'false' }}" aria-controls="collapseConfigure">
+                            <button class="btn btn-link {{ Route::is('weightPlans.*') || Route::is('users.*') || Route::is('dieticians.*') || Route::is('contact.*') ||  Route::is('unapproveddieticians.*')  ? '' : 'collapsed' }}" type="button" data-toggle="collapse" data-target="#collapseConfigure" aria-expanded="{{ Route::is('weightPlans.*') || Route::is('dieticians.*') || Route::is('users.*') || Route::is('contact.*') ||  Route::is('unapproveddieticians.*')  ? 'true' : 'false' }}" aria-controls="collapseConfigure">
                                 <i class="nav-icon fas fa-cogs"></i>
                                 Configure
                             </button>
                         </h2>
                     </div>
 
-                    <div id="collapseConfigure" class="collapse {{ Route::is('weightPlans.*') || Route::is('users.*') || Route::is('dieticians.*') || Route::is('contact.*') ? 'show' : '' }}" aria-labelledby="headingConfigure" data-parent="#accordionExample">
+                    <div id="collapseConfigure" class="collapse {{ Route::is('weightPlans.*') || Route::is('users.*') || Route::is('dieticians.*') || Route::is('contact.*') ||  Route::is('unapproveddieticians.*')  ? 'show' : '' }}" aria-labelledby="headingConfigure" data-parent="#accordionExample">
                         <div class="card-body">
                             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                                 <li class="nav-item">
@@ -157,6 +157,12 @@
                                     <a href="{{ route('dieticians.index') }}" class="nav-link {{ Route::is('dieticians.*') ? 'active' : '' }}">
                                         <i class="nav-icon fas fa-users"></i> <!-- Users -->
                                         <p>Dieticians</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('unapproveddieticians.index') }}" class="nav-link {{ Route::is('unapproveddieticians.*') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-users"></i> <!-- Users -->
+                                        <p>UnApproved Dieticians</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">

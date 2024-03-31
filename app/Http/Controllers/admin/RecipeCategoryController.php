@@ -53,12 +53,12 @@ class RecipeCategoryController extends Controller
 
                 $newImageName = $recipeCategory->id.'.'.$ext;
                 $sPath = public_path() .'/temp/'. $tempImage->name;
-                $dPath = public_path() .'/uploads/recipeCategory/'. $newImageName;
+                $dPath = public_path() .'/storage/uploads/recipeCategory/'. $newImageName;
                 File::copy($sPath,$dPath);
 
                 //Generate image thumbnail
                 $sPathThumbnail = public_path() .'/temp/thumb/'. $tempImage->name;
-                $dPathThumbnail = public_path() .'/uploads/recipeCategory/thumb/'. $newImageName;
+                $dPathThumbnail = public_path() .'/storage/uploads/recipeCategory/thumb/'. $newImageName;
                 $img = ImageManager::gd()->read($sPathThumbnail);
                 $img->resize(450, 600);
                 $img->save($dPathThumbnail);
@@ -133,11 +133,11 @@ class RecipeCategoryController extends Controller
 
                 $newImageName = $recipeCategory->id.'.'.$ext;
                 $sPath = public_path() .'/temp/'. $tempImage->name;
-                $dPath = public_path() .'/uploads/recipeCategory/'. $newImageName;
+                $dPath = public_path() .'/storage/uploads/recipeCategory/'. $newImageName;
                 File::copy($sPath,$dPath);
 
                 //Generate image thumbnail
-                $dPathThumbnail = public_path() .'/uploads/recipeCategory/thumb/'. $newImageName;
+                $dPathThumbnail = public_path() .'/storage/uploads/recipeCategory/thumb/'. $newImageName;
                 $img = ImageManager::gd()->read($sPath);
                 //$img->resize(450, 600);
                 $img->resize(450, 600, function ($constraint) {
@@ -179,8 +179,8 @@ class RecipeCategoryController extends Controller
         // Check if recipeCategory has an existing image
         if (!empty($recipeCategory->image)) {
             // Remove the previous image and thumbnail (if they exist)
-            $oldImagePath = public_path('/uploads/recipeCategory/' . $recipeCategory->image);
-            $oldThumbnailPath = public_path('/uploads/recipeCategory/thumb/' . $recipeCategory->image);
+            $oldImagePath = public_path('/storage/uploads/recipeCategory/' . $recipeCategory->image);
+            $oldThumbnailPath = public_path('/storage/uploads/recipeCategory/thumb/' . $recipeCategory->image);
 
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath); // Delete the old image

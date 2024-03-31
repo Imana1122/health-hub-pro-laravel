@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Progress extends Model
 {
     use HasFactory;
+
+    protected $fillable=[
+        'front_image',
+        'back_image',
+        'left_image',
+        'right_image',
+        'weight',
+        'height'
+    ];
 }

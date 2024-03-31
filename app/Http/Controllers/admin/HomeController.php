@@ -26,7 +26,7 @@ class HomeController extends Controller
 {
     public function deleteUnusedIngredientImages() {
         // Get all images in the folder
-        $allImages = File::files(public_path('/uploads/ingredient/'));
+        $allImages = File::files(public_path('storage/uploads/ingredient/'));
 
         // Get all ingredients
         $ingredients = Ingredient::all();
@@ -42,8 +42,8 @@ class HomeController extends Controller
 
         // Delete unused images
         foreach ($unusedImages as $unusedImage) {
-            $imagePath = public_path('/uploads/ingredient/') . $unusedImage;
-            $thumbPath = public_path('/uploads/ingredient/thumb/') . $unusedImage;
+            $imagePath = public_path('storage/uploads/ingredient/') . $unusedImage;
+            $thumbPath = public_path('storage/uploads/ingredient/thumb/') . $unusedImage;
 
             // Delete the image and its thumbnail from the folder
             File::delete($imagePath, $thumbPath);
@@ -52,7 +52,7 @@ class HomeController extends Controller
 
     public function deleteUnusedMealTypeImages() {
         // Get all images in the folder
-        $allImages = File::files(public_path('/uploads/mealType/'));
+        $allImages = File::files(public_path('storage/uploads/mealType/'));
 
         // Get all mealTypes
         $mealTypes = MealType::all();
@@ -68,8 +68,8 @@ class HomeController extends Controller
 
         // Delete unused images
         foreach ($unusedImages as $unusedImage) {
-            $imagePath = public_path('/uploads/mealType/') . $unusedImage;
-            $thumbPath = public_path('/uploads/mealType/thumb/') . $unusedImage;
+            $imagePath = public_path('storage/uploads/mealType/') . $unusedImage;
+            $thumbPath = public_path('storage/uploads/mealType/thumb/') . $unusedImage;
 
             // Delete the image and its thumbnail from the folder
             File::delete($imagePath, $thumbPath);
@@ -78,7 +78,7 @@ class HomeController extends Controller
 
     public function deleteUnusedRecipeCategoryImages() {
         // Get all images in the folder
-        $allImages = File::files(public_path('/uploads/recipeCategory/'));
+        $allImages = File::files(public_path('storage/uploads/recipeCategory/'));
 
         // Get all recipeCategories
         $recipeCategories = RecipeCategory::all();
@@ -94,8 +94,8 @@ class HomeController extends Controller
 
         // Delete unused images
         foreach ($unusedImages as $unusedImage) {
-            $imagePath = public_path('/uploads/recipeCategory/') . $unusedImage;
-            $thumbPath = public_path('/uploads/recipeCategory/thumb/') . $unusedImage;
+            $imagePath = public_path('storage/uploads/recipeCategory/') . $unusedImage;
+            $thumbPath = public_path('storage/uploads/recipeCategory/thumb/') . $unusedImage;
 
             // Delete the image and its thumbnail from the folder
             File::delete($imagePath, $thumbPath);
@@ -104,7 +104,7 @@ class HomeController extends Controller
 
     public function deleteUnusedRecipeImages() {
         // Get all images in the folder
-        $allImages = File::files(public_path('/uploads/recipes/small/'));
+        $allImages = File::files(public_path('storage/uploads/recipes/small/'));
 
         // Get all recipeCategories
         $recipeCategories = RecipeImage::all();
@@ -120,8 +120,8 @@ class HomeController extends Controller
 
         // Delete unused images
         foreach ($unusedImages as $unusedImage) {
-            $imagePath = public_path('/uploads/recipes/large/') . $unusedImage;
-            $thumbPath = public_path('/uploads/recipes/small/') . $unusedImage;
+            $imagePath = public_path('storage/uploads/recipes/large/') . $unusedImage;
+            $thumbPath = public_path('storage/uploads/recipes/small/') . $unusedImage;
 
             // Delete the image and its thumbnail from the folder
             File::delete($imagePath, $thumbPath);
@@ -130,7 +130,7 @@ class HomeController extends Controller
 
     public function deleteUnusedExerciseImages() {
         // Get all images in the folder
-        $allImages = File::files(public_path('/uploads/exercise/'));
+        $allImages = File::files(public_path('storage/uploads/exercise/'));
 
         // Get all exercises
         $exercises = Exercise::all();
@@ -146,8 +146,8 @@ class HomeController extends Controller
 
         // Delete unused images
         foreach ($unusedImages as $unusedImage) {
-            $imagePath = public_path('/uploads/exercise/') . $unusedImage;
-            $thumbPath = public_path('/uploads/exercise/thumb/') . $unusedImage;
+            $imagePath = public_path('storage/uploads/exercise/') . $unusedImage;
+            $thumbPath = public_path('storage/uploads/exercise/thumb/') . $unusedImage;
 
             // Delete the image and its thumbnail from the folder
             File::delete($imagePath, $thumbPath);
@@ -156,7 +156,7 @@ class HomeController extends Controller
 
     public function deleteUnusedWorkoutImages() {
         // Get all images in the folder
-        $allImages = File::files(public_path('/uploads/workout/'));
+        $allImages = File::files(public_path('storage/uploads/workout/'));
         // Get all workouts
         $workouts = Workout::all();
         $customizedWorkouts = CustomizedWorkout::all();
@@ -175,8 +175,8 @@ class HomeController extends Controller
 
         // Delete unused images
         foreach ($unusedImages as $unusedImage) {
-            $imagePath = public_path('/uploads/workout/') . $unusedImage;
-            $thumbPath = public_path('/uploads/workout/thumb/') . $unusedImage;
+            $imagePath = public_path('storage/uploads/workout/') . $unusedImage;
+            $thumbPath = public_path('storage/uploads/workout/thumb/') . $unusedImage;
 
             // Delete the image and its thumbnail from the folder
             File::delete($imagePath, $thumbPath);
@@ -185,7 +185,7 @@ class HomeController extends Controller
 
     public function deleteUnusedWeightPlanImages() {
         // Get all images in the folder
-        $allImages = File::files(public_path('/uploads/weightPlan/'));
+        $allImages = File::files(public_path('storage/uploads/weightPlan/'));
 
         // Get all weightPlans
         $weightPlans = WeightPlan::all();
@@ -201,8 +201,8 @@ class HomeController extends Controller
 
         // Delete unused images
         foreach ($unusedImages as $unusedImage) {
-            $imagePath = public_path('/uploads/weightPlan/') . $unusedImage;
-            $thumbPath = public_path('/uploads/weightPlan/thumb/') . $unusedImage;
+            $imagePath = public_path('storage/uploads/weightPlan/') . $unusedImage;
+            $thumbPath = public_path('storage/uploads/weightPlan/thumb/') . $unusedImage;
 
             // Delete the image and its thumbnail from the folder
             File::delete($imagePath, $thumbPath);
@@ -211,7 +211,7 @@ class HomeController extends Controller
 
     public function deleteUnusedDieticianCV() {
         // Get all images in the folder
-        $allFiles = File::files(public_path('/uploads/dietician/cv/'));
+        $allFiles = File::files(public_path('storage/uploads/dietician/cv/'));
 
         // Get all dieticians
         $dieticians = Dietician::all();
@@ -227,7 +227,7 @@ class HomeController extends Controller
 
         // Delete unused images
         foreach ($unusedFiles as $unusedFile) {
-            $filePath = public_path('/uploads/dietician/cv/') . $unusedFile;
+            $filePath = public_path('storage/uploads/dietician/cv/') . $unusedFile;
 
             // Delete the file from the folder
             File::delete($filePath);
@@ -236,7 +236,7 @@ class HomeController extends Controller
 
     public function deleteUnusedDieticianProfileImage() {
         // Get all images in the folder
-        $allImages = File::files(public_path('/uploads/dietician/profile/'));
+        $allImages = File::files(public_path('storage/uploads/dietician/profile/'));
 
         // Get all dieticians
         $dieticians = Dietician::all();
@@ -252,8 +252,8 @@ class HomeController extends Controller
 
         // Delete unused images
         foreach ($unusedImages as $unusedImage) {
-            $imagePath = public_path('/uploads/dietician/profile/') . $unusedImage;
-            $thumbPath = public_path('/uploads/dietician/profile/thumb/') . $unusedImage;
+            $imagePath = public_path('storage/uploads/dietician/profile/') . $unusedImage;
+            $thumbPath = public_path('storage/uploads/dietician/profile/thumb/') . $unusedImage;
 
             // Delete the image and its thumbnail from the folder
             File::delete($imagePath, $thumbPath);

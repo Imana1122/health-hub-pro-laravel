@@ -119,7 +119,7 @@ class UserProfileController extends Controller
         $tdee = $this->calculateTDEE($bmr, $userProfile->activity_level);
 
         // Step 4: Set Calorie Goals based on user's goal (e.g., weight loss, muscle gain)
-        $calorieGoal = $this->calculateCalorieGoal($tdee, $userGoal);
+        $calorieGoal = $this->calculateCalorieGoal($tdee, $userGoal,$userProfile->calorie_difference);
 
         // Step 5: Calculate Macronutrient Requirements based on predefined ratios
         $macronutrientGoals = $this->calculateMacronutrientGoals($calorieGoal, $userGoal);
@@ -193,14 +193,14 @@ class UserProfileController extends Controller
     }
 
     // Step 4: Set Calorie Goals based on user's goal
-    function calculateCalorieGoal($tdee, $userGoal) {
+    function calculateCalorieGoal($tdee, $userGoal,$calorieDifference) {
         switch ($userGoal) {
             case 'muscle-gain':
-                return $tdee + 200;
+                return $tdee + $calorieDifference;
             case 'weight-loss':
-                return $tdee - 200;
+                return $tdee - $calorieDifference;
             case 'fat-loss':
-                return $tdee - 200;
+                return $tdee - $calorieDifference;
             case 'maintain-weight':
             default:
                 return $tdee; // Maintain weight

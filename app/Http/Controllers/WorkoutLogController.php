@@ -46,7 +46,7 @@ class WorkoutLogController extends Controller
                 $workoutLog->save();
 
                 $notification = new Notification([
-                    'image' => asset('uploads/workout/' . $workout->image),
+                    'image' => asset('storage/uploads/workout/' . $workout->image),
                     'message' => $workout->name . " is logged.",
                 ]);
 

@@ -12,6 +12,7 @@ use App\Models\Recipe;
 use App\Models\RecipeIngredient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Str;
 
@@ -100,15 +101,23 @@ class IngredientController extends Controller
                 $ingredient->image =$newName;
                 $ingredient->save();
 
-                $image->move(public_path().'/uploads/ingredient/',$newName);
+                $image->move(public_path().'/images',$newName);
 
                 //Generate thumbnail
-                $sourcePath = public_path().'/uploads/ingredient/'.$newName; // Fix the path
-                $destPath = public_path().'/uploads/ingredient/thumb/'.$newName; // Fix the path
+                $sourcePath = public_path().'/images/'.$newName; // Fix the path
+                $destPath = public_path().'/storage/uploads/ingredient/'.$newName; // Fix the path
 
                 $image = ImageManager::gd()->read($sourcePath);
                 $image->resize(450, 600);
                 $image->save($destPath);
+
+
+                // Generate image thumbnail
+                $dPathThumbnail = 'uploads/ingredient/thumb/' . $newName;
+                $img = ImageManager::gd()->read($sourcePath);
+                $img->resize(450, 600);
+                $img->save(public_path('/storage/' . $dPathThumbnail)); // Save thumbnail to storage
+
 
             }
 
@@ -140,8 +149,8 @@ class IngredientController extends Controller
         // Check if ingredient has an existing image
         if (!empty($ingredient->image)) {
             // Remove the previous image and thumbnail (if they exist)
-            $oldImagePath = public_path('/uploads/ingredient/' . $ingredient->image);
-            $oldThumbnailPath = public_path('/uploads/ingredient/thumb/' . $ingredient->image);
+            $oldImagePath = public_path('/storage/uploads/ingredient/' . $ingredient->image);
+            $oldThumbnailPath = public_path('/storage/uploads/ingredient/thumb/' . $ingredient->image);
 
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath); // Delete the old image

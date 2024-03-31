@@ -57,12 +57,12 @@ class WeightPlanController extends Controller
 
                 $newImageName = $weightPlan->id.'.'.$ext;
                 $sPath = public_path() .'/temp/'. $tempImage->name;
-                $dPath = public_path() .'/uploads/weightPlan/'. $newImageName;
+                $dPath = public_path() .'/storage/uploads/weightPlan/'. $newImageName;
                 File::copy($sPath,$dPath);
 
                 //Generate image thumbnail
                 $sPathThumbnail = public_path() .'/temp/thumb/'. $tempImage->name;
-                $dPathThumbnail = public_path() .'/uploads/weightPlan/thumb/'. $newImageName;
+                $dPathThumbnail = public_path() .'/storage/uploads/weightPlan/thumb/'. $newImageName;
                 $img = ImageManager::gd()->read($sPathThumbnail);
                 $img->resize(450, 600);
                 $img->save($dPathThumbnail);
@@ -139,11 +139,11 @@ class WeightPlanController extends Controller
 
                 $newImageName = $weightPlan->id.'.'.$ext;
                 $sPath = public_path() .'/temp/'. $tempImage->name;
-                $dPath = public_path() .'/uploads/weightPlan/'. $newImageName;
+                $dPath = public_path() .'/storage/uploads/weightPlan/'. $newImageName;
                 File::copy($sPath,$dPath);
 
                 //Generate image thumbnail
-                $dPathThumbnail = public_path() .'/uploads/weightPlan/thumb/'. $newImageName;
+                $dPathThumbnail = public_path() .'/storage/uploads/weightPlan/thumb/'. $newImageName;
                 $img = ImageManager::gd()->read($sPath);
                 $img->resize(450, 600);
 
@@ -183,8 +183,8 @@ class WeightPlanController extends Controller
         // Check if weightPlan has an existing image
         if (!empty($weightPlan->image)) {
             // Remove the previous image and thumbnail (if they exist)
-            $oldImagePath = public_path('/uploads/weightPlan/' . $weightPlan->image);
-            $oldThumbnailPath = public_path('/uploads/weightPlan/thumb/' . $weightPlan->image);
+            $oldImagePath = public_path('/storage/uploads/weightPlan/' . $weightPlan->image);
+            $oldThumbnailPath = public_path('/storage/uploads/weightPlan/thumb/' . $weightPlan->image);
 
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath); // Delete the old image

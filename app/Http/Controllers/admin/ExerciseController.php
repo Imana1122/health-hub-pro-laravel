@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Exercise;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 
 class ExerciseController extends Controller
@@ -36,6 +37,7 @@ class ExerciseController extends Controller
             "description" =>"required|string|max:1000",
             "metabolic_equivalent"=> "required",
             'status' => 'required|in:0,1',
+            'image_id' =>'required'
         ]);
 
         if ($validator->passes()) {
@@ -57,15 +59,21 @@ class ExerciseController extends Controller
 
                 $newImageName = $exercise->id.'.'.$ext;
                 $sPath = public_path() .'/temp/'. $tempImage->name;
-                $dPath = public_path() .'/uploads/exercise/'. $newImageName;
-                File::copy($sPath,$dPath);
+                $dPath = 'uploads/exercise/' . $newImageName;
+                File::copy($sPath, public_path('/storage/' . $dPath)); // Copy file to storage
 
-                //Generate image thumbnail
+                // Generate image thumbnail
                 $sPathThumbnail = public_path() .'/temp/thumb/'. $tempImage->name;
-                $dPathThumbnail = public_path() .'/uploads/exercise/thumb/'. $newImageName;
+                $dPathThumbnail = 'uploads/exercise/thumb/' . $newImageName;
                 $img = ImageManager::gd()->read($sPathThumbnail);
                 $img->resize(450, 600);
-                $img->save($dPathThumbnail);
+                $img->save(public_path('/storage/' . $dPathThumbnail)); // Save thumbnail to storage
+
+                // Move the files within the storage disk
+                Storage::move($dPath, $dPath); // Move original image
+                Storage::move($dPathThumbnail, $dPathThumbnail); // Move thumbnail
+
+
 
                 $exercise->image = $newImageName;
                 $exercise->save();
@@ -141,17 +149,19 @@ class ExerciseController extends Controller
 
                 $newImageName = $exercise->id.'.'.$ext;
                 $sPath = public_path() .'/temp/'. $tempImage->name;
-                $dPath = public_path() .'/uploads/exercise/'. $newImageName;
+                $dPath = public_path() .'/storage/uploads/exercise/'. $newImageName;
                 File::copy($sPath,$dPath);
 
                 //Generate image thumbnail
-                $dPathThumbnail = public_path() .'/uploads/exercise/thumb/'. $newImageName;
+                $dPathThumbnail = public_path() .'/storage/uploads/exercise/thumb/'. $newImageName;
                 $img = ImageManager::gd()->read($sPath);
                 //$img->resize(450, 600);
                 $img->resize(450, 600, function ($constraint) {
                     $constraint->upsize();
                 });
                 $img->save($dPathThumbnail);
+
+
 
                 $exercise->image = $newImageName;
                 $exercise->save();
@@ -187,8 +197,8 @@ class ExerciseController extends Controller
         // Check if exercise has an existing image
         if (!empty($exercise->image)) {
             // Remove the previous image and thumbnail (if they exist)
-            $oldImagePath = public_path('/uploads/exercise/' . $exercise->image);
-            $oldThumbnailPath = public_path('/uploads/exercise/thumb/' . $exercise->image);
+            $oldImagePath = public_path('/storage/uploads/exercise/' . $exercise->image);
+            $oldThumbnailPath = public_path('/storage/uploads/exercise/thumb/' . $exercise->image);
 
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath); // Delete the old image

@@ -59,7 +59,7 @@ class UserRecipeLogController extends Controller
 
             $recipe= Recipe::where('id',$request->recipe_id)->first();
             $notification = new Notification([
-                'image' => asset('uploads/recipes/small/' . $recipe->images[0]->image),
+                'image' => asset('storage/uploads/recipes/small/' . $recipe->images[0]->image),
                 'message' => $recipe->title . " is logged.",
             ]);
 
@@ -166,7 +166,7 @@ class UserRecipeLogController extends Controller
 
         if ($userRecipeLogs->isEmpty()) {
             return response()->json([
-                'status' => false,
+                'status' => true,
                 'message' => 'No user logs found'
             ]);
         }
@@ -255,5 +255,6 @@ class UserRecipeLogController extends Controller
             $formattedData[] = ['x' => $month, 'y' => $calories];
         }
         return $formattedData;
+
     }
 }

@@ -29,7 +29,8 @@ class UserProfile extends Model
         'sodium',
         'sugar',
         'bmi',
-        'notification'
+        'notification',
+        'calorie_difference'
     ];
 
     public function user(){

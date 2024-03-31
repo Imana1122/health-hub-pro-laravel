@@ -66,7 +66,7 @@
                             </div>
                             @if(!empty($weightPlan->image))
                             <div>
-                                <img width="250" src="{{ asset('uploads/weightPlan/thumb/'.$weightPlan->image) }}" alt="">
+                                <img width="250" src="{{ asset('storage/uploads/weightPlan/thumb/'.$weightPlan->image) }}" alt="">
                             </div>
                             @endif
                         </div>

@@ -131,7 +131,7 @@
                                     <td>
                                         <div class="d-flex">
                                             @if (!empty($recipe->images) && count($recipe->images) > 0)
-                                                    <img src="{{ asset('uploads/recipes/small/' . $recipe->images->last()->image) }}" class="img-thumbnail mr-2" width="50">
+                                                    <img src="{{ asset('storage/uploads/recipes/small/' . $recipe->images->last()->image) }}" class="img-thumbnail mr-2" width="50">
                                             @else
                                                 <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-thumbnail mr-2" width="50">
                                             @endif

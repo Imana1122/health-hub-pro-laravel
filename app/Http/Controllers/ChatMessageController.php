@@ -206,45 +206,17 @@ class ChatMessageController extends Controller
 
                     $file = $request->file;
                     $ext = $file->getClientOriginalExtension();
-                    if($ext == null){
-                        // Generate a unique name for the file
-                        $newName = $chatMessage->id.'.mp3';
 
-                        // Move the uploaded file to a temporary directory
-                        $tempPath = public_path('temp/' . $newName);
-                        $file->move(public_path('temp'), $newName);
+                    $newName = $chatMessage->id.'.'.$ext;
+                    // Assuming $user is the User model instance and $dietician is the Dietician model instance
 
-                        // Convert the audio file to MP3 using ffmpeg
-                        $process = new Process(['ffmpeg', '-i', $tempPath, '-vn', '-acodec', 'libmp3lame', public_path('temp/' . $newName . '.mp3')]);
-                        $process->run();
+                    $chatMessage->file =$newName;
+                    $chatMessage->save();
 
-                        // Check if the conversion was successful
-                        if (!$process->isSuccessful()) {
-                            throw new ProcessFailedException($process);
-                        }
-
-                        // Move the converted file to the desired directory
-                        $newPath = public_path('uploads/chats/files/' . $newName);
-                        rename(public_path('temp/' . $newName . '.mp3'), $newPath);
-
-                        // Optionally, you may want to save the filename to the database
-                        $chatMessage = new ChatMessage();
-                        $chatMessage->file = $newName;
-                        $chatMessage->save();
-
-                    }else{
-                        $newName = $chatMessage->id.'.'.$ext;
-                        // Assuming $user is the User model instance and $dietician is the Dietician model instance
-
-                        $chatMessage->file =$newName;
-                        $chatMessage->save();
-
-                        $file->move(public_path().'/uploads/chats/files/',$newName);
+                    $file->move(public_path().'/uploads/chats/files/',$newName);
 
 
-                        $chatMessage = ChatMessage::where('id',$chatMessage->id)->first();
-                    }
-
+                    $chatMessage = ChatMessage::where('id',$chatMessage->id)->first();
 
                     event(new MessageSentToDietician($chatMessage));
 
@@ -291,11 +263,12 @@ class ChatMessageController extends Controller
                     'message'=>'You cannot send message to this dietician'
                 ]);
             }else{
+
                 if($request->message != '' || $request->message != null){
                     $chatMessage = new ChatMessage([
                         'message'=>$request->message
                     ]);
-                // Assuming $user is the User model instance and $dietician is the Dietician model instance
+                    // Assuming $user is the User model instance and $dietician is the Dietician model instance
                     $chatMessage->sender()->associate($dietician);
                     $chatMessage->receiver()->associate($user);
                     $chatMessage->save();
@@ -321,45 +294,16 @@ class ChatMessageController extends Controller
 
                     $file = $request->file;
                     $ext = $file->getClientOriginalExtension();
-                    if($ext == null){
-                        // Generate a unique name for the file
-                        $newName = $chatMessage->id . '_' . Str::random(20) . '.mp3'; // Example of generating a unique name, adjust as needed
 
-                        // Move the uploaded file to a temporary directory
-                        $tempPath = public_path('temp/' . $newName);
-                        $file->move(public_path('temp'), $newName);
+                    $newName = $chatMessage->id.'.'.$ext;
 
-                        // Convert the audio file to MP3 using ffmpeg
-                        $process = new Process(['ffmpeg', '-i', $tempPath, '-vn', '-acodec', 'libmp3lame', public_path('temp/' . $newName . '.mp3')]);
-                        $process->run();
+                    $chatMessage->file =$newName;
+                    $chatMessage->save();
 
-                        // Check if the conversion was successful
-                        if (!$process->isSuccessful()) {
-                            throw new ProcessFailedException($process);
-                        }
+                    $file->move(public_path().'/uploads/chats/files/',$newName);
 
-                        // Move the converted file to the desired directory
-                        $newPath = public_path('uploads/chats/files/' . $newName);
-                        rename(public_path('temp/' . $newName . '.mp3'), $newPath);
+                    $chatMessage = ChatMessage::where('id',$chatMessage->id)->first();
 
-                        // Optionally, you may want to save the filename to the database
-                        $chatMessage = new ChatMessage();
-                        $chatMessage->file = $newName;
-                        $chatMessage->save();
-
-                        // Clean up temporary files
-
-
-                    }else{
-                        $newName = $chatMessage->id.'.'.$ext;
-
-                        $chatMessage->file =$newName;
-                        $chatMessage->save();
-
-                        $file->move(public_path().'/uploads/chats/files/',$newName);
-
-                        $chatMessage = ChatMessage::where('id',$chatMessage->id)->first();
-                    }
 
 
                     event(new MessageSent($chatMessage));

@@ -4,10 +4,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\CustomizedWorkoutController;
 use App\Http\Controllers\dietician\DieticianAuthController;
+use App\Http\Controllers\Dietician\DieticianHomeController;
 use App\Http\Controllers\DieticianRatingController;
 use App\Http\Controllers\DieticianSubscriptionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\RecipeRecommendationController;
 use App\Http\Controllers\UserMealPlanController;
 use App\Http\Controllers\UserProfileController;
@@ -116,8 +118,11 @@ Route::prefix('account')->group(function () {
 
         //Notification Routes
         Route::get('/notifications', [NotificationController::class,'getNotifications'])->name('account.notifications.index');
-
         Route::put('/notifications/read', [NotificationController::class,'readNotifications'])->name('account.notifications.read');
+
+        //Progress Routes
+        Route::post('/progress/store', [ProgressController::class, 'store'])->name('account.progress.store');
+
 
     });
 
@@ -138,15 +143,23 @@ Route::prefix('dietician')->group(function () {
     Route::middleware('auth:dietician')->group(function () {
 
         Route::post('/update-profile', [DieticianAuthController::class, 'updateProfile'])->name('dietician.updateProfile');
-        Route::get('/logout', [DieticianAuthController::class, 'logout'])->name('dietician.logout');
+        Route::post('/logout', [DieticianAuthController::class, 'logout'])->name('dietician.logout');
         Route::post('/process-change-password', [DieticianAuthController::class, 'changePassword'])->name('dietician.changePassword');
 
         Route::get('/chats/participants', [ChatMessageController::class, 'getChatUsers'])->name('dietician.chats.users');
+        Route::get('/chats/{id}', [ChatMessageController::class, 'loadMoreMessages'])->name('dietician.chats.loadMore');
         Route::post('/chats/store', [ChatMessageController::class, 'storeByDietician'])->name('dietician.chats.store');
         Route::post('/chats/read', [ChatMessageController::class, 'setChatMessagesRead'])->name('dietician.chats.read');
 
         //Notification Routes
         Route::get('/notifications', [NotificationController::class,'getNotifications'])->name('dietician.notifications.index');
+        Route::put('/notifications/read', [NotificationController::class,'readNotifications'])->name('dietician.notifications.read');
+
+        //Home Routes
+        Route::get('/home-details', [DieticianHomeController::class,'index'])->name('dietician.home.index');
+        Route::get('/get-payment-details', [DieticianHomeController::class,'getPaymentDetails'])->name('dietician.payment-details');
+        Route::get('/get-payments', [DieticianHomeController::class,'getPayments'])->name('dietician.payments');
+        Route::get('/get-ratings', [DieticianHomeController::class,'getRatings'])->name('dietician.ratings');
 
     });
 

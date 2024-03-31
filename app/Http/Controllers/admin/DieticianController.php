@@ -12,7 +12,20 @@ use Illuminate\Support\Str;
 class DieticianController extends Controller
 {
     public function index(Request $request){
-        $dieticians = Dietician::latest();
+        $dieticians = Dietician::where('approved_status',1)->latest();
+        if($request->get('keyword')){
+            if (!empty($request->get('keyword'))) {
+                $dieticians = $dieticians->where('name','like','%'.$request->get('keyword').'%');
+            }
+        }
+
+        $dieticians = $dieticians->paginate(10);
+
+        return view("admin.dietician.list", compact('dieticians'));
+    }
+
+    public function getUnApprovedDieticians(Request $request){
+        $dieticians = Dietician::where('approved_status',0)->latest();
         if($request->get('keyword')){
             if (!empty($request->get('keyword'))) {
                 $dieticians = $dieticians->where('name','like','%'.$request->get('keyword').'%');
@@ -33,12 +46,10 @@ class DieticianController extends Controller
         $dietician = Dietician::where('id',$id)->first();
         if($dietician){
             // Generate a random string of length 8
-            $password = Str::random(8);
             $dietician->approved_status = 1;
             $dietician->status = 1;
-            $dietician->password = Hash::make($password);
             $dietician->save();
-            $message = "You have been approved as dietician and your password is: $password";
+            $message = "You have been approved as dietician";
             $this->sendcode($dietician->phone_number,$message);
             session()->flash('success','Dietician approved successfully');
             return response()->json([

@@ -73,7 +73,7 @@
                             </div>
                             @if(!empty($exercise->image))
                             <div>
-                                <img width="250" src="{{ asset('uploads/exercise/thumb/'.$exercise->image) }}" alt="">
+                                <img width="250" src="{{ asset('storage/uploads/exercise/thumb/'.$exercise->image) }}" alt="">
                             </div>
                             @endif
                         </div>

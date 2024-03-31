@@ -12,7 +12,7 @@
                         <label for="profileImage">Profile Image:</label>
                         <div class="input-group">
                             @if ($dietician->image != null)
-                                <img src="{{ asset('uploads/dietician/profile/' . $dietician->image) }}" class="img-fluid mr-2" width="50">
+                                <img src="{{ asset('storage/uploads/dietician/profile/' . $dietician->image) }}" class="img-fluid mr-2" width="50">
                             @else
                                 <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-fluid mr-2" width="50">
                             @endif

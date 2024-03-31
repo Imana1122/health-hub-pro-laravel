@@ -60,7 +60,7 @@
                                 <td>
                                      <!-- Display image thumbnail if exercise->image is not empty -->
                                     @if(!empty($exercise->image))
-                                        <img src="{{ asset('uploads/exercise/thumb/' . $exercise->image) }}" alt="Meal Type Image" class="img-thumbnail" style="width: 50px;">
+                                        <img src="{{ asset('storage/uploads/exercise/thumb/' . $exercise->image) }}" alt="Meal Type Image" class="img-thumbnail" style="width: 50px;">
                                         @else
                                         <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-thumbnail mr-2" width="50">
                                     @endif

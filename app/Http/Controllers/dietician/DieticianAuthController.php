@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Intervention\Image\ImageManager;
@@ -26,8 +27,7 @@ class DieticianAuthController extends Controller
             'cv' => 'required|file|mimes:pdf',
             'speciality' => 'required',
             'description' => 'required|max:255',
-            'esewa_client_id' => 'required',
-            'esewa_secret_key' => 'required',
+            'esewa_id' => 'required',
 
             'booking_amount' => 'required|numeric',
             'bio' => 'required',
@@ -42,8 +42,7 @@ class DieticianAuthController extends Controller
                 'phone_number' => $request->phone_number,
                 'speciality' => $request->speciality,
                 'description' => $request->description,
-                'esewa_client_id' => $request->esewa_client_id,
-                'esewa_secret_key' => $request->esewa_secret_key,
+                'esewa_id' => $request->esewa_id,
 
                 'booking_amount'=> $request->booking_amount,
                 'bio' => $request->bio,
@@ -58,15 +57,10 @@ class DieticianAuthController extends Controller
                 $dietician->image =$newName;
                 $dietician->save();
 
-                $image->move(public_path().'/uploads/dietician/profile/',$newName);
+                $imagePath = $image->store('public/uploads');
 
-                //Generate thumbnail
-                $sourcePath = public_path().'/uploads/dietician/profile/'.$newName; // Fix the path
-                $destPath = public_path().'/uploads/dietician/profile/thumb/'.$newName; // Fix the path
+                Storage::move($imagePath, 'public/uploads/dieticians/profile/' . $newName);
 
-                $image = ImageManager::gd()->read($sourcePath);
-                $image->resize(450, 600);
-                $image->save($destPath);
 
             }
 
@@ -79,8 +73,10 @@ class DieticianAuthController extends Controller
                 $dietician->cv =$newName;
                 $dietician->save();
 
-                $cv->move(public_path().'/uploads/dietician/cv/',$newName);
 
+                $imagePath = $image->store('public/uploads');
+
+                Storage::move($imagePath, 'public/uploads/dieticians/cv/' . $newName);
 
 
             }
@@ -371,25 +367,39 @@ public function logout(Request $request){
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3',
+            'first_name' => 'required|min:3',
+            'last_name' => 'required|min:3',
+            'bio' => 'required|min:3',
             'phone_number' => 'required|unique:dieticians,phone_number,' . $dieticianId . ',id',
             'email' => 'required|email|unique:dieticians,email,' . $dieticianId . ',id',
+            'speciality'=>'required',
+            'description'=>'required',
+            'esewa_id'=>'required',
+            'password'=>'required|confirmed'
 
         ]);
 
         if($validator->passes()){
 
             $dietician = Dietician::find($dieticianId);
-            $dietician->name = $request->name;
+            $dietician->first_name = $request->first_name;
+            $dietician->last_name = $request->last_name;
+            $dietician->bio = $request->bio;
             $dietician->email = $request->email;
             $dietician->phone_number = $request->phone_number;
+            $dietician->speciality = $request->speciality;
+            $dietician->description = $request->description;
+            $dietician->esewa_id = $request->esewa_id;
+            $dietician->password = Hash::make($request->password);
+
             $dietician->save();
 
             $message = 'Profile updated successfully';
 
             return response()->json([
                 'status' => true,
-                'message' => $message
+                'message' => $message,
+                'data'=>$dietician
             ]);
 
         }else{

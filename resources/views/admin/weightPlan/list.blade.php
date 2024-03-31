@@ -61,7 +61,7 @@
                                 <td>
                                      <!-- Display image thumbnail if weightPlan->image is not empty -->
                                     @if(!empty($weightPlan->image))
-                                        <img src="{{ asset('uploads/weightPlan/thumb/' . $weightPlan->image) }}" alt="Meal Type Image" class="img-thumbnail" style="width: 50px;">
+                                        <img src="{{ asset('storage/uploads/weightPlan/thumb/' . $weightPlan->image) }}" alt="Meal Type Image" class="img-thumbnail" style="width: 50px;">
                                         @else
                                         <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-thumbnail mr-2" width="50">
                                     @endif

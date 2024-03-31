@@ -7,6 +7,7 @@ use App\Models\Exercise;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 
@@ -35,19 +36,24 @@ class CustomizedWorkoutController extends Controller
         ]);
     }
     public function getExercises(){
-        $exercises=Exercise::orderBy('name')->get();
+        $exercises = Exercise::orderBy('name')
+                            ->select('id', 'name')
+                            ->get();
+
         return response()->json([
-            'status'=>true,
-            'data'=>$exercises
+            'status' => true,
+            'data' => $exercises
         ]);
     }
+
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             "name"=> "required",
             "slug"=> "required|unique:customized_workouts",
             "description" =>"required|string|max:1000",
             "exercises"=> "required",
-            'image'=>'required','count'=>'required'
+            'image'=>'required','count'=>'required',
+            'no_of_ex_per_set'=>'required|numeric'
         ]);
 
         if ($validator->passes()) {
@@ -68,7 +74,8 @@ class CustomizedWorkoutController extends Controller
                 'slug' => $request->slug,
                 'description' => $request->description,
                 'exercises' => $assocArray,
-                'duration' => $request->count
+                'duration' => $request->count,
+                'no_of_ex_per_set'=>$request->no_of_ex_per_set
             ]);
 
 
@@ -80,15 +87,10 @@ class CustomizedWorkoutController extends Controller
                 $workout->image =$newName;
                 $workout->save();
 
-                $image->move(public_path().'/uploads/workout/',$newName);
 
-                //Generate thumbnail
-                $sourcePath = public_path().'/uploads/workout/'.$newName; // Fix the path
-                $destPath = public_path().'/uploads/workout/thumb/'.$newName; // Fix the path
+                $imagePath = $image->store('public/uploads');
 
-                $image = ImageManager::gd()->read($sourcePath);
-                $image->resize(450, 600);
-                $image->save($destPath);
+                Storage::move($imagePath, 'public/uploads/workout' . $newName);
 
             }
 

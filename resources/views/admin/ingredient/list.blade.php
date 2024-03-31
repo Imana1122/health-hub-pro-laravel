@@ -59,7 +59,7 @@
                                 <td>
                                      <!-- Display image thumbnail if ingredient->image is not empty -->
                                     @if(!empty($ingredient->image))
-                                        <img src="{{ asset('uploads/ingredient/thumb/' . $ingredient->image) }}" alt="Ingredient Image" class="img-thumbnail" style="width: 50px;">
+                                        <img src="{{ asset('storage/uploads/ingredient/thumb/' . $ingredient->image) }}" alt="Ingredient Image" class="img-thumbnail" style="width: 50px;">
                                         @else
                                         <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-thumbnail mr-2" width="50">
                                     @endif

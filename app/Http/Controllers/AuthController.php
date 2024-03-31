@@ -6,15 +6,13 @@ namespace App\Http\Controllers;
 use App\Models\PasswordResetToken;
 use App\Models\User;
 use App\Models\UserProfile;
-use App\Models\UserRecipeLog;
-use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Str;
 
 
 class AuthController extends Controller
@@ -35,6 +33,21 @@ class AuthController extends Controller
                 'phone_number' => $request->phone_number,
                 'password' => $request->password
                 ]);
+            if($request->isAttemptingPrecognition){
+                $image = $request->image;
+                $ext = $image->getClientOriginalExtension();
+                $newName = $user->id.'.'.$ext;
+
+                $user->image =$newName;
+
+
+                $imagePath = $image->store('public/images');
+
+                Storage::move($imagePath, 'public/uploads/users/' . $newName);
+
+
+
+            }
             if($user){
                 $token = $user->createToken('auth_token')->accessToken;
 
@@ -78,12 +91,7 @@ class AuthController extends Controller
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('auth_token')->accessToken;
                 $userProfile = UserProfile::with('weightPlan')->where('user_id',$user->id)->first();
-                if(empty($userProfile)){
-                    return response()->json([
-                        'status' => false,
-                        'error' => "Profile not setup."
-                    ]);
-                }
+
                 $userCuisines = $user->cuisines()->get();
                 $userHealthConditions = $user->healthConditions()->get();
                 $userAllergens = $user->allergens()->get();
@@ -387,7 +395,8 @@ class AuthController extends Controller
             'hips'=> "required",
             'targeted_weight' => "required",
             'age'=> 'required',
-            'gender' => 'required'
+            'gender' => 'required',
+            'calorie_difference'=>'required'
         ]);
 
         if($validator->passes()){
@@ -402,7 +411,8 @@ class AuthController extends Controller
                     'bust' => $request->bust,
                     'targeted_weight' => $request->targeted_weight,
                     'gender' => $request->gender,
-                    'age' => $request->age
+                    'age' => $request->age,
+                    'calorie_difference'=>$request->calorie_difference
                 ]
             );
             // Assuming $userProfile is an instance of UserProfile

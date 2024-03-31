@@ -226,6 +226,7 @@ const dropzone = $("#image").dropzone({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
     success: function(file, response){
+        console.log(response);
         $("#image_id"). val(response.image_id);
     }
 });

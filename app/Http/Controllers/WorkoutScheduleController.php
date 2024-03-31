@@ -40,9 +40,8 @@ class WorkoutScheduleController extends Controller
             $workoutSchedule->save();
 
             $notification = new Notification([
-                'image' => asset('uploads/recipes/small/' . $workout->image),
+                'image' => asset('storage/uploads/recipes/small/' . $workout->image),
                 'message' => $workout->name . " is scheduled for " . $request->scheduled_time,
-                'scheduled_at'=>$request->scheduled_time
             ]);
             $user=User::where('id',auth()->user()->id)->first();
 

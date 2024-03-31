@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class Exercise extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
 
     protected $fillable = ['name', 'slug','description', 'metabolic_equivalent', 'status','image'];
 

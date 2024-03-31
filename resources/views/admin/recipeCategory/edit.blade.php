@@ -50,7 +50,7 @@
                             </div>
                             @if(!empty($recipeCategory->image))
                             <div>
-                                <img width="250" src="{{ asset('uploads/recipeCategory/thumb/'.$recipeCategory->image) }}" alt="">
+                                <img width="250" src="{{ asset('storage/uploads/recipeCategory/thumb/'.$recipeCategory->image) }}" alt="">
                             </div>
                             @endif
                         </div>

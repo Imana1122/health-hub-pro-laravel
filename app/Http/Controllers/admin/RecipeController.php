@@ -157,7 +157,7 @@ class RecipeController extends Controller
                     //Generate Recipe Thumbnail
                     //Large Image
                     $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
-                    $destinationPath = public_path().'/uploads/recipes/large/'.$imageName;
+                    $destinationPath = public_path().'/storage/uploads/recipes/large/'.$imageName;
                     $image = ImageManager::gd()->read($sourcePath);
                     $image->scale(height:1400);
                     $image->save($destinationPath);
@@ -165,7 +165,7 @@ class RecipeController extends Controller
 
                     //Small Image
                     $sourcePath = public_path().'/temp/'.$tempImageInfo->name;
-                    $destinationPath = public_path().'/uploads/recipes/small/'.$imageName;
+                    $destinationPath = public_path().'/storage/uploads/recipes/small/'.$imageName;
                     $image = ImageManager::gd()->read($sourcePath);
                     $image->resize(300,300);
                     $image->save($destinationPath);
@@ -363,7 +363,7 @@ class RecipeController extends Controller
         if (!empty($images)){
             foreach ($images as $image){
                 $filename = $image->image;
-                $basePath = public_path('uploads/recipes/'); // adjust the path based on your folder structure
+                $basePath = public_path('storage/uploads/recipes/'); // adjust the path based on your folder structure
 
                 // Delete the large image
                 $imagePath = $basePath.'large/'.$filename;

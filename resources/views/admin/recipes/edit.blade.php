@@ -67,7 +67,7 @@
                                 <div class="col-md-3" id="image-row-{{ $img->id }}">
                                     <input type="hidden" name="image_array[]" value="{{ $img->id }}">
                                     <div class="card" >
-                                        <img src="{{ asset('uploads/recipes/small/'.$img->image) }}" class="card-img-top" alt="...">
+                                        <img src="{{ asset('storage/uploads/recipes/small/'.$img->image) }}" class="card-img-top" alt="...">
                                         <div class="card-body">
                                             <a href="javascript:void(0)" onClick="deleteImage('{{ $img->id }}')" class="btn btn-danger">Delete</a>
                                         </div>

@@ -1057,6 +1057,25 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/api/account/progress/store' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.progress.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/api/dietician/process-register' => 
       array (
         0 => 
@@ -1144,8 +1163,7 @@ app('router')->setCompiledRoutes(
           1 => NULL,
           2 => 
           array (
-            'GET' => 0,
-            'HEAD' => 1,
+            'POST' => 0,
           ),
           3 => NULL,
           4 => false,
@@ -1192,44 +1210,6 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      '/api/dietician/chats/store' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'dietician.chats.store',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'POST' => 0,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      '/api/dietician/chats/read' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'dietician.chats.read',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'POST' => 0,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
       '/api/dietician/notifications' => 
       array (
         0 => 
@@ -1250,13 +1230,112 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/api/dietician/notifications/read' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.notifications.read',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/dietician/home-details' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.home.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/dietician/get-payment-details' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.payment-details',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/dietician/get-payments' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.payments',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/dietician/get-ratings' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.ratings',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/' => 
       array (
         0 => 
         array (
           0 => 
           array (
-            '_route' => 'generated::g93tOM7KuEfpJqal',
+            '_route' => 'generated::Zue7ut2PIBAGnlRc',
           ),
           1 => NULL,
           2 => 
@@ -2406,6 +2485,26 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/admin/unapproveddieticians' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'unapproveddieticians.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/admin/getSlug' => 
       array (
         0 => 
@@ -2429,7 +2528,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/oauth/(?|tokens/([^/]++)(*:32)|clients/([^/]++)(?|(*:58))|personal\\-access\\-tokens/([^/]++)(*:99))|/a(?|pi/account/(?|home\\-details/([^/]++)(*:148)|recipe\\-recommendations/([^/]++)(*:188)|get\\-(?|meal\\-logs/([^/]++)(*:223)|linechart\\-details/([^/]++)(*:258)|scheduled\\-workouts/([^/]++)(*:294)|workout\\-l(?|ogs/([^/]++)(*:327)|inechart\\-details/([^/]++)(*:361)))|delete(?|MealLog/([^/]++)(*:396)|WorkoutLog/([^/]++)(*:423))|workout\\-exercises/([^/]++)(*:459)|save\\-rating/([^/]++)(*:488)|chats/(?|([^/]++)(*:513)|store(*:526)|read(*:538)))|dmin/(?|mealTypes/([^/]++)(?|/edit(*:582)|(*:590))|a(?|llergens/([^/]++)(?|/edit(*:628)|(*:636))|dmins/([^/]++)(?|/edit(*:667)|(*:675)))|ingredients/([^/]++)(?|(*:708))|recipe(?|Categories/([^/]++)(?|/edit(*:753)|(*:761))|s/([^/]++)(?|/edit(*:788)|(*:796)))|healthConditions/([^/]++)(?|/edit(*:839)|(*:847))|cuisines/([^/]++)(?|/edit(*:881)|(*:889))|users/([^/]++)(?|/edit(*:920)|(*:928))|exercises/([^/]++)(?|/edit(*:963)|(*:971))|w(?|orkouts/([^/]++)(?|/edit(*:1008)|(*:1017))|eightPlans/([^/]++)(?|/edit(*:1054)|(*:1063)))|dieticians/(?|([^/]++)(*:1096)|detail/([^/]++)(*:1120)|approve\\-status/([^/]++)(*:1153)))))/?$}sDu',
+      0 => '{^(?|/oauth/(?|tokens/([^/]++)(*:32)|clients/([^/]++)(?|(*:58))|personal\\-access\\-tokens/([^/]++)(*:99))|/a(?|pi/(?|account/(?|home\\-details/([^/]++)(*:151)|recipe\\-recommendations/([^/]++)(*:191)|get\\-(?|meal\\-logs/([^/]++)(*:226)|linechart\\-details/([^/]++)(*:261)|scheduled\\-workouts/([^/]++)(*:297)|workout\\-l(?|ogs/([^/]++)(*:330)|inechart\\-details/([^/]++)(*:364)))|delete(?|MealLog/([^/]++)(*:399)|WorkoutLog/([^/]++)(*:426))|workout\\-exercises/([^/]++)(*:462)|save\\-rating/([^/]++)(*:491)|chats/(?|([^/]++)(*:516)|store(*:529)|read(*:541)))|dietician/chats/(?|([^/]++)(*:578)|store(*:591)|read(*:603)))|dmin/(?|mealTypes/([^/]++)(?|/edit(*:647)|(*:655))|a(?|llergens/([^/]++)(?|/edit(*:693)|(*:701))|dmins/([^/]++)(?|/edit(*:732)|(*:740)))|ingredients/([^/]++)(?|(*:773))|recipe(?|Categories/([^/]++)(?|/edit(*:818)|(*:826))|s/([^/]++)(?|/edit(*:853)|(*:861)))|healthConditions/([^/]++)(?|/edit(*:904)|(*:912))|cuisines/([^/]++)(?|/edit(*:946)|(*:954))|users/([^/]++)(?|/edit(*:985)|(*:993))|exercises/([^/]++)(?|/edit(*:1028)|(*:1037))|w(?|orkouts/([^/]++)(?|/edit(*:1075)|(*:1084))|eightPlans/([^/]++)(?|/edit(*:1121)|(*:1130)))|dieticians/(?|([^/]++)(*:1163)|payment\\-details/([^/]++)(*:1197)|detail/([^/]++)(*:1221)|approve\\-status/([^/]++)(*:1254)|make\\-payment/([^/]++)(*:1285)))))/?$}sDu',
     ),
     3 => 
     array (
@@ -2518,7 +2617,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      148 => 
+      151 => 
       array (
         0 => 
         array (
@@ -2541,7 +2640,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      188 => 
+      191 => 
       array (
         0 => 
         array (
@@ -2564,7 +2663,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      223 => 
+      226 => 
       array (
         0 => 
         array (
@@ -2587,7 +2686,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      258 => 
+      261 => 
       array (
         0 => 
         array (
@@ -2610,7 +2709,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      294 => 
+      297 => 
       array (
         0 => 
         array (
@@ -2633,7 +2732,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      327 => 
+      330 => 
       array (
         0 => 
         array (
@@ -2656,7 +2755,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      361 => 
+      364 => 
       array (
         0 => 
         array (
@@ -2679,7 +2778,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      396 => 
+      399 => 
       array (
         0 => 
         array (
@@ -2701,7 +2800,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      423 => 
+      426 => 
       array (
         0 => 
         array (
@@ -2723,7 +2822,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      459 => 
+      462 => 
       array (
         0 => 
         array (
@@ -2746,7 +2845,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      488 => 
+      491 => 
       array (
         0 => 
         array (
@@ -2768,7 +2867,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      513 => 
+      516 => 
       array (
         0 => 
         array (
@@ -2791,7 +2890,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      526 => 
+      529 => 
       array (
         0 => 
         array (
@@ -2812,7 +2911,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      538 => 
+      541 => 
       array (
         0 => 
         array (
@@ -2833,7 +2932,72 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      582 => 
+      578 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.chats.loadMore',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      591 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.chats.store',
+          ),
+          1 => 
+          array (
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      603 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.chats.read',
+          ),
+          1 => 
+          array (
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      647 => 
       array (
         0 => 
         array (
@@ -2856,7 +3020,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      590 => 
+      655 => 
       array (
         0 => 
         array (
@@ -2897,7 +3061,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      628 => 
+      693 => 
       array (
         0 => 
         array (
@@ -2920,7 +3084,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      636 => 
+      701 => 
       array (
         0 => 
         array (
@@ -2961,7 +3125,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      667 => 
+      732 => 
       array (
         0 => 
         array (
@@ -2984,7 +3148,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      675 => 
+      740 => 
       array (
         0 => 
         array (
@@ -3025,7 +3189,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      708 => 
+      773 => 
       array (
         0 => 
         array (
@@ -3066,7 +3230,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      753 => 
+      818 => 
       array (
         0 => 
         array (
@@ -3089,7 +3253,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      761 => 
+      826 => 
       array (
         0 => 
         array (
@@ -3130,7 +3294,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      788 => 
+      853 => 
       array (
         0 => 
         array (
@@ -3153,7 +3317,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      796 => 
+      861 => 
       array (
         0 => 
         array (
@@ -3194,7 +3358,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      839 => 
+      904 => 
       array (
         0 => 
         array (
@@ -3217,7 +3381,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      847 => 
+      912 => 
       array (
         0 => 
         array (
@@ -3258,7 +3422,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      881 => 
+      946 => 
       array (
         0 => 
         array (
@@ -3281,7 +3445,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      889 => 
+      954 => 
       array (
         0 => 
         array (
@@ -3322,7 +3486,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      920 => 
+      985 => 
       array (
         0 => 
         array (
@@ -3345,7 +3509,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      928 => 
+      993 => 
       array (
         0 => 
         array (
@@ -3386,7 +3550,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      963 => 
+      1028 => 
       array (
         0 => 
         array (
@@ -3409,7 +3573,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      971 => 
+      1037 => 
       array (
         0 => 
         array (
@@ -3450,7 +3614,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1008 => 
+      1075 => 
       array (
         0 => 
         array (
@@ -3473,7 +3637,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1017 => 
+      1084 => 
       array (
         0 => 
         array (
@@ -3514,7 +3678,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1054 => 
+      1121 => 
       array (
         0 => 
         array (
@@ -3537,7 +3701,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1063 => 
+      1130 => 
       array (
         0 => 
         array (
@@ -3578,7 +3742,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1096 => 
+      1163 => 
       array (
         0 => 
         array (
@@ -3600,7 +3764,30 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1120 => 
+      1197 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dieticians.payment-details',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      1221 => 
       array (
         0 => 
         array (
@@ -3623,13 +3810,35 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1153 => 
+      1254 => 
       array (
         0 => 
         array (
           0 => 
           array (
             '_route' => 'dieticians.approveStatus',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      1285 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dieticians.payment',
           ),
           1 => 
           array (
@@ -4375,7 +4584,7 @@ app('router')->setCompiledRoutes(
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:149:"function () {
     // Authentication failed
     return \\response()->json([\'status\'=>false,\'message\'=>\'Not authenticated\',\'authenticated\' => false]);
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004660000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004700000000000000000";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
@@ -6347,6 +6556,43 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'account.progress.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/account/progress/store',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ProgressController@store',
+        'controller' => 'App\\Http\\Controllers\\ProgressController@store',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.progress.store',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'dietician.processRegister' => 
     array (
       'methods' => 
@@ -6499,8 +6745,7 @@ app('router')->setCompiledRoutes(
     array (
       'methods' => 
       array (
-        0 => 'GET',
-        1 => 'HEAD',
+        0 => 'POST',
       ),
       'uri' => 'api/dietician/logout',
       'action' => 
@@ -6593,6 +6838,44 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'dietician.chats.users',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'dietician.chats.loadMore' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/dietician/chats/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:dietician',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ChatMessageController@loadMoreMessages',
+        'controller' => 'App\\Http\\Controllers\\ChatMessageController@loadMoreMessages',
+        'namespace' => NULL,
+        'prefix' => 'api/dietician',
+        'where' => 
+        array (
+        ),
+        'as' => 'dietician.chats.loadMore',
       ),
       'fallback' => false,
       'defaults' => 
@@ -6720,7 +7003,196 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::g93tOM7KuEfpJqal' => 
+    'dietician.notifications.read' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'api/dietician/notifications/read',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:dietician',
+        ),
+        'uses' => 'App\\Http\\Controllers\\NotificationController@readNotifications',
+        'controller' => 'App\\Http\\Controllers\\NotificationController@readNotifications',
+        'namespace' => NULL,
+        'prefix' => 'api/dietician',
+        'where' => 
+        array (
+        ),
+        'as' => 'dietician.notifications.read',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'dietician.home.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/dietician/home-details',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:dietician',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Dietician\\DieticianHomeController@index',
+        'controller' => 'App\\Http\\Controllers\\Dietician\\DieticianHomeController@index',
+        'namespace' => NULL,
+        'prefix' => 'api/dietician',
+        'where' => 
+        array (
+        ),
+        'as' => 'dietician.home.index',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'dietician.payment-details' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/dietician/get-payment-details',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:dietician',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Dietician\\DieticianHomeController@getPaymentDetails',
+        'controller' => 'App\\Http\\Controllers\\Dietician\\DieticianHomeController@getPaymentDetails',
+        'namespace' => NULL,
+        'prefix' => 'api/dietician',
+        'where' => 
+        array (
+        ),
+        'as' => 'dietician.payment-details',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'dietician.payments' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/dietician/get-payments',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:dietician',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Dietician\\DieticianHomeController@getPayments',
+        'controller' => 'App\\Http\\Controllers\\Dietician\\DieticianHomeController@getPayments',
+        'namespace' => NULL,
+        'prefix' => 'api/dietician',
+        'where' => 
+        array (
+        ),
+        'as' => 'dietician.payments',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'dietician.ratings' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/dietician/get-ratings',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:dietician',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Dietician\\DieticianHomeController@getRatings',
+        'controller' => 'App\\Http\\Controllers\\Dietician\\DieticianHomeController@getRatings',
+        'namespace' => NULL,
+        'prefix' => 'api/dietician',
+        'where' => 
+        array (
+        ),
+        'as' => 'dietician.ratings',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'generated::Zue7ut2PIBAGnlRc' => 
     array (
       'methods' => 
       array (
@@ -6736,13 +7208,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:48:"function () {
     return \\view(\'admin.login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004690000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004730000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::g93tOM7KuEfpJqal',
+        'as' => 'generated::Zue7ut2PIBAGnlRc',
       ),
       'fallback' => false,
       'defaults' => 
@@ -10242,6 +10714,44 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'unapproveddieticians.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/unapproveddieticians',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'admin.auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\admin\\DieticianController@getUnApprovedDieticians',
+        'controller' => 'App\\Http\\Controllers\\admin\\DieticianController@getUnApprovedDieticians',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+        'as' => 'unapproveddieticians.index',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'dieticians.destroy' => 
     array (
       'methods' => 
@@ -10264,6 +10774,44 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'dieticians.destroy',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'dieticians.payment-details' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/dieticians/payment-details/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'admin.auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\DieticianSalaryPaymentController@index',
+        'controller' => 'App\\Http\\Controllers\\Admin\\DieticianSalaryPaymentController@index',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+        'as' => 'dieticians.payment-details',
       ),
       'fallback' => false,
       'defaults' => 
@@ -10354,6 +10902,43 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'dieticians.payment' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'admin/dieticians/make-payment/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'admin.auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\DieticianSalaryPaymentController@makePayment',
+        'controller' => 'App\\Http\\Controllers\\Admin\\DieticianSalaryPaymentController@makePayment',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+        'as' => 'dieticians.payment',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'getSlug' => 
     array (
       'methods' => 
@@ -10378,7 +10963,7 @@ app('router')->setCompiledRoutes(
                 \'status\'=>true,
                 \'slug\'=>$slug
             ]);
-        }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000050b0000000000000000";}}',
+        }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000051f0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '/admin',
         'where' => 

@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 class Workout extends Model
 {
     use HasFactory,HasUuids;
-    protected $fillable = ['name', 'slug','description', 'exercises', 'status','duration','image'];
+    protected $fillable = ['name', 'slug','description', 'exercises', 'status','duration','image','no_of_ex_per_set'];
     protected $casts = [
         'exercises' => 'json',
     ];

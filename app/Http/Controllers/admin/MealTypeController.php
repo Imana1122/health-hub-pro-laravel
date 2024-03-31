@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use App\Models\MealType;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 
 class MealTypeController extends Controller
@@ -52,16 +53,24 @@ class MealTypeController extends Controller
                 $ext = last($extArray);
 
                 $newImageName = $mealType->id.'.'.$ext;
-                $sPath = public_path() .'/temp/'. $tempImage->name;
-                $dPath = public_path() .'/uploads/mealType/'. $newImageName;
-                File::copy($sPath,$dPath);
 
-                //Generate image thumbnail
+                $sPath = public_path() .'/temp/'. $tempImage->name;
+                $dPath = 'uploads/mealType/' . $newImageName;
+                File::copy($sPath, public_path('/storage/' . $dPath)); // Copy file to storage
+
+                // Generate image thumbnail
                 $sPathThumbnail = public_path() .'/temp/thumb/'. $tempImage->name;
-                $dPathThumbnail = public_path() .'/uploads/mealType/thumb/'. $newImageName;
+                $dPathThumbnail = 'uploads/mealType/thumb/' . $newImageName;
                 $img = ImageManager::gd()->read($sPathThumbnail);
                 $img->resize(450, 600);
-                $img->save($dPathThumbnail);
+                $img->save(public_path('/storage/' . $dPathThumbnail)); // Save thumbnail to storage
+
+                // Move the files within the storage disk
+                Storage::move($dPath, $dPath); // Move original image
+                Storage::move($dPathThumbnail, $dPathThumbnail); // Move thumbnail
+
+
+
 
                 $mealType->image = $newImageName;
                 $mealType->save();
@@ -128,18 +137,23 @@ class MealTypeController extends Controller
                 $ext = last($extArray);
 
                 $newImageName = $mealType->id.'.'.$ext;
-                $sPath = public_path() .'/temp/'. $tempImage->name;
-                $dPath = public_path() .'/uploads/mealType/'. $newImageName;
-                File::copy($sPath,$dPath);
 
-                //Generate image thumbnail
-                $dPathThumbnail = public_path() .'/uploads/mealType/thumb/'. $newImageName;
-                $img = ImageManager::gd()->read($sPath);
-                //$img->resize(450, 600);
-                $img->resize(450, 600, function ($constraint) {
-                    $constraint->upsize();
-                });
-                $img->save($dPathThumbnail);
+
+                $sPath = public_path() .'/temp/'. $tempImage->name;
+                $dPath = 'uploads/mealType/' . $newImageName;
+                File::copy($sPath, public_path('/storage/' . $dPath)); // Copy file to storage
+
+                // Generate image thumbnail
+                $sPathThumbnail = public_path() .'/temp/thumb/'. $tempImage->name;
+                $dPathThumbnail = 'uploads/mealType/thumb/' . $newImageName;
+                $img = ImageManager::gd()->read($sPathThumbnail);
+                $img->resize(450, 600);
+                $img->save(public_path('/storage/' . $dPathThumbnail)); // Save thumbnail to storage
+
+                // Move the files within the storage disk
+                Storage::move($dPath, $dPath); // Move original image
+                Storage::move($dPathThumbnail, $dPathThumbnail); // Move thumbnail
+
 
                 $mealType->image = $newImageName;
                 $mealType->save();
@@ -175,8 +189,8 @@ class MealTypeController extends Controller
         // Check if mealType has an existing image
         if (!empty($mealType->image)) {
             // Remove the previous image and thumbnail (if they exist)
-            $oldImagePath = public_path('/uploads/mealType/' . $mealType->image);
-            $oldThumbnailPath = public_path('/uploads/mealType/thumb/' . $mealType->image);
+            $oldImagePath = public_path('/storage/uploads/mealType/' . $mealType->image);
+            $oldThumbnailPath = public_path('/storage/uploads/mealType/thumb/' . $mealType->image);
 
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath); // Delete the old image

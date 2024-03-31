@@ -24,8 +24,7 @@ class Dietician extends Authenticatable
         'description',
         'approved_status',
         'availability_status',
-        'esewa_client_id',
-        'esewa_secret_key',
+        'esewa_id',
         'booking_amount',
         'password',
         'bio',
@@ -72,6 +71,10 @@ class Dietician extends Authenticatable
     public function notifications()
     {
         return $this->morphMany(Notification::class, 'user');
+    }
+
+    public function payments(){
+        return $this->hasMany(DieticianSalaryPayment::class,'dietician_id');
     }
 
 

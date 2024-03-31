@@ -10,7 +10,7 @@ class CustomizedWorkout extends Model
 {
     use HasFactory,HasUuids;
 
-    protected $fillable = ['name', 'slug','description', 'exercises', 'status','duration','image','user_id'];
+    protected $fillable = ['name', 'slug','description', 'exercises', 'status','duration','image','user_id','no_of_ex_per_setw'];
     protected $casts = [
         'exercises' => 'json',
     ];
