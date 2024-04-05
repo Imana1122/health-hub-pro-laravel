@@ -6,6 +6,7 @@ use App\Events\NotificationSent;
 use App\Models\ChatUser;
 use App\Models\Dietician;
 use App\Models\DieticianBooking;
+use App\Models\DieticianRating;
 use App\Models\Notification;
 use App\Models\User;
 use Carbon\Carbon;
@@ -59,23 +60,14 @@ class DieticianSubscriptionController extends Controller
             ->toArray();
 
 
-        $dieticians = Dietician::where('approved_status', 1)->with('ratings.user')->withCount('ratings')
-            ->withSum('ratings','rating')
+        $dieticians = Dietician::where('approved_status', 1)
             ->whereIn('id', $dieticianIdsWithRecentBookings);
 
         if ($request->get('keyword') != '') {
             $dieticians = $dieticians->where('dieticians.first_name', 'like', '%' . $request->input('keyword') . '%')->orWhere('dieticians.last_name', 'like', '%' . $request->input('keyword') . '%')->orWhere('dieticians.email', 'like', '%' . $request->input('keyword') . '%');
         }
         $dieticians= $dieticians->paginate(4);
-        foreach($dieticians as $dietician){
-            //Rating Calculation
-            $avgRating = '0.00';
-            if($dietician->ratings_count > 0){
-                $avgRating = number_format(($dietician->ratings_sum_rating/$dietician->ratings_count),2);
 
-            }
-            $dietician->avgRating = $avgRating;
-        }
 
 
         return response()->json([
@@ -227,4 +219,52 @@ class DieticianSubscriptionController extends Controller
             ]);
         }
     }
+    public function getPayments(Request $request) {
+        $userId = auth()->user()->id;
+
+        $dieticianBookings = DieticianBooking::with('dietician')->where('user_id', $userId)
+            ->where('payment_status',1)->latest()
+            ->paginate(10);
+
+
+        return response()->json([
+            'status' => true,
+            'data' => $dieticianBookings
+        ]);
+    }
+
+    public function getRatings($id){
+        $ratings=DieticianRating::where('dietician_id',$id)->with('user')->paginate(10);
+        return response()->json([
+            'status'=>true,
+            'data'=>$ratings
+        ]);
+    }
+
+    public function getAvgRating($id){
+        $dietician = Dietician::where('id', $id)
+            ->withCount('ratings')
+            ->withSum('ratings', 'rating')
+            ->first();
+
+        // Check if the dietician exists
+        if ($dietician) {
+            // Rating Calculation
+            $avgRating = '0.00';
+            if ($dietician->ratings_count > 0) {
+                $avgRating = number_format(($dietician->ratings_sum_rating / $dietician->ratings_count), 2);
+            }
+
+            return response()->json([
+                'status' => true,
+                'data' => $avgRating
+            ]);
+        } else {
+            return response()->json([
+                'status' => true,
+                'data' => '0.00'
+            ]);
+        }
+    }
+
 }

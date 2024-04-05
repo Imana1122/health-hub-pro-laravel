@@ -277,10 +277,7 @@ class AuthController extends Controller
             $message =  'Verification code is missing.';
             return redirect()->back()->with('error', $message);
 
-            // return response()->json([
-            //     'status'=> false,
-            //     'error'=> $message
-            // ]);
+
 
         }else{
             $storedcode = $verificationRecord->code;
@@ -290,10 +287,7 @@ class AuthController extends Controller
                     $message =  'Verification code is expired.';
                     return redirect()->back()->with('error', $message);
 
-                    // return response()->json([
-                    //     'status'=> true,
-                    //     'message'=> $message
-                    // ]);
+
                 }else{
 
                     $user = User::where('phone_number', $request->phone_number)->first();
@@ -301,10 +295,7 @@ class AuthController extends Controller
                         $message = 'User with the given phone number not found! Try again';
                         return redirect()->back()->with('error', $message);
 
-                        // return response()->json([
-                        //     'status'=> false,
-                        //     'message'=> $message
-                        // ]);
+
 
                     }else{
                         $user->password = Hash::make($request->password);
@@ -313,10 +304,7 @@ class AuthController extends Controller
                         $message ='Password successfully reset.';
                         return redirect()->back()->with('success', $message);
 
-                        // return response()->json([
-                        //     'status'=> true,
-                        //     'message'=> $message
-                        // ]);
+
                     }
 
                 }
@@ -325,10 +313,7 @@ class AuthController extends Controller
                 $message = 'Invalid verification code. Try regenerating again.';
                 return redirect()->back()->with('error', $message);
 
-                // return response()->json([
-                //     'status'=> false,
-                //     'error'=> $message
-                // ]);
+
 
             }
         }
@@ -432,6 +417,59 @@ class AuthController extends Controller
                 'errors' => $validator->errors()
             ]);
         }
+
+    }
+
+
+    public function updateProfileImage(Request $request){
+        $id = auth()->user()->id;
+
+        if(!$id){
+            return response()->json([
+                'error'=> 'User not found',
+                'status'=>false
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'image'=>'required|image',
+
+        ]);
+
+        if($validator->passes()){
+
+            $user = User::find($id);
+
+
+
+            if($request->image){
+                $image = $request->image;
+                $ext = $image->getClientOriginalExtension();
+                $newName = $user->id.'.'.$ext;
+
+                $user->image =$newName;
+
+                $imagePath = $image->store('public/uploads');
+
+                Storage::move($imagePath, 'public/uploads/users/' . $newName);            }
+
+            $user->save();
+
+            $message = 'Profile Image updated successfully';
+
+            return response()->json([
+                'status' => true,
+                'message' => $message,
+                'data'=>$user
+            ]);
+
+        }else{
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+
 
     }
 

@@ -46,8 +46,12 @@
                     <thead>
                         <tr>
                             <th>Title</th>
-                            <th>Slug</th>
+                            <th>Subtitle</th>
                             <th>Thumbnail</th>
+                            <th>Protein Ratio</th>
+                            <th>Carb Ratio</th>
+                            <th>Fat Ratio</th>
+
                             <th width="100">Status</th>
                             <th width="100">Action</th>
                         </tr>
@@ -57,7 +61,7 @@
                             @foreach ( $weightPlans as $weightPlan)
                             <tr>
                                 <td>{{ $weightPlan->title }}</td>
-                                <td>{{ $weightPlan->slug }}</td>
+                                <td>{{ $weightPlan->subtitle }}</td>
                                 <td>
                                      <!-- Display image thumbnail if weightPlan->image is not empty -->
                                     @if(!empty($weightPlan->image))
@@ -66,6 +70,10 @@
                                         <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-thumbnail mr-2" width="50">
                                     @endif
                                 </td>
+                                <td>{{ $weightPlan->protein_ratio }}</td>
+                                <td>{{ $weightPlan->carb_ratio }}</td>
+                                <td>{{ $weightPlan->fat_ratio }}</td>
+
                                 <td>
                                     @if($weightPlan->status == 1)
                                     <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">

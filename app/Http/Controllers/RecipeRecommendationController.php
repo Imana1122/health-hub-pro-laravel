@@ -33,7 +33,7 @@ class RecipeRecommendationController extends Controller
         // Extract allergen_id values from the collection
         $healthConditionIds = $userHealthConditions->pluck('health_condition_id')->toArray();
 
-        $recipes = Recipe::with('images')->with('ingredient')->where('meal_type_id',$meal_type_id)->orderBy('title','ASC');
+        $recipes = Recipe::with('images')->where('meal_type_id',$meal_type_id)->orderBy('title','ASC');
         if ($request->get('keyword') != '') {
             $recipes = $recipes->where('recipes.title', 'like', '%' . $request->input('keyword') . '%');
         }
@@ -79,9 +79,6 @@ class RecipeRecommendationController extends Controller
     }
 
 
-
-
-
     public function getRecipeCategories(Request $request){
         $recipeCategories = RecipeCategory::orderBy('name','ASC')->get();
 
@@ -103,8 +100,15 @@ class RecipeRecommendationController extends Controller
         ]);
     }
 
+    public function getRecipeDetails( $id){
+
+        $recipe = Recipe::with('images')->with('ingredient')->where('id',$id)->first();
 
 
-
+        return response()->json([
+            'status' => true,
+            'data' => $recipe
+        ]);
+    }
 
 }

@@ -25,19 +25,29 @@ class UserMealPlanController extends Controller
         // Define the target values
         $targetValues = [
             'calories' => $userProfile->calories,
-            'carbohydrates' => $userProfile->carbohydrates,
             'protein' => $userProfile->protein,
             'total_fat' => $userProfile->total_fat,
+            'carbohydrates' => $userProfile->carbohydrates,
             'sodium' => $userProfile->sodium,
             'sugar' => $userProfile->sugar,
         ];
 
-        // Query to retrieve meal plans sorted by the sum of absolute differences from target values
-        $mealPlansQuery = MealPlan::with('breakfastRecipe.images','breakfastRecipe.meal_type','breakfastRecipe.ingredient')->with('snackRecipe.images','snackRecipe.meal_type','snackRecipe.ingredient')->with('lunchRecipe.images','lunchRecipe.meal_type','lunchRecipe.ingredient')->with('dinnerRecipe.images','dinnerRecipe.meal_type','dinnerRecipe.ingredient')->select('*');
+        // Query to retrieve meal plans
+        $mealPlansQuery = MealPlan::with('breakfastRecipe.images','breakfastRecipe.meal_type')
+            ->with('snackRecipe.images','snackRecipe.meal_type')
+            ->with('lunchRecipe.images','lunchRecipe.meal_type')
+            ->with('dinnerRecipe.images','dinnerRecipe.meal_type')
+            ->select('*');
 
-        foreach ($targetValues as $key => $value) {
-            $mealPlansQuery->orderByRaw("ABS($key - $value)");
-        }
+        // Calculate the overall difference
+        $mealPlansQuery->orderByRaw("
+            ABS(calories - {$targetValues['calories']}) +
+            ABS(protein - {$targetValues['protein']}) +
+            ABS(total_fat - {$targetValues['total_fat']}) +
+            ABS(carbohydrates - {$targetValues['carbohydrates']}) +
+            ABS(sodium - {$targetValues['sodium']}) +
+            ABS(sugar - {$targetValues['sugar']})
+        ");
 
         // Define the pagination limit
         $perPage = 1;

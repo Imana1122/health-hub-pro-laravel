@@ -210,11 +210,11 @@ class ChatMessageController extends Controller
                     $newName = $chatMessage->id.'.'.$ext;
                     // Assuming $user is the User model instance and $dietician is the Dietician model instance
 
+
+
+                    $file->move(public_path().'/storage/uploads/chats/files/',$newName);
                     $chatMessage->file =$newName;
                     $chatMessage->save();
-
-                    $file->move(public_path().'/uploads/chats/files/',$newName);
-
 
                     $chatMessage = ChatMessage::where('id',$chatMessage->id)->first();
 

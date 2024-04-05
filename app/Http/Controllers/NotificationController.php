@@ -16,8 +16,8 @@ class NotificationController extends Controller
         ->where(function ($query) {
             $query->where('scheduled_at', '<', now())
                 ->orWhereNull('scheduled_at');
-        })
-        ->paginate(10);
+        })->latest()
+        ->paginate(5);
 
         return response()->json([
             'status'=>true,

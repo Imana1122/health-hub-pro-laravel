@@ -72,16 +72,29 @@
             </div>
         </div>
         <div class="card-body">
-           @foreach ($dieticianBookings as $booking )
-            <div class="card p-3 bg-blue text-white">
-                <div class="form-control mb-2">Sent Messages::{{ $booking->sent_messages }}</div>
-                <div class="form-control mb-2">Received Messages::{{ $booking->received_messages }}</div>
-                <div class="form-control">Booked By::{{ $booking->user_id }}</div>
-
-            </div>
-
-           @endforeach
+            @foreach ($dieticianBookings as $booking )
+                <div class="card p-3 bg-blue text-white">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <i class="fas fa-calendar-alt"></i> Subscribed Date: {{ $booking->updated_at->format('M d, Y') }}
+                        </div>
+                        <div class="col">
+                            <i class="fas fa-calendar-times"></i> End Date: {{ $booking->end_datetime->format('M d, Y') }}
+                        </div>
+                    </div>
+                    <div class="form-control mb-2">
+                        <i class="fas fa-envelope"></i> Sent Messages: {{ $booking->sent_messages }}
+                    </div>
+                    <div class="form-control mb-2">
+                        <i class="fas fa-envelope-open"></i> Received Messages: {{ $booking->received_messages }}
+                    </div>
+                    <div class="form-control">
+                        <i class="fas fa-user"></i> Booked By: {{ $booking->user_id }}
+                    </div>
+                </div>
+            @endforeach
         </div>
+
     </div>
     <div class="card">
         <div class="card-header">

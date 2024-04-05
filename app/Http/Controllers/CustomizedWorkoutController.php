@@ -20,21 +20,14 @@ class CustomizedWorkoutController extends Controller
         }
         $workouts= $workouts->paginate(3);
 
-        // Fetch all exercises
-        $exercises = Exercise::all()->keyBy('id');
 
-        // Manipulate the data to replace exercise IDs with exercise objects
-
-        $workouts->each(function ($workout) use ($exercises) {
-            $workout->exercises = collect($workout->exercises)->map(function ($exerciseId) use ($exercises) {
-                return $exercises->get(intval($exerciseId));
-            });
-        });
         return response()->json([
             'status' => true,
             'data' => $workouts
         ]);
     }
+
+
     public function getExercises(){
         $exercises = Exercise::orderBy('name')
                             ->select('id', 'name')
@@ -107,4 +100,7 @@ class CustomizedWorkoutController extends Controller
             ]);
         }
     }
+
+
+
 }

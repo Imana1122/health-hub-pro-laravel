@@ -93,7 +93,7 @@ class WorkoutLogController extends Controller
         $providedDate = date('Y-m-d', strtotime($now));
 
         // Retrieve UserWorkoutLog records with workout data, including images and ingredients
-        $workoutLogs = WorkoutLog::where('user_id', auth()->user()->id)
+        $workoutLogs = WorkoutLog::where('user_id', auth()->user()->id)->with('workout')
             ->whereRaw('DATE(created_at) = ?', [$providedDate])
             ->get();
 
@@ -132,10 +132,19 @@ class WorkoutLogController extends Controller
 
     }
 
-    public function getWorkoutLineGraphDetails($type)
+    public function getWorkoutLineGraphDetails(Request $request,$type)
     {
+        $year=$request->get('year');
+        $month=$request->get('month');
+
         // Step 1: Query UserWorkoutLog to retrieve the logs of workouts logged by the user
-        $userWorkoutLogs = WorkoutLog::with('workout')->where('user_id', auth()->user()->id)->get();
+        $userWorkoutLogs = WorkoutLog::with('workout')->where('user_id', auth()->user()->id);
+        if($type == 'monthly'){
+            $userWorkoutLogs=$userWorkoutLogs->whereYear('created_at',$year)->get();
+        }else{
+            $userWorkoutLogs=$userWorkoutLogs->whereYear('created_at',$year)->whereMonth('created_at',$month)->get();
+
+        }
         if ($userWorkoutLogs->isEmpty()) {
             return response()->json([
                 'status' => true,
@@ -148,9 +157,7 @@ class WorkoutLogController extends Controller
             case 'daily':
                 $lineChartData = $this->getDataForDaily($userWorkoutLogs);
                 break;
-            case 'weekly':
-                $lineChartData = $this->getDataForWeekly($userWorkoutLogs);
-                break;
+
             case 'monthly':
                 $lineChartData = $this->getDataForMonthly($userWorkoutLogs);
                 break;
@@ -173,7 +180,7 @@ class WorkoutLogController extends Controller
         // Implement logic to process data for daily basis
         $dailyData = [];
         foreach ($workoutLogs as $log) {
-            $date = $log->created_at->format('Y-m-d');
+            $date = $log->created_at->format('d');
             $calories_burned = $log->calories_burned;
             if (!isset($dailyData[$date])) {
                 $dailyData[$date] = 0;
@@ -188,26 +195,6 @@ class WorkoutLogController extends Controller
     }
 
 
-    private function getDataForWeekly($logDetails)
-    {
-        // Implement logic to process data for weekly basis
-        // For example, group data by week and calculate total calories_burned for each week
-        $weeklyData = [];
-        foreach ($logDetails as $log) {
-            $week = $log->created_at->format('W');
-            $calories_burned = $log->calories_burned;
-            if (!isset($weeklyData[$week])) {
-                $weeklyData[$week] = 0;
-            }
-            $weeklyData[$week] += $calories_burned;
-        }
-        $formattedData = [];
-        foreach ($weeklyData as $week => $calories_burned) {
-            // Assuming the year is not considered for weekly data
-            $formattedData[] = ['x' => 'Week ' . $week, 'y' => $calories_burned];
-        }
-        return $formattedData;
-    }
 
     private function getDataForMonthly($logDetails)
     {
@@ -215,7 +202,7 @@ class WorkoutLogController extends Controller
         // For example, group data by month and calculate total calories_burned for each month
         $monthlyData = [];
         foreach ($logDetails as $log) {
-            $month = $log->created_at->format('Y-m');
+            $month = $log->created_at->format('m');
             $calories_burned = $log->calories_burned;
             if (!isset($monthlyData[$month])) {
                 $monthlyData[$month] = 0;

@@ -34,7 +34,7 @@ class RecipeController extends Controller
         $categories = RecipeCategory::orderBy('name', 'ASC')->get();
 
         if ($request->get('keyword') != '') {
-            $recipes = $recipes->where('recipes.title', 'like', '%' . $request->input('keyword') . '%');
+            $recipes = $recipes->where('recipes.title', 'like', '%' . $request->input('keyword') . '%')->orWhere('recipes.id', 'like', '%' . $request->input('keyword') . '%');
         }
 
         // $categoryId = RecipeCategory::where('slug', 'smoothie')->first()->id;

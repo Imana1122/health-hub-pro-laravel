@@ -25,12 +25,12 @@ class DieticianAuthController extends Controller
             'phone_number' => 'required|unique:dieticians',
             'image'=>'required|file|mimes:png,jpg,jpeg,svg',
             'cv' => 'required|file|mimes:pdf',
-            'speciality' => 'required',
-            'description' => 'required|max:255',
+            'speciality' => 'required|max:5000',
+            'description' => 'required|max:5000',
             'esewa_id' => 'required',
-
             'booking_amount' => 'required|numeric',
             'bio' => 'required',
+            'password'=>'required|confirmed'
         ]);
 
         if ($validator->passes()){
@@ -46,6 +46,7 @@ class DieticianAuthController extends Controller
 
                 'booking_amount'=> $request->booking_amount,
                 'bio' => $request->bio,
+                'password'=> Hash::make($request->password)
                 ]);
 
             //Save Image Here
@@ -59,9 +60,7 @@ class DieticianAuthController extends Controller
 
                 $imagePath = $image->store('public/uploads');
 
-                Storage::move($imagePath, 'public/uploads/dieticians/profile/' . $newName);
-
-
+                Storage::move($imagePath, 'public/uploads/dietician/profile/' . $newName);
             }
 
             //Save Image Here
@@ -74,9 +73,9 @@ class DieticianAuthController extends Controller
                 $dietician->save();
 
 
-                $imagePath = $image->store('public/uploads');
+                $imagePath = $cv->store('public/uploads');
 
-                Storage::move($imagePath, 'public/uploads/dieticians/cv/' . $newName);
+                Storage::move($imagePath, 'public/uploads/dietician/cv/' . $newName);
 
 
             }
@@ -297,10 +296,6 @@ public function logout(Request $request){
             $message =  'Verification code is missing.';
             return redirect()->back()->with('error', $message);
 
-            // return response()->json([
-            //     'status'=> false,
-            //     'error'=> $message
-            // ]);
 
         }else{
             $storedcode = $verificationRecord->code;
@@ -310,10 +305,7 @@ public function logout(Request $request){
                     $message =  'Verification code is expired.';
                     return redirect()->back()->with('error', $message);
 
-                    // return response()->json([
-                    //     'status'=> true,
-                    //     'message'=> $message
-                    // ]);
+
                 }else{
 
                     $dietician = Dietician::where('phone_number', $request->phone_number)->first();
@@ -321,10 +313,7 @@ public function logout(Request $request){
                         $message = 'Dietician with the given phone number not found! Try again';
                         return redirect()->back()->with('error', $message);
 
-                        // return response()->json([
-                        //     'status'=> false,
-                        //     'message'=> $message
-                        // ]);
+
 
                     }else{
                         $dietician->password = Hash::make($request->password);
@@ -333,10 +322,7 @@ public function logout(Request $request){
                         $message ='Password successfully reset.';
                         return redirect()->back()->with('success', $message);
 
-                        // return response()->json([
-                        //     'status'=> true,
-                        //     'message'=> $message
-                        // ]);
+
                     }
 
                 }
@@ -345,10 +331,7 @@ public function logout(Request $request){
                 $message = 'Invalid verification code. Try regenerating again.';
                 return redirect()->back()->with('error', $message);
 
-                // return response()->json([
-                //     'status'=> false,
-                //     'error'=> $message
-                // ]);
+
 
             }
         }
@@ -375,7 +358,6 @@ public function logout(Request $request){
             'speciality'=>'required',
             'description'=>'required',
             'esewa_id'=>'required',
-            'password'=>'required|confirmed'
 
         ]);
 
@@ -390,11 +372,79 @@ public function logout(Request $request){
             $dietician->speciality = $request->speciality;
             $dietician->description = $request->description;
             $dietician->esewa_id = $request->esewa_id;
-            $dietician->password = Hash::make($request->password);
 
+
+            //Save Image Here
+            if($request->cv){
+                $cv = $request->cv;
+                $ext = $cv->getClientOriginalExtension();
+                $newName = $dietician->id.'.'.$ext;
+
+                $dietician->cv =$newName;
+
+
+                $imagePath = $cv->store('public/uploads');
+
+                Storage::move($imagePath, 'public/uploads/dietician/cv/' . $newName);
+
+
+            }
             $dietician->save();
 
             $message = 'Profile updated successfully';
+
+            return response()->json([
+                'status' => true,
+                'message' => $message,
+                'data'=>$dietician
+            ]);
+
+        }else{
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+
+
+    }
+
+    public function updateProfileImage(Request $request){
+        $dieticianId = auth()->user()->id;
+
+        if(!$dieticianId){
+            return response()->json([
+                'error'=> 'Dietician not found',
+                'status'=>false
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'image'=>'required|image',
+
+        ]);
+
+        if($validator->passes()){
+
+            $dietician = Dietician::find($dieticianId);
+
+
+
+            if($request->image){
+                $image = $request->image;
+                $ext = $image->getClientOriginalExtension();
+                $newName = $dietician->id.'.'.$ext;
+
+                $dietician->image =$newName;
+
+                $imagePath = $image->store('public/uploads');
+
+                Storage::move($imagePath, 'public/uploads/dietician/profile/' . $newName);
+            }
+
+            $dietician->save();
+
+            $message = 'Profile Image updated successfully';
 
             return response()->json([
                 'status' => true,

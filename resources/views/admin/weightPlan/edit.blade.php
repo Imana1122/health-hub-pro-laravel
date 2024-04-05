@@ -40,6 +40,27 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
+                                <label for="protein_ratio">Protein Ratio</label>
+                                <input type="text" name="protein_ratio" id="protein_ratio" class="form-control" placeholder="SubTitle" value="{{ $weightPlan->protein_ratio }}">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="carb_ratio">Carb Ratio</label>
+                                <input type="text" name="carb_ratio" id="carb_ratio" class="form-control" placeholder="SubTitle" value="{{ $weightPlan->carb_ratio }}">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="fat_ratio">Fat Ratio</label>
+                                <input type="text" name="fat_ratio" id="fat_ratio" class="form-control" placeholder="SubTitle" value="{{ $weightPlan->fat_ratio }}">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
                                 <label for="subtitle">SubTitle</label>
                                 <input type="text" name="subtitle" id="subtitle" class="form-control" placeholder="SubTitle" value="{{ $weightPlan->subtitle }}">
                                 <p></p>

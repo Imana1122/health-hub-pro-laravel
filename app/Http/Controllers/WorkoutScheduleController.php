@@ -40,7 +40,7 @@ class WorkoutScheduleController extends Controller
             $workoutSchedule->save();
 
             $notification = new Notification([
-                'image' => asset('storage/uploads/recipes/small/' . $workout->image),
+                'image' => asset('storage/uploads/workout/' . $workout->image),
                 'message' => $workout->name . " is scheduled for " . $request->scheduled_time,
             ]);
             $user=User::where('id',auth()->user()->id)->first();
@@ -65,21 +65,16 @@ class WorkoutScheduleController extends Controller
     public function getScheduledWorkouts($now){
         $date = date('Y-m-d', strtotime($now));
         $scheduledWorkouts = WorkoutSchedule::with('workout')->where('user_id',auth()->user()->id)->whereDate('scheduled_time',$date)->get();
-        $exercises = Exercise::all()->keyBy('id');
 
-        // Manipulate the data to replace exercise IDs with exercise objects
 
-        $scheduledWorkouts->each(function ($workout) use ($exercises) {
-            $workout->workout->exercises = collect($workout->workout->exercises)->map(function ($exerciseId) use ($exercises) {
-                return $exercises->get(intval($exerciseId));
-            });
-        });
 
         return response()->json([
             'status'=>true,
             'data'=>$scheduledWorkouts
         ]);
     }
+
+
 
     public function getUpcomingWorkouts(){
         $upcomingWorkouts = WorkoutSchedule::with('workout')->where('user_id',auth()->user()->id)->whereDate('scheduled_time','>' ,now())->where('done',0)->limit(3)->get();

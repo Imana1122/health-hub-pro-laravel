@@ -57,12 +57,7 @@ class HomeController extends Controller
 
             // Attach the total calories burned for the workout
             $workoutLog->workout->total_calories_burned = $totalCaloriesBurnedForWorkout;
-            $exercises = Exercise::all()->keyBy('id');
 
-            // Manipulate the data to replace exercise IDs with exercise objects
-            $workoutLog->workout->exercises = collect($workoutLog->workout->exercises)->map(function ($exerciseId) use ($exercises) {
-                return $exercises->get(intval($exerciseId));
-            });
         }
     }
 

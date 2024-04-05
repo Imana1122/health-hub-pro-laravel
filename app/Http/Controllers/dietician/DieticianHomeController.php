@@ -8,6 +8,7 @@ use App\Models\Dietician;
 use App\Models\DieticianBooking;
 use App\Models\DieticianRating;
 use App\Models\DieticianSalaryPayment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DieticianHomeController extends Controller
@@ -51,14 +52,35 @@ class DieticianHomeController extends Controller
 
         $dietician = Dietician::findOrFail(auth()->user()->id);
         $dieticianPayment = DieticianSalaryPayment::where('dietician_id',$dietician->id)->where('year',$year)->where('month',$month)->first();
+        // Get the start date of the month
+        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+
+        // Get the end date of the month
+        $endDate = $startDate->copy()->endOfMonth();
+
         $dieticianBookings = DieticianBooking::with('user')->where('dietician_id', $dietician->id)
-            ->whereYear('updated_at', $year)
-            ->whereMonth('updated_at', $month)
-            ->where('payment_status', true)
-            ->paginate(5);
+            ->where('payment_status', 1)
+            ->where(function ($query) use ($startDate, $endDate,$year,$month) {
+                $query->where(function ($query) use ($startDate, $endDate) {
+                    // Subscriptions starting in the specified month
+                    $query->whereDate('updated_at', '>=', $startDate)
+                        ->whereDate('updated_at', '<=', $endDate);
+                })->orWhere(function ($query) use ($startDate, $year,$month) {
+                    // Subscriptions started before the specified month and still active
+                    $query->whereDate('updated_at', '<', $startDate)
+                        ->where(function ($query) use ($year, $month) {
+                            $query->whereDate('updated_at', '>', Carbon::createFromDate($year, $month, 1)->subDays(30))
+                               ;
+                        });
+                });
+            })
+            ->paginate(10);
 
         foreach($dieticianBookings as $booking){
             $dietician_id = $booking->dietician_id;
+            // Calculate the end datetime by adding 30 days to the updated_at timestamp
+            $endDatetime = Carbon::createFromFormat('Y-m-d H:i:s', $booking->updated_at)->addDays(30);
+
             $no_of_sent_messages = ChatMessage::where('sender_id', $dietician_id)
                 ->whereYear('created_at', $year)
                 ->whereMonth('created_at', $month)
@@ -69,6 +91,7 @@ class DieticianHomeController extends Controller
                 ->whereMonth('created_at', $month)
                 ->count();
 
+            $booking->end_datetime = $endDatetime;
             $booking->sent_messages = $no_of_sent_messages;
             $booking->received_messages = $no_of_received_messages;
         }

@@ -60,12 +60,12 @@
                                 <td>
                                      <!-- Display image thumbnail if dietician->image is not empty -->
                                     @if(!empty($dietician->image))
-                                        <img src="{{ asset('storage/uploads/dietician/profile/thumb/' . $dietician->image) }}" alt="Dietician Image" class="img-thumbnail" style="width: 50px;">
+                                        <img src="{{ asset('storage/uploads/dietician/profile/' . $dietician->image) }}" alt="Dietician Image" class="img-thumbnail" style="width: 50px;">
                                         @else
                                         <img src="{{ asset('admin-assets/img/default-150x150.png') }}" alt="" class="img-thumbnail mr-2" width="50">
                                     @endif
                                 </td>
-                                <td><a href="{{ route('dieticians.payment-details', ['id' => $dietician->id]) }}"><i class="fas fa-credit-card"></i></a></td>
+                                <td>@if($dietician->approved_status == 1) <a href="{{ route('dieticians.payment-details', ['id' => $dietician->id]) }}"><i class="fas fa-credit-card"></i></a>@else<span class="badge bg-danger">not approved</span>@endif</td>
                                 <td>
                                     @if($dietician->status == 1)
                                     <svg class="text-success-500 h-6 w-6 text-success" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">

@@ -34,6 +34,7 @@ class RecipeCategoryController extends Controller
             "name"=> "required",
             "slug"=> "required|unique:recipe_categories",
             'status' => 'required|in:0,1',
+            'image_id'=>'required'
         ]);
 
         if ($validator->passes()) {

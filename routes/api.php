@@ -5,6 +5,7 @@ use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\CustomizedWorkoutController;
 use App\Http\Controllers\dietician\DieticianAuthController;
 use App\Http\Controllers\Dietician\DieticianHomeController;
+use App\Http\Controllers\dietician\ShareProgressController;
 use App\Http\Controllers\DieticianRatingController;
 use App\Http\Controllers\DieticianSubscriptionController;
 use App\Http\Controllers\HomeController;
@@ -50,6 +51,7 @@ Route::prefix('account')->group(function () {
 
         Route::post('/update-info', [AuthController::class, 'updateInfo'])->name('account.updateInfo');
         Route::post('/complete-profile', [AuthController::class, 'completeProfile'])->name('account.completeProfile');
+        Route::post('/update-profile-image', [AuthController::class, 'updateProfileImage'])->name('account.updateProfileImage');
 
         Route::post('/logout', [AuthController::class, 'logout'])->name('account.logout');
         Route::post('/process-change-password', [AuthController::class, 'changePassword'])->name('account.changePassword');
@@ -70,13 +72,15 @@ Route::prefix('account')->group(function () {
         //Meal Plans
         Route::get('/meal-plans', [UserMealPlanController::class, 'index'])->name('account.getMealPlans');
         Route::post('/select-meal-plan', [UserMealPlanController::class, 'selectMealPlan'])->name('account.selectMealPlan');
+        Route::get('/meal-plan-recommendations', [UserMealPlanController::class, 'index'])->name('account.mealPlans');
 
         //Recipe Recommendations
         Route::get('/recipe-categories', [RecipeRecommendationController::class, 'getRecipeCategories'])->name('account.getRecipeCategories');
         Route::get('/recipe-meal-types', [RecipeRecommendationController::class, 'getMealTypes'])->name('account.getMealTypes');
         Route::get('/recipe-recommendations/{meal_type_id}', [RecipeRecommendationController::class, 'getRecipeRecommendations'])->name('account.getRecipeRecommendations');
         Route::get('/setTodayGoal', [UserMealPlanController::class, 'setTodayGoal'])->name('account.setTodayGoal');
-        Route::get('/meal-plan-recommendations', [UserMealPlanController::class, 'index'])->name('account.mealPlans');
+        Route::get('/recipe/{id}', [RecipeRecommendationController::class, 'getRecipeDetails'])->name('account.getRecipeDetails');
+
         //meal logs
         Route::post('/log-meal', [UserRecipeLogController::class, 'logMeal'])->name('account.logMeal');
         Route::get('/get-meal-logs/{now}', [UserRecipeLogController::class, 'getMealLogs'])->name('account.getMealLogs');
@@ -86,6 +90,7 @@ Route::prefix('account')->group(function () {
         //Workout Recommendations
         Route::get('/workout-recommendations', [WorkoutRecommendationController::class, 'getWorkoutRecommendations'])->name('account.getWorkoutRecommendations');
         Route::get('workout-exercises/{id}', [WorkoutRecommendationController::class, 'getWorkoutwithExercise'])->name('account.getWorkoutExercises');
+        Route::get('/workout-details/{id}', [WorkoutRecommendationController::class, 'getWorkoutDetails'])->name('account.getWorkoutDetails');
 
         //Dietician
         Route::get('/get-dieticians', [DieticianSubscriptionController::class, 'getDieticians'])->name('account.getDieticians');
@@ -93,11 +98,15 @@ Route::prefix('account')->group(function () {
         Route::post('/book-dieticians', [DieticianSubscriptionController::class, 'bookDietician'])->name('account.bookDietician');
         Route::post('/verify-booking-payment', [DieticianSubscriptionController::class, 'verifyBookingPayment'])->name('account.verifyBookingPayment');
         Route::post('/save-rating/{id}', [DieticianRatingController::class, 'saveRating'])->name('account.dietician.saveRating');
+        Route::get('/get-payments', [DieticianSubscriptionController::class, 'getPayments'])->name('account.getPayments');
+        Route::get('/get-ratings/{id}', [DieticianSubscriptionController::class, 'getRatings'])->name('account.getRatings');
+        Route::get('/get-avg-rating/{id}', [DieticianSubscriptionController::class, 'getAvgRating'])->name('account.getAvgRating');
 
         //Customize Workout
         Route::get('/get-customized-workouts', [CustomizedWorkoutController::class, 'getCustomizedWorkouts'])->name('account.getCustomizedWorkouts');
         Route::get('/get-exercises', [CustomizedWorkoutController::class, 'getExercises'])->name('account.getExercises');
         Route::post('/customized-workout/store', [CustomizedWorkoutController::class, 'store'])->name('account.customizedWorkout.store');
+
         Route::post('/schedule-workout', [WorkoutScheduleController::class, 'scheduleWorkout'])->name('account.scheduleWorkout');
         Route::get('/get-scheduled-workouts/{now}', [WorkoutScheduleController::class, 'getScheduledWorkouts'])->name('account.getScheduledWorkouts');
         Route::get('/get-upcoming-workouts', [WorkoutScheduleController::class, 'getUpcomingWorkouts'])->name('account.getUpcomingWorkouts');
@@ -121,7 +130,11 @@ Route::prefix('account')->group(function () {
         Route::put('/notifications/read', [NotificationController::class,'readNotifications'])->name('account.notifications.read');
 
         //Progress Routes
+        Route::get('/progress', [ProgressController::class, 'index'])->name('account.progress.index');
         Route::post('/progress/store', [ProgressController::class, 'store'])->name('account.progress.store');
+        Route::get('/progress/result', [ProgressController::class, 'result'])->name('account.progress.result');
+        Route::get('/progress/stat', [ProgressController::class, 'stat'])->name('account.progress.stat');
+        Route::get('/progress/line-chart-data', [ProgressController::class, 'getLineChartData'])->name('account.progress.chart');
 
 
     });
@@ -143,6 +156,8 @@ Route::prefix('dietician')->group(function () {
     Route::middleware('auth:dietician')->group(function () {
 
         Route::post('/update-profile', [DieticianAuthController::class, 'updateProfile'])->name('dietician.updateProfile');
+        Route::post('/update-profile-image', [DieticianAuthController::class, 'updateProfileImage'])->name('dietician.updateProfileImage');
+
         Route::post('/logout', [DieticianAuthController::class, 'logout'])->name('dietician.logout');
         Route::post('/process-change-password', [DieticianAuthController::class, 'changePassword'])->name('dietician.changePassword');
 
@@ -160,6 +175,12 @@ Route::prefix('dietician')->group(function () {
         Route::get('/get-payment-details', [DieticianHomeController::class,'getPaymentDetails'])->name('dietician.payment-details');
         Route::get('/get-payments', [DieticianHomeController::class,'getPayments'])->name('dietician.payments');
         Route::get('/get-ratings', [DieticianHomeController::class,'getRatings'])->name('dietician.ratings');
+
+        //share progress routes
+        Route::get('/progress/{id}', [ShareProgressController::class, 'index'])->name('dietician.progress.index');
+        Route::get('/progress/result/{id}', [ShareProgressController::class, 'result'])->name('dietician.progress.result');
+        Route::get('/progress/stat/{id}', [ShareProgressController::class, 'stat'])->name('dietician.progress.stat');
+        Route::get('/progress/line-chart-data/{id}', [ShareProgressController::class, 'getLineChartData'])->name('dietician.progress.chart');
 
     });
 

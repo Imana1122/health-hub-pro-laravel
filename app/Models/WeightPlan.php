@@ -14,6 +14,10 @@ class WeightPlan extends Model
         'title',
         'slug',
         'subtitle',
+        'protein_ratio',
+        'carb_ratio',
+        'fat_ratio',
+
         'status'
     ];
     public function userProfiles(){

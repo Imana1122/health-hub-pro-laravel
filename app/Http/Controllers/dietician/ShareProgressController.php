@@ -1,95 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\dietician;
 
+use App\Http\Controllers\Controller;
 use App\Models\Progress;
-use App\Models\UserProfile;
-use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
-class ProgressController extends Controller
+class ShareProgressController extends Controller
 {
-    public function index(){
-        $progress = Progress::where('user_id',auth()->user()->id)->paginate(10);
+    public function index($id){
+        $progress = Progress::where('user_id',$id)->paginate(10);
         return response()->json([
             'status'=>true,
             'data'=>$progress
         ]);
     }
 
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            "weight"=> "required|numeric",
-            "height"=> "required|numeric",
-            'front_image'=>'required|image',
-            'back_image'=>'required|image',
-            'right_image'=>'required|image',
-            'left_image'=>'required|image',
-        ]);
-
-        if ($validator->passes()) {
-            $user = auth()->user();
-
-            // Check if progress exists for the current month and user
-            $progress = Progress::where('user_id', $user->id)
-                ->whereYear('created_at', Carbon::now()->year)
-                ->whereMonth('created_at', Carbon::now()->month)
-                ->first();
-            $userProfile = UserProfile::where('user_id',auth()->user()->id)->first();
-
-            if ($progress) {
-                // Update existing progress
-                $progress->weight = $request->weight;
-                $progress->height = $request->height;
-                $progress->updated_at=now();
-
-            } else {
-                // Create new progress
-                $progress = new Progress();
-                $progress->user_id = $user->id;
-                $progress->weight = $request->weight;
-                $progress->height = $request->height;
-            }
-            $userProfile->updated_at=now();
-            $userProfile->height=$request->height;
-            $userProfile->weight=$request->weight;
-            $userProfile->save();
-
-            // Save or update progress images
-            $progress->front_image = $this->saveImage($request->front_image, $user->id, 'front');
-            $progress->back_image = $this->saveImage($request->back_image, $user->id, 'back');
-            $progress->right_image = $this->saveImage($request->right_image, $user->id, 'right');
-            $progress->left_image = $this->saveImage($request->left_image, $user->id, 'left');
-            $progress->save();
-
-            return response()->json([
-                "status"=> true,
-                "message"=> $progress ? 'Progress updated successfully' : 'Progress added successfully'
-            ]);
-        } else {
-            return response()->json([
-                "status"=> false,
-                "errors"=> $validator->errors()
-            ]);
-        }
-    }
-
-    private function saveImage($image, $userId, $side)
-    {
-        $ext = $image->getClientOriginalExtension();
-        $timestamp = now()->format('Y-m-d_His');
-        $newName = $userId . '_' . $timestamp . '.' . $ext;
-        $imagePath = $image->store("public/uploads/progress/$side");
-        Storage::move($imagePath, "public/uploads/progress/$side/$newName");
-        return $newName;
-    }
-
-
-    public function result(Request $request)
+    public function result(Request $request,$id)
     {
         // Convert string representations of dates to DateTime objects
         $month1 = new DateTime($request->get('month1'));
@@ -111,12 +39,12 @@ class ProgressController extends Controller
             ]);
         }
 
-        $progress1 = Progress::where('user_id', auth()->user()->id)
+        $progress1 = Progress::where('user_id', $id)
                             ->whereYear('updated_at', $year1)
                             ->whereMonth('updated_at', $month1)
                             ->first();
 
-        $progress2 = Progress::where('user_id', auth()->user()->id)
+        $progress2 = Progress::where('user_id', $id)
                             ->whereYear('updated_at', $year2)
                             ->whereMonth('updated_at', $month2)
                             ->first();
@@ -150,7 +78,7 @@ class ProgressController extends Controller
         ]);
     }
 
-    public function stat(Request $request)
+    public function stat(Request $request,$id)
     {
         // Convert string representations of dates to DateTime objects
         $month1 = new DateTime($request->get('month1'));
@@ -172,12 +100,12 @@ class ProgressController extends Controller
             ]);
         }
 
-        $progress1 = Progress::where('user_id', auth()->user()->id)
+        $progress1 = Progress::where('user_id', $id)
                             ->whereYear('updated_at', $year1)
                             ->whereMonth('updated_at', $month1)
                             ->first();
 
-        $progress2 = Progress::where('user_id', auth()->user()->id)
+        $progress2 = Progress::where('user_id', $id)
                             ->whereYear('updated_at', $year2)
                             ->whereMonth('updated_at', $month2)
                             ->first();
@@ -214,14 +142,15 @@ class ProgressController extends Controller
         ]);
     }
 
-    public function getLineChartData(Request $request)
+    public function getLineChartData(Request $request,$id)
     {
-        $year=$request->get('year');
-        if($year=null){
-            $year=now()->year;
+        $year = $request->get('year');
+        if ($year == null) { // Use comparison operator '==' instead of assignment operator '='
+            $year = now()->year;
         }
+
         // Fetch progress data for weight and height along with the corresponding months
-        $progressData = Progress::where('user_id', auth()->user()->id)->whereYear('updated_at',$year)
+        $progressData = Progress::where('user_id', $id)->whereYear('updated_at',$year)
             ->orderBy('updated_at') // Ensure data is ordered by date
             ->get(['weight', 'height', 'updated_at']) // Select weight, height, and updated_at fields
             ->map(function ($progress) {
@@ -237,8 +166,4 @@ class ProgressController extends Controller
             'data' => $progressData
         ]);
     }
-
-
-
-
 }

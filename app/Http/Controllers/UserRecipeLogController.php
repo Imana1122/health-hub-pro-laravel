@@ -78,7 +78,7 @@ class UserRecipeLogController extends Controller
                 $providedDate = date('Y-m-d', strtotime($request->created_at));
 
                 // Retrieve UserRecipeLog records with recipe data, including images and ingredients
-                $recipeLogs = UserRecipeLog::with(['recipe.images', 'recipe.ingredient'])
+                $recipeLogs = UserRecipeLog::with(['recipe.images'])
                     ->where('user_id', auth()->user()->id)
                     ->whereRaw('DATE(created_at) = ?', [$providedDate])
                     ->get();
@@ -159,10 +159,19 @@ class UserRecipeLogController extends Controller
 
     }
 
-    public function getLineGraphDetails($type)
+    public function getLineGraphDetails(Request $request,$type)
     {
+        $year=$request->get('year');
+        $month=$request->get('month');
+
         // Step 1: Query UserRecipeLog to retrieve the logs of recipes logged by the user
-        $userRecipeLogs = UserRecipeLog::with('recipe')->where('user_id', auth()->user()->id)->orderBy('created_at')->get();
+        $userRecipeLogs = UserRecipeLog::with('recipe')->where('user_id', auth()->user()->id)->orderBy('created_at');
+        if($type == 'monthly'){
+            $userRecipeLogs=$userRecipeLogs->whereYear('created_at',$year)->get();
+        }else{
+            $userRecipeLogs=$userRecipeLogs->whereYear('created_at',$year)->whereMonth('created_at',$month)->get();
+
+        }
 
         if ($userRecipeLogs->isEmpty()) {
             return response()->json([
@@ -201,7 +210,7 @@ class UserRecipeLogController extends Controller
         // Implement logic to process data for daily basis
         $dailyData = [];
         foreach ($recipeLogs as $log) {
-            $date = $log->created_at->format('Y-m-d');
+            $date = $log->created_at->format('d');
             $calories = $log->recipe->calories;
             if (!isset($dailyData[$date])) {
                 $dailyData[$date] = 0;
@@ -232,7 +241,7 @@ class UserRecipeLogController extends Controller
         $formattedData = [];
         foreach ($weeklyData as $week => $calories) {
             // Assuming the year is not considered for weekly data
-            $formattedData[] = ['x' => 'Week ' . $week, 'y' => $calories];
+            $formattedData[] = ['x' => $week, 'y' => $calories];
         }
         return $formattedData;
     }
@@ -243,7 +252,7 @@ class UserRecipeLogController extends Controller
         // For example, group data by month and calculate total calories for each month
         $monthlyData = [];
         foreach ($logDetails as $log) {
-            $month = $log->created_at->format('Y-m');
+            $month = $log->created_at->format('m');
             $calories = $log->recipe->calories;
             if (!isset($monthlyData[$month])) {
                 $monthlyData[$month] = 0;

@@ -71,7 +71,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-file-pdf"></i></span>
                             </div>
-                            <a href="{{ asset('uploads/dietician/cv/' . $dietician->cv) }}" target="_blank" class="btn btn-outline-primary btn-sm">View CV</a>
+                            <a href="{{ asset('storage/uploads/dietician/cv/' . $dietician->cv) }}" target="_blank" class="btn btn-outline-primary btn-sm">View CV</a>
                         </div>
                     </div>
                     <div class="form-group">

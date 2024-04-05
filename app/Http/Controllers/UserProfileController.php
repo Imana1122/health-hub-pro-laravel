@@ -109,7 +109,7 @@ class UserProfileController extends Controller
         // Assuming $userProfile contains the user's profile data
 
         $userProfile = UserProfile::where('user_id',auth()->user()->id)->first();
-        $userGoal = WeightPlan::where('id',$userProfile->weight_plan_id)->first()->slug;
+        $userGoal = WeightPlan::where('id',$userProfile->weight_plan_id)->first();
 
         // Step 2: Calculate BMR
         $bmr = $this->calculateBMR($userProfile);
@@ -122,7 +122,7 @@ class UserProfileController extends Controller
         $calorieGoal = $this->calculateCalorieGoal($tdee, $userGoal,$userProfile->calorie_difference);
 
         // Step 5: Calculate Macronutrient Requirements based on predefined ratios
-        $macronutrientGoals = $this->calculateMacronutrientGoals($calorieGoal, $userGoal);
+        $macronutrientGoals = $this->calculateMacronutrientGoals($userProfile, $userGoal);
 
         // Step 6: Adjust for Individual Needs (optional)
 
@@ -207,23 +207,19 @@ class UserProfileController extends Controller
         }
     }
 
-    // Step 5: Calculate Macronutrient Requirements based on predefined ratios
-    function calculateMacronutrientGoals($calorieGoal, $goalType) {
-        // Define macronutrient ratios based on goal type
-        $macronutrientRatios = [
-            'muscle-gain' => ['protein' => 0.3, 'carbohydrate' => 0.5, 'fat' => 0.2],
-            'weight-loss' => ['protein' => 0.35, 'carbohydrate' => 0.4, 'fat' => 0.25],
-            'fat-loss' => ['protein' => 0.4, 'carbohydrate' => 0.3, 'fat' => 0.3],
-            'maintain-weight' => ['protein' => 0.25, 'carbohydrate' => 0.45, 'fat' => 0.3],
-        ];
-
+    function calculateMacronutrientGoals($profile, $userGoal) {
         // Calculate macronutrient goals
-        $macronutrientGoals = [];
-        foreach ($macronutrientRatios[$goalType] as $macronutrient => $ratio) {
-            $macronutrientGoals[$macronutrient] = $calorieGoal * $ratio;
-        }
-        return $macronutrientGoals;
+        $proteinGoal = $profile->weight * $userGoal->protein_ratio;
+        $carbGoal =  $profile->weight  *  $userGoal->carb_ratio;
+        $fatGoal =  $profile->weight  *  $userGoal->fat_ratio;
+
+        return [
+            'protein' => $proteinGoal,
+            'carbohydrate' => $carbGoal,
+            'fat' => $fatGoal,
+        ];
     }
+
 
     // Step 7: Calculate Sodium and Sugar Intake limits
     function calculateSodiumLimit() {

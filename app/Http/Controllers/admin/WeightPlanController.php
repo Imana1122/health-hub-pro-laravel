@@ -34,7 +34,10 @@ class WeightPlanController extends Controller
             "title"=> "required",
             "slug"=> "required|unique:weight_plans",
             'status' => 'required|in:0,1',
-            'subtitle' => 'required'
+            'subtitle' => 'required',
+            'protein_ratio' => 'required|numeric'  ,
+            'carb_ratio' => 'required|numeric' ,
+              'fat_ratio' => 'required|numeric'
 
         ]);
 
@@ -44,7 +47,10 @@ class WeightPlanController extends Controller
                 'title' => $request->title,
                 'slug' => $request->slug,
                 'status' => $request->status,
-                'subtitle' => $request->subtitle
+                'subtitle' => $request->subtitle,
+                'protein_ratio' => $request->protein_ratio  ,
+                'carb_ratio' => $request->carb_ratio ,
+                  'fat_ratio' => $request->fat_ratio
 
             ]);
 
@@ -119,7 +125,10 @@ class WeightPlanController extends Controller
             "title"=> "required",
             "slug" => "required|unique:weight_plans,slug," . $weightPlan->id . ",id",
             'status' => 'required|in:0,1',
-            'subtitle' => 'required'
+            'subtitle' => 'required',
+            'protein_ratio' => 'required|numeric'  ,
+            'carb_ratio' => 'required|numeric' ,
+              'fat_ratio' => 'required|numeric'
         ]);
 
         if ($validator->passes()) {
@@ -127,7 +136,10 @@ class WeightPlanController extends Controller
                 'title' => $request->title,
                 'slug' => $request->slug,
                 'status' => $request->status,
-                'subtitle' => $request->subtitle
+                'subtitle' => $request->subtitle,
+                'protein_ratio' => $request->protein_ratio  ,
+                'carb_ratio' => $request->carb_ratio ,
+                  'fat_ratio' => $request->fat_ratio
             ]);
 
             //Save Image Here
