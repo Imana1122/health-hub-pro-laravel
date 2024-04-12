@@ -318,6 +318,46 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/api/terms-and-conditions' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'termsAndConditions.getAll',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/contact' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'contact.getAll',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/api/account/process-register' => 
       array (
         0 => 
@@ -356,7 +396,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      '/api/account/process-forgot-password' => 
+      '/api/account/forgot-password' => 
       array (
         0 => 
         array (
@@ -619,6 +659,65 @@ app('router')->setCompiledRoutes(
           2 => 
           array (
             'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/update-notification' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.changeNotification',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/home-details' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.home',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/badges' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.badges',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
           ),
           3 => NULL,
           4 => false,
@@ -1195,6 +1294,45 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/api/account/bookmarks' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.bookmark.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/account/bookmark/store' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'account.recipe.bookmark',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/api/dietician/process-register' => 
       array (
         0 => 
@@ -1233,7 +1371,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      '/api/dietician/process-forgot-password' => 
+      '/api/dietician/forgot-password' => 
       array (
         0 => 
         array (
@@ -1473,7 +1611,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::f3e8F2XNJIWKSFwi',
+            '_route' => 'generated::ofNb44oFCZOBupM3',
           ),
           1 => NULL,
           2 => 
@@ -2114,6 +2252,65 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/admin/termsAndConditions' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'termsAndConditions.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/admin/termsAndConditions/create' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'termsAndConditions.create',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/admin/termsAndConditions/store' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'termsAndConditions.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/admin/recipes' => 
       array (
         0 => 
@@ -2666,7 +2863,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/oauth/(?|tokens/([^/]++)(*:32)|clients/([^/]++)(?|(*:58))|personal\\-access\\-tokens/([^/]++)(*:99))|/a(?|pi/(?|account/(?|home\\-details/([^/]++)(*:151)|recipe(?|\\-recommendations/([^/]++)(*:194)|/([^/]++)(*:211))|get\\-(?|meal\\-logs/([^/]++)(*:247)|linechart\\-details/([^/]++)(*:282)|ratings/([^/]++)(*:306)|avg\\-rating/([^/]++)(*:334)|scheduled\\-workouts/([^/]++)(*:370)|workout\\-l(?|ogs/([^/]++)(*:403)|inechart\\-details/([^/]++)(*:437)))|delete(?|MealLog/([^/]++)(*:472)|WorkoutLog/([^/]++)(*:499))|workout\\-(?|exercises/([^/]++)(*:538)|details/([^/]++)(*:562))|save\\-rating/([^/]++)(*:592)|chats/(?|([^/]++)(*:617)|store(*:630)|read(*:642)))|dietician/(?|chats/(?|([^/]++)(*:682)|store(*:695)|read(*:707))|progress/(?|([^/]++)(*:736)|result/([^/]++)(*:759)|stat/([^/]++)(*:780)|line\\-chart\\-data/([^/]++)(*:814))))|dmin/(?|mealTypes/([^/]++)(?|/edit(*:859)|(*:867))|a(?|llergens/([^/]++)(?|/edit(*:905)|(*:913))|dmins/([^/]++)(?|/edit(*:944)|(*:952)))|ingredients/([^/]++)(?|(*:985))|recipe(?|Categories/([^/]++)(?|/edit(*:1030)|(*:1039))|s/([^/]++)(?|/edit(*:1067)|(*:1076)))|healthConditions/([^/]++)(?|/edit(*:1120)|(*:1129))|cuisines/([^/]++)(?|/edit(*:1164)|(*:1173))|users/([^/]++)(?|/edit(*:1205)|(*:1214))|exercises/([^/]++)(?|/edit(*:1250)|(*:1259))|w(?|orkouts/([^/]++)(?|/edit(*:1297)|(*:1306))|eightPlans/([^/]++)(?|/edit(*:1343)|(*:1352)))|dieticians/(?|([^/]++)(*:1385)|payment\\-details/([^/]++)(*:1419)|detail/([^/]++)(*:1443)|approve\\-status/([^/]++)(*:1476)|make\\-payment/([^/]++)(*:1507)))))/?$}sDu',
+      0 => '{^(?|/oauth/(?|tokens/([^/]++)(*:32)|clients/([^/]++)(?|(*:58))|personal\\-access\\-tokens/([^/]++)(*:99))|/a(?|pi/(?|account/(?|recipe(?|\\-recommendations/([^/]++)(*:164)|/([^/]++)(*:181))|get\\-(?|meal\\-logs/([^/]++)(*:217)|linechart\\-details/([^/]++)(*:252)|ratings/([^/]++)(*:276)|avg\\-rating/([^/]++)(*:304)|scheduled\\-workouts/([^/]++)(*:340)|workout\\-l(?|ogs/([^/]++)(*:373)|inechart\\-details/([^/]++)(*:407)))|delete(?|MealLog/([^/]++)(*:442)|WorkoutLog/([^/]++)(*:469))|workout\\-(?|exercises/([^/]++)(*:508)|details/([^/]++)(*:532))|save\\-rating/([^/]++)(*:562)|chats/(?|([^/]++)(*:587)|store(*:600)|read(*:612)))|dietician/(?|chats/(?|([^/]++)(*:652)|store(*:665)|read(*:677))|progress/(?|([^/]++)(*:706)|result/([^/]++)(*:729)|stat/([^/]++)(*:750)|line\\-chart\\-data/([^/]++)(*:784))|user\\-profile/([^/]++)(*:815)))|dmin/(?|mealTypes/([^/]++)(?|/edit(*:859)|(*:867))|a(?|llergens/([^/]++)(?|/edit(*:905)|(*:913))|dmins/([^/]++)(?|/edit(*:944)|(*:952)))|ingredients/([^/]++)(?|(*:985))|recipe(?|Categories/([^/]++)(?|/edit(*:1030)|(*:1039))|s/([^/]++)(?|/edit(*:1067)|(*:1076)))|healthConditions/([^/]++)(?|/edit(*:1120)|(*:1129))|cuisines/([^/]++)(?|/edit(*:1164)|(*:1173))|termsAndConditions/([^/]++)(*:1210)|users/([^/]++)(?|/edit(*:1241)|(*:1250))|exercises/([^/]++)(?|/edit(*:1286)|(*:1295))|w(?|orkouts/([^/]++)(?|/edit(*:1333)|(*:1342))|eightPlans/([^/]++)(?|/edit(*:1379)|(*:1388)))|dieticians/(?|([^/]++)(*:1421)|payment\\-details/([^/]++)(*:1455)|detail/([^/]++)(*:1479)|approve\\-status/([^/]++)(*:1512)|make\\-payment/([^/]++)(*:1543)))))/?$}sDu',
     ),
     3 => 
     array (
@@ -2755,30 +2952,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      151 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'account.home',
-          ),
-          1 => 
-          array (
-            0 => 'now',
-          ),
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      194 => 
+      164 => 
       array (
         0 => 
         array (
@@ -2801,7 +2975,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      211 => 
+      181 => 
       array (
         0 => 
         array (
@@ -2824,7 +2998,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      247 => 
+      217 => 
       array (
         0 => 
         array (
@@ -2847,7 +3021,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      282 => 
+      252 => 
       array (
         0 => 
         array (
@@ -2870,7 +3044,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      306 => 
+      276 => 
       array (
         0 => 
         array (
@@ -2893,7 +3067,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      334 => 
+      304 => 
       array (
         0 => 
         array (
@@ -2916,7 +3090,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      370 => 
+      340 => 
       array (
         0 => 
         array (
@@ -2939,7 +3113,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      403 => 
+      373 => 
       array (
         0 => 
         array (
@@ -2962,7 +3136,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      437 => 
+      407 => 
       array (
         0 => 
         array (
@@ -2985,7 +3159,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      472 => 
+      442 => 
       array (
         0 => 
         array (
@@ -3007,7 +3181,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      499 => 
+      469 => 
       array (
         0 => 
         array (
@@ -3029,7 +3203,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      538 => 
+      508 => 
       array (
         0 => 
         array (
@@ -3052,7 +3226,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      562 => 
+      532 => 
       array (
         0 => 
         array (
@@ -3075,7 +3249,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      592 => 
+      562 => 
       array (
         0 => 
         array (
@@ -3097,7 +3271,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      617 => 
+      587 => 
       array (
         0 => 
         array (
@@ -3120,7 +3294,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      630 => 
+      600 => 
       array (
         0 => 
         array (
@@ -3141,7 +3315,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      642 => 
+      612 => 
       array (
         0 => 
         array (
@@ -3162,7 +3336,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      682 => 
+      652 => 
       array (
         0 => 
         array (
@@ -3185,7 +3359,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      695 => 
+      665 => 
       array (
         0 => 
         array (
@@ -3206,7 +3380,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      707 => 
+      677 => 
       array (
         0 => 
         array (
@@ -3227,7 +3401,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      736 => 
+      706 => 
       array (
         0 => 
         array (
@@ -3250,7 +3424,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      759 => 
+      729 => 
       array (
         0 => 
         array (
@@ -3273,7 +3447,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      780 => 
+      750 => 
       array (
         0 => 
         array (
@@ -3296,13 +3470,36 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      814 => 
+      784 => 
       array (
         0 => 
         array (
           0 => 
           array (
             '_route' => 'dietician.progress.chart',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      815 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'dietician.getUserProfile',
           ),
           1 => 
           array (
@@ -3754,7 +3951,7 @@ app('router')->setCompiledRoutes(
           ),
           1 => 
           array (
-            0 => 'brand',
+            0 => 'id',
           ),
           2 => 
           array (
@@ -3777,7 +3974,7 @@ app('router')->setCompiledRoutes(
           ),
           1 => 
           array (
-            0 => 'brand',
+            0 => 'id',
           ),
           2 => 
           array (
@@ -3796,7 +3993,7 @@ app('router')->setCompiledRoutes(
           ),
           1 => 
           array (
-            0 => 'brand',
+            0 => 'id',
           ),
           2 => 
           array (
@@ -3808,7 +4005,29 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1205 => 
+      1210 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'termsAndConditions.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      1241 => 
       array (
         0 => 
         array (
@@ -3831,7 +4050,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1214 => 
+      1250 => 
       array (
         0 => 
         array (
@@ -3872,7 +4091,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1250 => 
+      1286 => 
       array (
         0 => 
         array (
@@ -3895,7 +4114,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1259 => 
+      1295 => 
       array (
         0 => 
         array (
@@ -3936,7 +4155,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1297 => 
+      1333 => 
       array (
         0 => 
         array (
@@ -3959,7 +4178,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1306 => 
+      1342 => 
       array (
         0 => 
         array (
@@ -4000,7 +4219,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1343 => 
+      1379 => 
       array (
         0 => 
         array (
@@ -4023,7 +4242,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1352 => 
+      1388 => 
       array (
         0 => 
         array (
@@ -4064,7 +4283,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1385 => 
+      1421 => 
       array (
         0 => 
         array (
@@ -4086,7 +4305,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1419 => 
+      1455 => 
       array (
         0 => 
         array (
@@ -4109,7 +4328,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1443 => 
+      1479 => 
       array (
         0 => 
         array (
@@ -4132,7 +4351,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1476 => 
+      1512 => 
       array (
         0 => 
         array (
@@ -4154,7 +4373,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      1507 => 
+      1543 => 
       array (
         0 => 
         array (
@@ -4906,13 +5125,87 @@ app('router')->setCompiledRoutes(
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:149:"function () {
     // Authentication failed
     return \\response()->json([\'status\'=>false,\'message\'=>\'Not authenticated\',\'authenticated\' => false]);
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000047f0000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000048a0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
         array (
         ),
         'as' => 'login',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'termsAndConditions.getAll' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/terms-and-conditions',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+        ),
+        'uses' => 'App\\Http\\Controllers\\admin\\TermsAndConditionsController@getAll',
+        'controller' => 'App\\Http\\Controllers\\admin\\TermsAndConditionsController@getAll',
+        'namespace' => NULL,
+        'prefix' => 'api',
+        'where' => 
+        array (
+        ),
+        'as' => 'termsAndConditions.getAll',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'contact.getAll' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/contact',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+        ),
+        'uses' => 'App\\Http\\Controllers\\admin\\ContactController@getAll',
+        'controller' => 'App\\Http\\Controllers\\admin\\ContactController@getAll',
+        'namespace' => NULL,
+        'prefix' => 'api',
+        'where' => 
+        array (
+        ),
+        'as' => 'contact.getAll',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5008,7 +5301,7 @@ app('router')->setCompiledRoutes(
       array (
         0 => 'POST',
       ),
-      'uri' => 'api/account/process-forgot-password',
+      'uri' => 'api/account/forgot-password',
       'action' => 
       array (
         'middleware' => 
@@ -5524,6 +5817,43 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'account.changeNotification' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/account/update-notification',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\UserProfileController@changeNotification',
+        'controller' => 'App\\Http\\Controllers\\UserProfileController@changeNotification',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.changeNotification',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'account.home' => 
     array (
       'methods' => 
@@ -5531,7 +5861,7 @@ app('router')->setCompiledRoutes(
         0 => 'GET',
         1 => 'HEAD',
       ),
-      'uri' => 'api/account/home-details/{now}',
+      'uri' => 'api/account/home-details',
       'action' => 
       array (
         'middleware' => 
@@ -5547,6 +5877,44 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'account.home',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.badges' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/account/badges',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\HomeController@getBadges',
+        'controller' => 'App\\Http\\Controllers\\HomeController@getBadges',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.badges',
       ),
       'fallback' => false,
       'defaults' => 
@@ -7294,6 +7662,81 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'account.bookmark.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/account/bookmarks',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RecipeBookmarkController@index',
+        'controller' => 'App\\Http\\Controllers\\RecipeBookmarkController@index',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.bookmark.index',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'account.recipe.bookmark' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/account/bookmark/store',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:customer',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RecipeBookmarkController@bookmark',
+        'controller' => 'App\\Http\\Controllers\\RecipeBookmarkController@bookmark',
+        'namespace' => NULL,
+        'prefix' => 'api/account',
+        'where' => 
+        array (
+        ),
+        'as' => 'account.recipe.bookmark',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'dietician.processRegister' => 
     array (
       'methods' => 
@@ -7374,7 +7817,7 @@ app('router')->setCompiledRoutes(
       array (
         0 => 'POST',
       ),
-      'uri' => 'api/dietician/process-forgot-password',
+      'uri' => 'api/dietician/forgot-password',
       'action' => 
       array (
         'middleware' => 
@@ -8082,7 +8525,45 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::f3e8F2XNJIWKSFwi' => 
+    'dietician.getUserProfile' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'api/dietician/user-profile/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+          1 => 'auth:dietician',
+        ),
+        'uses' => 'App\\Http\\Controllers\\dietician\\ShareProgressController@getUserProfile',
+        'controller' => 'App\\Http\\Controllers\\dietician\\ShareProgressController@getUserProfile',
+        'namespace' => NULL,
+        'prefix' => 'api/dietician',
+        'where' => 
+        array (
+        ),
+        'as' => 'dietician.getUserProfile',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'generated::ofNb44oFCZOBupM3' => 
     array (
       'methods' => 
       array (
@@ -8098,13 +8579,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:48:"function () {
     return \\view(\'admin.login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000004820000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000048f0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::f3e8F2XNJIWKSFwi',
+        'as' => 'generated::ofNb44oFCZOBupM3',
       ),
       'fallback' => false,
       'defaults' => 
@@ -9850,7 +10331,7 @@ app('router')->setCompiledRoutes(
         0 => 'GET',
         1 => 'HEAD',
       ),
-      'uri' => 'admin/cuisines/{brand}/edit',
+      'uri' => 'admin/cuisines/{id}/edit',
       'action' => 
       array (
         'middleware' => 
@@ -9887,7 +10368,7 @@ app('router')->setCompiledRoutes(
       array (
         0 => 'PUT',
       ),
-      'uri' => 'admin/cuisines/{brand}',
+      'uri' => 'admin/cuisines/{id}',
       'action' => 
       array (
         'middleware' => 
@@ -9924,7 +10405,7 @@ app('router')->setCompiledRoutes(
       array (
         0 => 'DELETE',
       ),
-      'uri' => 'admin/cuisines/{brand}',
+      'uri' => 'admin/cuisines/{id}',
       'action' => 
       array (
         'middleware' => 
@@ -9940,6 +10421,156 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'cuisines.destroy',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'termsAndConditions.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/termsAndConditions',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'admin.auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\admin\\TermsAndConditionsController@index',
+        'controller' => 'App\\Http\\Controllers\\admin\\TermsAndConditionsController@index',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+        'as' => 'termsAndConditions.index',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'termsAndConditions.create' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/termsAndConditions/create',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'admin.auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\admin\\TermsAndConditionsController@create',
+        'controller' => 'App\\Http\\Controllers\\admin\\TermsAndConditionsController@create',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+        'as' => 'termsAndConditions.create',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'termsAndConditions.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'admin/termsAndConditions/store',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'admin.auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\admin\\TermsAndConditionsController@store',
+        'controller' => 'App\\Http\\Controllers\\admin\\TermsAndConditionsController@store',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+        'as' => 'termsAndConditions.store',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'termsAndConditions.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'admin/termsAndConditions/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'admin.auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\admin\\TermsAndConditionsController@destroy',
+        'controller' => 'App\\Http\\Controllers\\admin\\TermsAndConditionsController@destroy',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+        'as' => 'termsAndConditions.destroy',
       ),
       'fallback' => false,
       'defaults' => 
@@ -11853,7 +12484,7 @@ app('router')->setCompiledRoutes(
                 \'status\'=>true,
                 \'slug\'=>$slug
             ]);
-        }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000053d0000000000000000";}}',
+        }";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005530000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '/admin',
         'where' => 

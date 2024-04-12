@@ -12,16 +12,15 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index($now){
+    public function index(){
         $userId=auth()->user()->id;
 
-        // Extract the date part from the provided datetime string
-        $providedDate = date('Y-m-d', strtotime($now));
+
 
         // Retrieve UserRecipeLog records with recipe data, including images and ingredients
-        $recipeLogs = UserRecipeLog::with(['recipe.images', 'recipe.ingredient'])
+        $recipeLogs = UserRecipeLog::with(['recipe'])
             ->where('user_id', $userId)
-            ->whereRaw('DATE(created_at) = ?', [$providedDate])
+            ->whereDate('created_at',now())
             ->get();
 
 
@@ -104,5 +103,20 @@ class HomeController extends Controller
                 ]
         ]);
 
+    }
+
+    public function getBadges() {
+        $noOfBadges = UserRecipeLog::where('user_id', auth()->user()->id)
+            ->selectRaw('count(distinct date(updated_at)) as count')
+            ->first()
+            ->count;
+
+        // Assuming you want badges for every 7 distinct days
+        $noOfBadges = intval($noOfBadges / 7);
+
+        return response()->json([
+            'status' => true,
+            'data' => $noOfBadges
+        ]);
     }
 }

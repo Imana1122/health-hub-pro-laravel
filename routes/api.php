@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\admin\ContactController;
+use App\Http\Controllers\admin\TermsAndConditionsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\CustomizedWorkoutController;
@@ -11,6 +13,7 @@ use App\Http\Controllers\DieticianSubscriptionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProgressController;
+use App\Http\Controllers\RecipeBookmarkController;
 use App\Http\Controllers\RecipeRecommendationController;
 use App\Http\Controllers\UserMealPlanController;
 use App\Http\Controllers\UserProfileController;
@@ -36,13 +39,15 @@ Route::get('/', function () {
 })->name('login');
 
 // Route::get('/meal-plans', [MealPlanController::class, 'index'])->name('mealplans.index');
+Route::get('/terms-and-conditions', [TermsAndConditionsController::class, 'getAll'])->name('termsAndConditions.getAll');
+Route::get('/contact', [ContactController::class, 'getAll'])->name('contact.getAll');
 
 Route::prefix('account')->group(function () {
     // Routes accessible by guests
     Route::middleware('guest')->group(function () {
         Route::post('/process-register', [AuthController::class, 'processRegister'])->name('account.processRegister');
         Route::post('/process-login', [AuthController::class, 'authenticate'])->name('account.authenticate');
-        Route::post('/process-forgot-password', [AuthController::class, 'sendcode'])->name('account.sendcode');
+        Route::post('/forgot-password', [AuthController::class, 'sendcode'])->name('account.sendcode');
 
     });
 
@@ -66,8 +71,12 @@ Route::prefix('account')->group(function () {
         Route::post('/set-allergens', [UserProfileController::class, 'setAllergens'])->name('account.setAllergens');
         Route::post('/set-health-conditions', [UserProfileController::class, 'setHealthConditions'])->name('account.setHealthConditions');
 
+        //pop up notification
+        Route::post('/update-notification', [UserProfileController::class, 'changeNotification'])->name('account.changeNotification');
+
         //Home
-        Route::get('/home-details/{now}', [HomeController::class, 'index'])->name('account.home');
+        Route::get('/home-details', [HomeController::class, 'index'])->name('account.home');
+        Route::get('/badges', [HomeController::class, 'getBadges'])->name('account.badges');
 
         //Meal Plans
         Route::get('/meal-plans', [UserMealPlanController::class, 'index'])->name('account.getMealPlans');
@@ -137,6 +146,10 @@ Route::prefix('account')->group(function () {
         Route::get('/progress/line-chart-data', [ProgressController::class, 'getLineChartData'])->name('account.progress.chart');
 
 
+        //Bookmark Routes
+        Route::get('/bookmarks', [RecipeBookmarkController::class, 'index'])->name('account.bookmark.index');
+        Route::post('/bookmark/store', [RecipeBookmarkController::class, 'bookmark'])->name('account.recipe.bookmark');
+
     });
 
 });
@@ -148,7 +161,7 @@ Route::prefix('dietician')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::post('/process-register', [DieticianAuthController::class, 'processRegister'])->name('dietician.processRegister');
         Route::post('/process-login', [DieticianAuthController::class, 'authenticate'])->name('dietician.authenticate');
-        Route::post('/process-forgot-password', [DieticianAuthController::class, 'sendcode'])->name('dietician.sendcode');
+        Route::post('/forgot-password', [DieticianAuthController::class, 'sendcode'])->name('dietician.sendcode');
 
     });
 
@@ -181,6 +194,7 @@ Route::prefix('dietician')->group(function () {
         Route::get('/progress/result/{id}', [ShareProgressController::class, 'result'])->name('dietician.progress.result');
         Route::get('/progress/stat/{id}', [ShareProgressController::class, 'stat'])->name('dietician.progress.stat');
         Route::get('/progress/line-chart-data/{id}', [ShareProgressController::class, 'getLineChartData'])->name('dietician.progress.chart');
+        Route::get('/user-profile/{id}', [ShareProgressController::class, 'getUserProfile'])->name('dietician.getUserProfile');
 
     });
 

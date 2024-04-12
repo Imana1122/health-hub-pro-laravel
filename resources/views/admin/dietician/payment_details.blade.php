@@ -64,35 +64,55 @@
     </div>
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Payment Details</h5>
-            <div class="card-subtitle">
+            <h5 class="card-title">Details</h5>
+            <div class="card-tools">
                 <input type="number" id="yearInput" placeholder="Enter year (YYYY)" min="1000" max="9999" required>
                 <input type="number" id="monthInput" placeholder="Enter month (MM)" min="1" max="12" required>
                 <button class="btn btn-primary" onclick="getPaymentDetails()">Get</button>
             </div>
         </div>
-        <div class="card-body">
-            @foreach ($dieticianBookings as $booking )
-                <div class="card p-3 bg-blue text-white">
-                    <div class="row mb-2">
-                        <div class="col">
-                            <i class="fas fa-calendar-alt"></i> Subscribed Date: {{ $booking->updated_at->format('M d, Y') }}
+        <div  class="card-body ">
+            <div class="container">
+                <div class="row">
+                    @foreach ($dieticianBookings as $booking)
+                    <div class="col-md-4 mb-3">
+                        <div class="bg-green p-4 rounded">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="{{ asset('storage/uploads/users/'.$booking->user->image) }}" alt="User" style="border-radius: 50%; width: 60px; height: 60px;">
+                                <div class="ml-3">
+                                    <div class="font-weight-bold">{{ $booking->user->name }}</div>
+                                    <div class="font-weight-bold text-muted">Subscribed Date:</div>
+                                    <div class="text-muted">{{ $booking->updated_at }}</div>
+                                    <div class="font-weight-bold text-muted">End Date:</div>
+                                    <div class="text-muted">{{ $booking->end_datetime }}</div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle bg-lightblue text-center" style="width: 20px; height: 20px;">
+                                    <i class="fas fa-arrow-alt-circle-left received-message text-red"></i>
+                                </div>
+                                <div class="ml-2">
+                                    <span>Received: {{ $booking->received_messages }}</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mt-2">
+                                <div class="rounded-circle bg-lightblue text-center" style="width: 20px; height: 20px;">
+                                    <i class="fas fa-arrow-alt-circle-right text-blue"></i>
+                                </div>
+                                <div class="ml-2">
+                                    <span>Sent: {{ $booking->sent_messages }}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col">
-                            <i class="fas fa-calendar-times"></i> End Date: {{ $booking->end_datetime->format('M d, Y') }}
-                        </div>
                     </div>
-                    <div class="form-control mb-2">
-                        <i class="fas fa-envelope"></i> Sent Messages: {{ $booking->sent_messages }}
-                    </div>
-                    <div class="form-control mb-2">
-                        <i class="fas fa-envelope-open"></i> Received Messages: {{ $booking->received_messages }}
-                    </div>
-                    <div class="form-control">
-                        <i class="fas fa-user"></i> Booked By: {{ $booking->user_id }}
-                    </div>
+                    @endforeach
                 </div>
-            @endforeach
+            </div>
+
+
+        </div>
+        <div class="card-footer clearfix">
+            {{ $dieticianBookings->links() }}
         </div>
 
     </div>

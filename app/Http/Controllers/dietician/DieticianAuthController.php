@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\dietician;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PasswordResetMail;
 use App\Models\PasswordResetToken;
 use App\Models\Dietician;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -234,34 +236,43 @@ public function logout(Request $request){
                 'status' => false,
                 ]);
             try {
-                $client = new Client();
                 $queryParams = http_build_query(['phone_number' => $phone_number, 'code' => $code]);
                 $resetRoute = url('reset-password') . '?' . $queryParams;
-                $response = $client->post('https://sms.aakashsms.com/sms/v3/send', [
-                    'form_params' => [
-                        'auth_token' => 'c1eecbd817abc78626ee119a530b838ef57f8dad9872d092ab128776a00ed31d',
-                        'to' => $phone_number,
-                        'text' => "You can change your password here: $resetRoute",
-                    ],
-                ]);
+                $dietician=Dietician::where('phone_number',$phone_number)->first();
 
-                if ($response->getStatusCode() === 200) {
+                Mail::to($dietician->email)->send(new PasswordResetMail(
+
+                    "You can change your password here: $resetRoute"
+                ));
+
+                // $client = new Client();
+
+                // $response = $client->post('https://sms.aakashsms.com/sms/v3/send', [
+                //     'form_params' => [
+                //         'auth_token' => 'c1eecbd817abc78626ee119a530b838ef57f8dad9872d092ab128776a00ed31d',
+                //         'to' => $phone_number,
+                //         'text' => "You can change your password here: $resetRoute",
+                //     ],
+                // ]);
+
+
+                // if ($response->getStatusCode() === 200) {
                     $message = 'Verification code sent successfully';
                     return response()->json([
                         'status'=> true,
                         'message'=> $message
                     ]);
-                } else {
-                    return response()->json([
-                        'status'=> false,
-                        'error'=> 'Failed to send verification code'
-                    ]);
-                }
+                // } else {
+                //     return response()->json([
+                //         'status'=> false,
+                //         'message'=> 'Failed to send verification code'
+                //     ]);
+                // }
             } catch (\Exception $e) {
                 $message = 'Failed to send verification code. Check your Internet Connection.';
                 return response()->json([
                     'status'=> false,
-                    'errors'=> $message
+                    'message'=> $message
                 ]);
             }
         }

@@ -387,4 +387,8 @@ class RecipeController extends Controller
             'message'=> 'Recipe Deleted Successfully'
         ]);
     }
+
+    public function addAllergenRecipe(){
+
+    }
 }

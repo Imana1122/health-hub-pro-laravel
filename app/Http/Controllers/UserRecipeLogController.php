@@ -58,8 +58,14 @@ class UserRecipeLogController extends Controller
 
 
             $recipe= Recipe::where('id',$request->recipe_id)->first();
+            if(!empty($recipe->images)){
+                $image=asset('storage/uploads/recipes/small/' . $recipe->images[0]->image);
+            }else{
+                $image = asset('admin-assets/img/default-150x150.png');
+
+            }
             $notification = new Notification([
-                'image' => asset('storage/uploads/recipes/small/' . $recipe->images[0]->image),
+                'image' => $image,
                 'message' => $recipe->title . " is logged.",
             ]);
 
@@ -74,18 +80,9 @@ class UserRecipeLogController extends Controller
 
             if($recipeLog){
 
-                // Extract the date part from the provided datetime string
-                $providedDate = date('Y-m-d', strtotime($request->created_at));
-
-                // Retrieve UserRecipeLog records with recipe data, including images and ingredients
-                $recipeLogs = UserRecipeLog::with(['recipe.images'])
-                    ->where('user_id', auth()->user()->id)
-                    ->whereRaw('DATE(created_at) = ?', [$providedDate])
-                    ->get();
                 return response()->json([
                     'status' => true,
                     'data' => [
-                        'recipeLogs'=>$recipeLogs,
                         'userNutrients'=>$userMealPlan
                     ]
                 ]);
@@ -116,7 +113,7 @@ class UserRecipeLogController extends Controller
         $providedDate = date('Y-m-d', strtotime($now));
 
         // Retrieve UserRecipeLog records with recipe data, including images and ingredients
-        $recipeLogs = UserRecipeLog::with(['recipe.images', 'recipe.ingredient'])
+        $recipeLogs = UserRecipeLog::with(['recipe.images'])
             ->where('user_id', auth()->user()->id)
             ->whereRaw('DATE(created_at) = ?', [$providedDate])
             ->get();

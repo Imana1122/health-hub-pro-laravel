@@ -595,7 +595,16 @@
                 if (response["status"] == true) {
                     $(".error").removeClass('invalid-feedback');
                     $('input[type="text"], select').removeClass('is-invalid');
-                    window.location.href = "{{ route('recipes.index') }}";
+                    // Extract the current page number from the URL
+                    var currentPage = new URLSearchParams(window.location.search).get('page');
+                    // If no page number is found, default to 1
+                    currentPage = currentPage ? currentPage : 1;
+
+                    // Construct the redirect URL with the current page number
+                    var redirectUrl = "{{ route('recipes.index') }}" + "?page=" + currentPage;
+
+                    // Redirect to the index page with the same pagination
+                    window.location.href = redirectUrl;
 
 
                 } else {

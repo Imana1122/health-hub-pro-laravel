@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MealType;
 use App\Models\Recipe;
+use App\Models\RecipeBookmark;
 use App\Models\RecipeCategory;
 use App\Models\UserAllergen;
 use App\Models\UserCuisine;
@@ -104,6 +105,11 @@ class RecipeRecommendationController extends Controller
 
         $recipe = Recipe::with('images')->with('ingredient')->where('id',$id)->first();
 
+        $bookmark = RecipeBookmark::where('user_id', auth()->user()->id)
+        ->where('recipe_id', $recipe->id)
+        ->exists();
+
+        $recipe->bookmark = $bookmark ? 1 : 0;
 
         return response()->json([
             'status' => true,

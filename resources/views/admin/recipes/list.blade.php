@@ -154,7 +154,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <button class="btn btn-success link-button" onclick="window.location.href='{{ route('recipes.edit', $recipe->id) }}'">
+                                        <button class="btn btn-success link-button"  onclick="redirectToEditPage('{{ $recipe->id }}')">
                                             <svg class="text-white filament-link-icon w-9 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                                             </svg>
@@ -213,6 +213,26 @@
 @section('customJs')
 
 <script>
+    function redirectToEditPage(recipeId) {
+
+        // Extract the current page number from the URL
+        var currentPage = new URLSearchParams(window.location.search).get('page');
+        // If no page number is found, default to 1
+        currentPage = currentPage ? currentPage : 1;
+
+        // Construct the URL for the edit page with the page and recipe parameters
+        var editUrl = '{{ route("recipes.edit", [":id"]) }}';
+        editUrl = editUrl.replace(':id', recipeId);
+
+        // Append the page query parameter if present
+        if (currentPage) {
+            editUrl += '?page=' + currentPage;
+        }
+
+        // Redirect to the edit page
+        window.location.href = editUrl;
+    }
+
     function deleteRecipe(id) {
         var url = '{{ route('recipes.destroy', "ID") }}';
         var newUrl = url.replace("ID", id);

@@ -17,6 +17,7 @@ use App\Http\Controllers\admin\IngredientController;
 use App\Http\Controllers\admin\RecipeCategoryController;
 use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\TempImagesController;
+use App\Http\Controllers\admin\TermsAndConditionsController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\WeightPlanController;
 use App\Http\Controllers\admin\WorkoutController;
@@ -112,9 +113,15 @@ Route::group(['prefix'=> 'admin'], function () {
         Route::get('/cuisines', [CuisineController::class,'index'])->name('cuisines.index');
         Route::get('/cuisines/create', [CuisineController::class,'create'])->name('cuisines.create');
         Route::post('/cuisines/store', [CuisineController::class,'store'])->name('cuisines.store');
-        Route::get('/cuisines/{brand}/edit', [CuisineController::class,'edit'])->name('cuisines.edit');
-        Route::put('/cuisines/{brand}', [CuisineController::class,'update'])->name('cuisines.update');
-        Route::delete('/cuisines/{brand}', [CuisineController::class,'destroy'])->name('cuisines.destroy');
+        Route::get('/cuisines/{id}/edit', [CuisineController::class,'edit'])->name('cuisines.edit');
+        Route::put('/cuisines/{id}', [CuisineController::class,'update'])->name('cuisines.update');
+        Route::delete('/cuisines/{id}', [CuisineController::class,'destroy'])->name('cuisines.destroy');
+
+        //Terms and Conditions Routes
+        Route::get('/termsAndConditions', [TermsAndConditionsController::class,'index'])->name('termsAndConditions.index');
+        Route::get('/termsAndConditions/create', [TermsAndConditionsController::class,'create'])->name('termsAndConditions.create');
+        Route::post('/termsAndConditions/store', [TermsAndConditionsController::class,'store'])->name('termsAndConditions.store');
+        Route::delete('/termsAndConditions/{id}', [TermsAndConditionsController::class,'destroy'])->name('termsAndConditions.destroy');
 
         //Product Routes
         Route::get('/recipes', [RecipeController::class,'index'])->name('recipes.index');

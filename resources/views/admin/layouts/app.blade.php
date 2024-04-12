@@ -78,7 +78,7 @@
             </div>
 
 			<!-- /.content-wrapper -->
-			<footer class="main-footer">
+			<footer class="main-footer" style="height:10px">
 		        <div class="col-12 mt-3">
 					<div class="copy-right text-center">
 						<p>© Copyright 2022 Health Hub Pro. All Rights Reserved <br> Made With 🩷 By Imana</p>

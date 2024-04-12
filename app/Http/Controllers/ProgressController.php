@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 class ProgressController extends Controller
 {
     public function index(){
-        $progress = Progress::where('user_id',auth()->user()->id)->paginate(10);
+        $progress = Progress::where('user_id',auth()->user()->id)->latest()->paginate(10);
         return response()->json([
             'status'=>true,
             'data'=>$progress
@@ -217,7 +217,7 @@ class ProgressController extends Controller
     public function getLineChartData(Request $request)
     {
         $year=$request->get('year');
-        if($year=null){
+        if($year==null){
             $year=now()->year;
         }
         // Fetch progress data for weight and height along with the corresponding months

@@ -131,14 +131,14 @@
                 <div class="card bg-dark">
                     <div class="card-header" id="headingConfigure">
                         <h2 class="mb-0">
-                            <button class="btn btn-link {{ Route::is('weightPlans.*') || Route::is('users.*') || Route::is('dieticians.*') || Route::is('contact.*') ||  Route::is('unapproveddieticians.*')  ? '' : 'collapsed' }}" type="button" data-toggle="collapse" data-target="#collapseConfigure" aria-expanded="{{ Route::is('weightPlans.*') || Route::is('dieticians.*') || Route::is('users.*') || Route::is('contact.*') ||  Route::is('unapproveddieticians.*')  ? 'true' : 'false' }}" aria-controls="collapseConfigure">
+                            <button class="btn btn-link {{ Route::is('termsAndConditions.*') || Route::is('weightPlans.*') || Route::is('users.*') || Route::is('dieticians.*') || Route::is('contact.*') ||  Route::is('unapproveddieticians.*')  ? '' : 'collapsed' }}" type="button" data-toggle="collapse" data-target="#collapseConfigure" aria-expanded="{{ Route::is('termsAndConditions.*') || Route::is('weightPlans.*') || Route::is('dieticians.*') || Route::is('users.*') || Route::is('contact.*') ||  Route::is('unapproveddieticians.*')  ? 'true' : 'false' }}" aria-controls="collapseConfigure">
                                 <i class="nav-icon fas fa-cogs"></i>
                                 Configure
                             </button>
                         </h2>
                     </div>
 
-                    <div id="collapseConfigure" class="collapse {{ Route::is('weightPlans.*') || Route::is('users.*') || Route::is('dieticians.*') || Route::is('contact.*') ||  Route::is('unapproveddieticians.*')  ? 'show' : '' }}" aria-labelledby="headingConfigure" data-parent="#accordionExample">
+                    <div id="collapseConfigure" class="collapse {{ Route::is('termsAndConditions.*') || Route::is('weightPlans.*') || Route::is('users.*') || Route::is('dieticians.*') || Route::is('contact.*') ||  Route::is('unapproveddieticians.*')  ? 'show' : '' }}" aria-labelledby="headingConfigure" data-parent="#accordionExample">
                         <div class="card-body">
                             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                                 <li class="nav-item">
@@ -171,6 +171,12 @@
                                         <p>Contact</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('termsAndConditions.index') }}" class="nav-link {{ Route::is('termsAndConditions.*') ? 'active' : '' }}">
+                                        <i class="nav-icon fas fa-file-contract"></i> <!-- Terms and Conditions -->
+                                        <p>Terms and Conditions</p>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -189,6 +195,7 @@
                         </h2>
                     </div>
 
+
                     <div id="collapseSetting" class="collapse {{ Route::is('admins.*') ? 'show' : '' }}" aria-labelledby="headingSetting" data-parent="#accordionExample">
                         <div class="card-body">
                             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -201,6 +208,7 @@
                             </ul>
                         </div>
                     </div>
+
                 </div>
             </div>
         </nav>

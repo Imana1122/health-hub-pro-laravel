@@ -4,6 +4,9 @@ namespace App\Http\Controllers\dietician;
 
 use App\Http\Controllers\Controller;
 use App\Models\Progress;
+use App\Models\User;
+use App\Models\UserProfile;
+use App\Models\WeightPlan;
 use DateTime;
 use Illuminate\Http\Request;
 
@@ -165,5 +168,31 @@ class ShareProgressController extends Controller
             'status' => true,
             'data' => $progressData
         ]);
+    }
+
+    public function getUserProfile($id){
+        $user=User::where('id',$id)->first();
+        $userProfile = UserProfile::where('user_id',$user->id)->first();
+        $weightPlan=WeightPlan::where('id',$userProfile->weight_plan_id)->first();
+        $userProfile->weight_plan=$weightPlan->title ?? '';
+        $user->profile=$userProfile;
+
+        $userCuisines = $user->cuisines()->get();
+        $userHealthConditions = $user->healthConditions()->get();
+        $userAllergens = $user->allergens()->get();
+        $user->allergens=$userAllergens;
+        $user->healthConditions=$userHealthConditions;
+        $user->cuisines=$userCuisines;
+        if($user){
+            return response()->json([
+                'status' => true,
+                'data' => $user
+            ]);
+        }else{
+            return response()->json([
+                'status' => false,
+                'data' => 'User Profile not found'
+            ]);
+        }
     }
 }

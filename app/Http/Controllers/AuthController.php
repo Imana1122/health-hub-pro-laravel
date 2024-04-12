@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Mail\PasswordResetMail;
 use App\Models\PasswordResetToken;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Models\WeightPlan;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -72,54 +74,56 @@ class AuthController extends Controller
     }
 
     public function authenticate(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        "phone_number" => "required|string",
-        "password" => "required",
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            "phone_number" => "required|string",
+            "password" => "required",
+        ]);
 
-    if ($validator->passes()) {
-        $user = User::where('phone_number', $request->phone_number)->first();
+        if ($validator->passes()) {
+            $user = User::where('phone_number', $request->phone_number)->first();
 
-        if (!$user) {
-            return response()->json([
-                'status' => false,
-                'error' => "Phone Number is incorrect."
-            ]);
-        } else {
-            // Use Hash::check to compare the provided password with the hashed password in the database
-            if (Hash::check($request->password, $user->password)) {
-                $token = $user->createToken('auth_token')->accessToken;
-                $userProfile = UserProfile::with('weightPlan')->where('user_id',$user->id)->first();
-
-                $userCuisines = $user->cuisines()->get();
-                $userHealthConditions = $user->healthConditions()->get();
-                $userAllergens = $user->allergens()->get();
-
-
-                return response()->json([
-                    'status' => true,
-                    'user' => $user,
-                    'token' => $token,
-                    'userProfile'=>$userProfile,
-                    'userCuisines' => $userCuisines,
-                    'userHealthConditions' => $userHealthConditions,
-                    'userAllergens' => $userAllergens,
-                ]);
-            } else {
+            if (!$user) {
                 return response()->json([
                     'status' => false,
-                    'error' => "Password incorrect."
+                    'error' => "Phone Number is incorrect."
                 ]);
+            } else {
+                // Use Hash::check to compare the provided password with the hashed password in the database
+                if (Hash::check($request->password, $user->password)) {
+                    $token = $user->createToken('auth_token')->accessToken;
+                    $userProfile = UserProfile::where('user_id',$user->id)->first();
+                    $weightPlan=WeightPlan::where('id',$userProfile->weight_plan_id)->first();
+                    $userProfile->weight_plan=$weightPlan->title ?? '';
+
+                    $userCuisines = $user->cuisines()->get();
+                    $userHealthConditions = $user->healthConditions()->get();
+                    $userAllergens = $user->allergens()->get();
+
+
+                    return response()->json([
+                        'status' => true,
+                        'user' => $user,
+                        'token' => $token,
+                        'userProfile'=>$userProfile,
+                        'userCuisines' => $userCuisines,
+                        'userHealthConditions' => $userHealthConditions,
+                        'userAllergens' => $userAllergens,
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'error' => "Password incorrect."
+                    ]);
+                }
             }
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
         }
-    } else {
-        return response()->json([
-            'status' => false,
-            'errors' => $validator->errors()
-        ]);
     }
-}
 
     public function logout(Request $request){
         try {
@@ -188,7 +192,9 @@ class AuthController extends Controller
                     $query->where('phone_number', $request->phone_number);
                 }),
             ],
+
         ]);
+        $user=User::where('phone_number',$request->phone_number)->first();
         if ($validator->fails()) {
 
             return response()->json([
@@ -215,34 +221,42 @@ class AuthController extends Controller
                 'status' => false,
                 ]);
             try {
-                $client = new Client();
                 $queryParams = http_build_query(['phone_number' => $phone_number, 'code' => $code]);
-                $resetRoute = url('reset-password') . '?' . $queryParams;
-                $response = $client->post('https://sms.aakashsms.com/sms/v3/send', [
-                    'form_params' => [
-                        'auth_token' => 'c1eecbd817abc78626ee119a530b838ef57f8dad9872d092ab128776a00ed31d',
-                        'to' => $phone_number,
-                        'text' => "You can change your password here: $resetRoute",
-                    ],
-                ]);
 
-                if ($response->getStatusCode() === 200) {
-                    $message = 'Verification code sent successfully';
+                $resetRoute = url('reset-password') . '?' . $queryParams;
+                Mail::to($user->email)->send(new PasswordResetMail(
+
+                    "You can change your password here: $resetRoute"
+                ));
+
+                // $client = new Client();
+                // $response = $client->post('https://sms.aakashsms.com/sms/v3/send', [
+                //     'form_params' => [
+                //         'auth_token' => 'c1eecbd817abc78626ee119a530b838ef57f8dad9872d092ab128776a00ed31d',
+                //         'to' => $phone_number,
+                //         'text' => "You can change your password here: $resetRoute",
+                //     ],
+                // ]);
+
+
+
+                // if ($response->getStatusCode() === 200) {
+                    $message = 'Password reset route sent to your phone number and email successfully';
                     return response()->json([
                         'status'=> true,
                         'message'=> $message
                     ]);
-                } else {
-                    return response()->json([
-                        'status'=> false,
-                        'error'=> 'Failed to send verification code'
-                    ]);
-                }
+                // } else {
+                //     return response()->json([
+                //         'status'=> false,
+                //         'message'=> 'Failed to send password reset route'
+                //     ]);
+                // }
             } catch (\Exception $e) {
                 $message = 'Failed to send verification code. Check your Internet Connection.';
                 return response()->json([
                     'status'=> false,
-                    'errors'=> $message
+                    'message'=> $message
                 ]);
             }
         }

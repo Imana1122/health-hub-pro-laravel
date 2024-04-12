@@ -35,7 +35,7 @@ class DieticianSalaryPaymentController extends Controller
         // Get the end date of the month
         $endDate = $startDate->copy()->endOfMonth();
 
-        $dieticianBookings = DieticianBooking::where('dietician_id', $dietician->id)
+        $dieticianBookings = DieticianBooking::with('user')->where('dietician_id', $dietician->id)
             ->where('payment_status', 1)
             ->where(function ($query) use ($startDate, $endDate,$year,$month) {
                 $query->where(function ($query) use ($startDate, $endDate) {
@@ -51,7 +51,7 @@ class DieticianSalaryPaymentController extends Controller
                         });
                 });
             })
-            ->get();
+            ->paginate(5);
 
         foreach($dieticianBookings as $booking){
             $dietician_id = $booking->dietician_id;

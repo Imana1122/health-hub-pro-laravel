@@ -64,20 +64,26 @@ class UserProfileController extends Controller
             'weight_plan_id' => "required",
         ]);
 
+
         if($validator->passes()){
             $userProfile = UserProfile::where('user_id',$userId)->first();
+            $weightPlan=WeightPlan::where('id',$request->weight_plan_id)->first();
 
-            $userProfile->update(
-                [
-                    'weight_plan_id' => $request->weight_plan_id,
-                ]
-            );
+            if($userProfile == null && $weightPlan == null){
+                return response()->json([
+                    'status' => false,
+                    'error' => 'No weight plan or userprofile with this id!'
+                ]);
+            }
+
+
 
             $userGoals = $this->getTodayGoal();
 
             // dd($userGoals);
             $userProfile->update(
                 [
+                    'weight_plan_id' => $request->weight_plan_id,
                     'calories' => $userGoals['calories'],
                     'protein' => $userGoals['protein'],
                     'carbohydrates' => $userGoals['carbohydrates'],
@@ -88,6 +94,8 @@ class UserProfileController extends Controller
 
                 ]
             );
+            $userProfile=UserProfile::where('user_id',auth()->user()->id)->first();
+            $userProfile->weight_plan =  $weightPlan->title;
 
             return response()->json([
                 'status' => true,
@@ -167,9 +175,10 @@ class UserProfileController extends Controller
         // Step 2: Calculate BMR
     function calculateBMR($userProfile) {
         $bmr = 0;
-        if ($userProfile->gender === 'male') {
+        if ($userProfile->gender == 'male') {
             $bmr = 10 * $userProfile->weight + 6.25 * $userProfile->height - 5 * $userProfile->age + 5;
-        } elseif ($userProfile->gender === 'female') {
+        } elseif ($userProfile->gender == 'female') {
+
             $bmr = 10 * $userProfile->weight + 6.25 * $userProfile->height - 5 * $userProfile->age - 161;
         }
         return $bmr;
@@ -378,5 +387,34 @@ class UserProfileController extends Controller
         }
 
 
+    }
+
+    public function changeNotification(){
+        $userProfile = UserProfile::where('user_id',auth()->user()->id)->first();
+        if($userProfile == null){
+            return response()->json([
+                'status'=>false,
+                'message'=>'User profile not found'
+            ]);
+        }else{
+            if($userProfile->notification ==1){
+                $userProfile->notification=0;
+                $userProfile->save();
+                return response()->json([
+                    'status'=>true,
+                    'message'=>'Pop up notification blocked.',
+                    'data'=>0
+                ]);
+            }else{
+                $userProfile->notification=1;
+                $userProfile->save();
+                return response()->json([
+                    'status'=>true,
+                    'message'=>'Pop up notification activated.',
+                    'data'=>1
+                ]);
+            }
+
+        }
     }
 }

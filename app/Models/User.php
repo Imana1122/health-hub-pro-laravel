@@ -55,6 +55,9 @@ class User extends Authenticatable
     public function userProfile(){
         return $this->hasOne(UserProfile::class);
     }
+    public function profile(){
+        return $this->hasOne(UserProfile::class);
+    }
     public function userCuisines(){
         return $this->hasMany(UserCuisine::class,'user_id');
     }

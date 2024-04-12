@@ -15,9 +15,8 @@ class DieticianHomeController extends Controller
 {
     public function index(Request $request){
 
-
         // Step 1: Query UserWorkoutpayment to retrieve the payments of workouts paymentged by the user
-        $dieticianPaymentHistory = DieticianSalaryPayment::where('dietician_id', auth()->user()->id)->get();
+        $dieticianPaymentHistory = DieticianSalaryPayment::where('dietician_id', auth()->user()->id)->where('year',$request->get('year'))->get();
         if ($dieticianPaymentHistory->isEmpty()) {
             return response()->json([
                 'status' => true,
@@ -27,7 +26,7 @@ class DieticianHomeController extends Controller
         // Step 3: Group the data based on the $type parameter
         $lineChartData = [];
         foreach ($dieticianPaymentHistory as $payment) {
-            $month = $payment->year . '-'.$payment->month;
+            $month = $payment->month;
             $amount = $payment->amount;
             if (!isset($lineChartData[$month])) {
                 $lineChartData[$month] = 0;

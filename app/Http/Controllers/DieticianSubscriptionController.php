@@ -12,6 +12,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\MailForNotification;
+use Illuminate\Support\Facades\Mail;
 
 class DieticianSubscriptionController extends Controller
 {
@@ -28,6 +30,7 @@ class DieticianSubscriptionController extends Controller
         $dieticians = Dietician::where('approved_status', 1)->with('ratings.user')->withCount('ratings')
         ->withSum('ratings','rating')
         ->whereNotIn('id', $dieticianIdsWithRecentBookings);
+
         if ($request->get('keyword') != '') {
             $dieticians = $dieticians->where('dieticians.first_name', 'like', '%' . $request->input('keyword') . '%')->orWhere('dieticians.last_name', 'like', '%' . $request->input('keyword') . '%')->orWhere('dieticians.email', 'like', '%' . $request->input('keyword') . '%');
         }
@@ -180,6 +183,10 @@ class DieticianSubscriptionController extends Controller
                     $notification->to = 'user';
 
                     event(new NotificationSent($notification));
+                    Mail::to($user->email)->send(new MailForNotification($dietician->first_name .$dietician->last_name. " is booked. You paid NRs $dietician->booking_amount via esewa for this. Now you can chat with them to help yourself with dietary guidance.",'New Dietician Subscription'
+
+
+                    ));
 
                     $notification = new Notification([
                         'image' => asset('storage/uploads/users/' . $user->image),
@@ -192,7 +199,10 @@ class DieticianSubscriptionController extends Controller
                     $notification = Notification::where('id',$notification->id)->first();
 
                     event(new NotificationSent($notification));
+                    Mail::to($dietician->email)->send(new MailForNotification($user->name . " booked you. Now you can chat with them to help them with dietary guidance.",'New Dietician Subscription'
 
+
+                    ));
                     return response()->json([
                         'status' => true,
                         'message'=>'Dietician  booked successfully'

@@ -7,13 +7,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class MailForNotification extends Mailable
+class PasswordResetMail extends Mailable
 {
     use Queueable, SerializesModels;
 
 
     public $messages;
-    public $title;
 
     /**
      * Create a new message instance.
@@ -22,11 +21,10 @@ class MailForNotification extends Mailable
      * @param  string  $messages
      * @return void
      */
-    public function __construct( $messages,$title)
+    public function __construct( $messages)
     {
 
         $this->messages = $messages;
-        $this->title=$title;
     }
 
     /**
@@ -38,10 +36,9 @@ class MailForNotification extends Mailable
     {
         // dd($this->messages);
         return $this->from('imanalimbu@gmail.com')
-            ->subject('Dietician Subscription')
-            ->view('mails.notification_mail_view')
+            ->subject('Password Reset')
+            ->view('mails.password_reset_mail_view')
             ->with([
-                'title'=>$this->title,
 
                 'messages' => $this->messages,
             ]);

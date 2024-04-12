@@ -61,4 +61,16 @@ class ContactController extends Controller
             ]);
         }
     }
+
+    public function getAll(Request $request){
+        $contact = Contact::latest()->first();
+
+
+
+
+        return response()->json([
+            'status' => true,
+            'data' =>  $contact
+        ]);
+    }
 }
