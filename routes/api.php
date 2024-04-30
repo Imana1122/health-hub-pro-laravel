@@ -12,6 +12,7 @@ use App\Http\Controllers\DieticianRatingController;
 use App\Http\Controllers\DieticianSubscriptionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OtherController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\RecipeBookmarkController;
 use App\Http\Controllers\RecipeRecommendationController;
@@ -33,6 +34,11 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::get('/recipe-categories', [OtherController::class, 'setRecipeCategories'])->name('recipe-categories.set');
+
+
+
 Route::get('/', function () {
     // Authentication failed
     return response()->json(['status'=>false,'message'=>'Not authenticated','authenticated' => false]);

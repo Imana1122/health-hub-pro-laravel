@@ -11,12 +11,7 @@ use App\Models\DieticianBooking;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str; // Import the Str class for string manipulation
-
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 class ChatMessageController extends Controller
 {
@@ -300,7 +295,7 @@ class ChatMessageController extends Controller
                     $chatMessage->file =$newName;
                     $chatMessage->save();
 
-                    $file->move(public_path().'/uploads/chats/files/',$newName);
+                    $file->move(public_path().'/storage/uploads/chats/files/',$newName);
 
                     $chatMessage = ChatMessage::where('id',$chatMessage->id)->first();
 

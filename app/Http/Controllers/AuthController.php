@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
+use Intervention\Image\Encoders\AutoEncoder;
+use Intervention\Image\ImageManager;
 
 class AuthController extends Controller
 {
@@ -26,6 +27,7 @@ class AuthController extends Controller
             'email'=> 'required|email|unique:users',
             'phone_number' => 'required|unique:users',
             'password' => 'required|confirmed',
+            'image' => 'required|mimes:png,jpg,jpeg',
         ]);
 
         if ($validator->passes()){
@@ -35,17 +37,23 @@ class AuthController extends Controller
                 'phone_number' => $request->phone_number,
                 'password' => $request->password
                 ]);
-            if($request->isAttemptingPrecognition){
+
+            if($request->image){
                 $image = $request->image;
                 $ext = $image->getClientOriginalExtension();
                 $newName = $user->id.'.'.$ext;
 
                 $user->image =$newName;
+                $image = ImageManager::gd()->read($image);
+                $image->resize(300, 275);
+                // Encode the image using an encoder object
+                $encoder = new AutoEncoder(); // This will automatically detect the output format
+                $encodedImage = $image->encode($encoder);
 
+                // If you want to convert the encoded image to a string
+                $imageData = (string) $encodedImage;
 
-                $imagePath = $image->store('public/images');
-
-                Storage::move($imagePath, 'public/uploads/users/' . $newName);
+                Storage::disk('public')->put('uploads/users/' . $newName, $imageData);
 
 
 
@@ -61,7 +69,7 @@ class AuthController extends Controller
 
             }else{
                 return response()->json([
-                    'status' => false
+                    'status' => true
                 ]);
             }
 
@@ -72,6 +80,64 @@ class AuthController extends Controller
             ]);
         }
     }
+
+    public function completeProfile(Request $request){
+        $userId = auth()->user()->id;
+
+        if(!$userId){
+            return response()->json([
+                'error'=> 'User not found',
+                'status'=>false
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'height' => 'required',
+            'weight' => 'required',
+            'waist' => 'required',
+            'hips'=> "required",
+            'targeted_weight' => "required",
+            'age'=> 'required',
+            'gender' => 'required',
+            'calorie_difference'=>'required'
+        ]);
+
+        if($validator->passes()){
+
+            $userProfile = UserProfile::updateOrCreate(
+                ['user_id' => $userId],
+                [
+                    'height' => $request->height,
+                    'weight' => $request->weight,
+                    'waist' => $request->waist,
+                    'hips' => $request->hips,
+                    'bust' => $request->bust,
+                    'targeted_weight' => $request->targeted_weight,
+                    'gender' => $request->gender,
+                    'age' => $request->age,
+                    'calorie_difference'=>$request->calorie_difference
+                ]
+            );
+            // Assuming $userProfile is an instance of UserProfile
+            $weightPlan = $userProfile->weightPlan; // Correct
+
+            $message = 'Profile completed successfully';
+
+            return response()->json([
+                'status' => true,
+                'userProfile' => $userProfile,
+                'weightPlan' => $weightPlan
+            ]);
+
+        }else{
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+
+    }
+
 
     public function authenticate(Request $request)
     {
@@ -93,13 +159,15 @@ class AuthController extends Controller
                 if (Hash::check($request->password, $user->password)) {
                     $token = $user->createToken('auth_token')->accessToken;
                     $userProfile = UserProfile::where('user_id',$user->id)->first();
-                    $weightPlan=WeightPlan::where('id',$userProfile->weight_plan_id)->first();
-                    $userProfile->weight_plan=$weightPlan->title ?? '';
+                    if (!empty($userProfile)){
+                        $weightPlan=WeightPlan::where('id',$userProfile->weight_plan_id)->first();
+                        $userProfile->weight_plan=$weightPlan->title ?? '';
 
+
+                    }
                     $userCuisines = $user->cuisines()->get();
                     $userHealthConditions = $user->healthConditions()->get();
                     $userAllergens = $user->allergens()->get();
-
 
                     return response()->json([
                         'status' => true,
@@ -183,83 +251,135 @@ class AuthController extends Controller
     public function sendcode(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => [
+            'user' => [
                 'required',
-                'numeric',
-                'digits:10',
-                Rule::exists('users')->where(function ($query) use ($request) {
-                    // Include a where clause to check for the phone_number in the users table.
-                    $query->where('phone_number', $request->phone_number);
-                }),
             ],
-
         ]);
-        $user=User::where('phone_number',$request->phone_number)->first();
-        if ($validator->fails()) {
+        $user=User::where('phone_number',$request->user)->first();
+        if(!empty($user)){
+            if ($validator->fails()) {
 
-            return response()->json([
-                'status'=> false,
-                'errors'=> $validator->errors()
-            ]);
-
-
-        }else{
-
-            $phone_number = strval($request->input('phone_number'));
-
-            $code = mt_rand(10000, 99999);
-            $encryptedCode= Hash::make($code);
-
-            $phone_verification = PasswordResetToken::updateOrCreate(
-                [
-                    'phone_number'=> $phone_number,
-                ],
-                [
-                'phone_number' => $phone_number,
-                'code' => $encryptedCode,
-                'expires_at' => now()->addMinutes(1),
-                'status' => false,
-                ]);
-            try {
-                $queryParams = http_build_query(['phone_number' => $phone_number, 'code' => $code]);
-
-                $resetRoute = url('reset-password') . '?' . $queryParams;
-                Mail::to($user->email)->send(new PasswordResetMail(
-
-                    "You can change your password here: $resetRoute"
-                ));
-
-                // $client = new Client();
-                // $response = $client->post('https://sms.aakashsms.com/sms/v3/send', [
-                //     'form_params' => [
-                //         'auth_token' => 'c1eecbd817abc78626ee119a530b838ef57f8dad9872d092ab128776a00ed31d',
-                //         'to' => $phone_number,
-                //         'text' => "You can change your password here: $resetRoute",
-                //     ],
-                // ]);
-
-
-
-                // if ($response->getStatusCode() === 200) {
-                    $message = 'Password reset route sent to your phone number and email successfully';
-                    return response()->json([
-                        'status'=> true,
-                        'message'=> $message
-                    ]);
-                // } else {
-                //     return response()->json([
-                //         'status'=> false,
-                //         'message'=> 'Failed to send password reset route'
-                //     ]);
-                // }
-            } catch (\Exception $e) {
-                $message = 'Failed to send verification code. Check your Internet Connection.';
                 return response()->json([
                     'status'=> false,
-                    'message'=> $message
+                    'errors'=> $validator->errors()
                 ]);
+
+
+            }else{
+
+                $phone_number = strval($request->input('user'));
+
+                $code = mt_rand(10000, 99999);
+                $encryptedCode= Hash::make($code);
+
+                $phone_verification = PasswordResetToken::updateOrCreate(
+                    [
+                        'phone_number'=> $phone_number,
+                    ],
+                    [
+                    'phone_number' => $phone_number,
+                    'code' => $encryptedCode,
+                    'expires_at' => now()->addMinutes(1),
+                    'status' => false,
+                    ]);
+                try {
+                    $queryParams = http_build_query(['phone_number' => $phone_number, 'code' => $code]);
+
+                    $resetRoute = url('reset-password') . '?' . $queryParams;
+
+
+                    $client = new Client();
+                    $response = $client->post('https://sms.aakashsms.com/sms/v3/send', [
+                        'form_params' => [
+                            'auth_token' => 'c1eecbd817abc78626ee119a530b838ef57f8dad9872d092ab128776a00ed31d',
+                            'to' => $phone_number,
+                            'text' => "You can change your password here: $resetRoute",
+                        ],
+                    ]);
+
+
+
+                    if ($response->getStatusCode() === 200) {
+                        $message = 'Password reset route sent to your phone number successfully';
+                        return response()->json([
+                            'status'=> true,
+                            'message'=> $message
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status'=> false,
+                            'message'=> 'Failed to send password reset route'
+                        ]);
+                    }
+                } catch (\Exception $e) {
+                    $message = 'Failed to send verification code. Check your Internet Connection.';
+                    return response()->json([
+                        'status'=> false,
+                        'message'=> $message
+                    ]);
+                }
             }
+        }else{
+            $user=User::where('email',$request->user)->first();
+            if(!empty($user)){
+                if ($validator->fails()) {
+
+                    return response()->json([
+                        'status'=> false,
+                        'errors'=> $validator->errors()
+                    ]);
+
+
+                }else{
+
+                    $phone_number = strval($request->input('user'));
+
+                    $code = mt_rand(10000, 99999);
+                    $encryptedCode= Hash::make($code);
+
+                    $phone_verification = PasswordResetToken::updateOrCreate(
+                        [
+                            'phone_number'=> $phone_number,
+                        ],
+                        [
+                        'phone_number' => $phone_number,
+                        'code' => $encryptedCode,
+                        'expires_at' => now()->addMinutes(1),
+                        'status' => false,
+                        ]);
+                    try {
+                        $queryParams = http_build_query(['phone_number' => $phone_number, 'code' => $code]);
+
+                        $resetRoute = url('reset-password') . '?' . $queryParams;
+                        Mail::to($user->email)->send(new PasswordResetMail(
+
+                            "You can change your password here: $resetRoute"
+                        ));
+                        $message = 'Password reset route sent to your email successfully';
+                        return response()->json([
+                            'status'=> true,
+                            'message'=> $message
+                        ]);
+
+                    } catch (\Exception $e) {
+                        $message = 'Failed to send verification code. Check your Internet Connection.';
+                        return response()->json([
+                            'status'=> false,
+                            'message'=> $message
+                        ]);
+                    }
+                }
+            }else{
+                return response()->json(
+                    [
+                        'status'=> false,
+                        'message'=>'No user found'
+                    ]
+                );
+            }
+
         }
+
 
 
     }
@@ -377,62 +497,6 @@ class AuthController extends Controller
 
     }
 
-    public function completeProfile(Request $request){
-        $userId = auth()->user()->id;
-
-        if(!$userId){
-            return response()->json([
-                'error'=> 'User not found',
-                'status'=>false
-            ]);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'height' => 'required',
-            'weight' => 'required',
-            'waist' => 'required',
-            'hips'=> "required",
-            'targeted_weight' => "required",
-            'age'=> 'required',
-            'gender' => 'required',
-            'calorie_difference'=>'required'
-        ]);
-
-        if($validator->passes()){
-
-            $userProfile = UserProfile::updateOrCreate(
-                ['user_id' => $userId],
-                [
-                    'height' => $request->height,
-                    'weight' => $request->weight,
-                    'waist' => $request->waist,
-                    'hips' => $request->hips,
-                    'bust' => $request->bust,
-                    'targeted_weight' => $request->targeted_weight,
-                    'gender' => $request->gender,
-                    'age' => $request->age,
-                    'calorie_difference'=>$request->calorie_difference
-                ]
-            );
-            // Assuming $userProfile is an instance of UserProfile
-            $weightPlan = $userProfile->weightPlan; // Correct
-
-            $message = 'Profile completed successfully';
-
-            return response()->json([
-                'status' => true,
-                'userProfile' => $userProfile,
-                'weightPlan' => $weightPlan
-            ]);
-
-        }else{
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()
-            ]);
-        }
-
-    }
 
 
     public function updateProfileImage(Request $request){

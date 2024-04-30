@@ -14,7 +14,7 @@ use Intervention\Image\ImageManager;
 class CustomizedWorkoutController extends Controller
 {
     public function getCustomizedWorkouts(Request $request){
-        $workouts = CustomizedWorkout::orderBy('name','ASC');
+        $workouts = CustomizedWorkout::orderBy('name','ASC')->where('user_id',auth()->user()->id);
         if ($request->get('keyword') != '') {
             $workouts = $workouts->where('workouts.name', 'like', '%' . $request->input('keyword') . '%')->orWhere('dieticians.scheduled_time', 'like', '%' . $request->input('keyword') . '%');
         }
@@ -83,7 +83,7 @@ class CustomizedWorkoutController extends Controller
 
                 $imagePath = $image->store('public/uploads');
 
-                Storage::move($imagePath, 'public/uploads/workout' . $newName);
+                Storage::move($imagePath, 'public/uploads/workout/' . $newName);
 
             }
 

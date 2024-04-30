@@ -35,7 +35,7 @@ class PasswordResetMail extends Mailable
     public function build()
     {
         // dd($this->messages);
-        return $this->from('imanalimbu@gmail.com')
+        return $this->from(ENV('MAIL_FROM_ADDRESS'))
             ->subject('Password Reset')
             ->view('mails.password_reset_mail_view')
             ->with([

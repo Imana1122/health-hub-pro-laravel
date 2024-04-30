@@ -68,8 +68,10 @@ class UserProfileController extends Controller
         if($validator->passes()){
             $userProfile = UserProfile::where('user_id',$userId)->first();
             $weightPlan=WeightPlan::where('id',$request->weight_plan_id)->first();
+            $userProfile->weight_plan_id=$request->weight_plan_id;
+            $userProfile->save();
 
-            if($userProfile == null && $weightPlan == null){
+            if($userProfile == null && empty($weightPlan)){
                 return response()->json([
                     'status' => false,
                     'error' => 'No weight plan or userprofile with this id!'

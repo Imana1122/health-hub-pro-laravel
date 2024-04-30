@@ -37,7 +37,7 @@ class MailForNotification extends Mailable
     public function build()
     {
         // dd($this->messages);
-        return $this->from('imanalimbu@gmail.com')
+        return $this->from(ENV('MAIL_FROM_ADDRESS'))
             ->subject('Dietician Subscription')
             ->view('mails.notification_mail_view')
             ->with([

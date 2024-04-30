@@ -7,6 +7,7 @@ use App\Models\Allergen;
 use App\Models\Cuisine;
 use App\Models\CustomizedWorkout;
 use App\Models\Dietician;
+use App\Models\DieticianBooking;
 use App\Models\Exercise;
 use App\Models\HealthCondition;
 use App\Models\Ingredient;
@@ -295,7 +296,13 @@ class HomeController extends Controller
         $this->deleteUnusedWeightPlanImages();
         $this->deleteUnusedDieticianProfileImage();
         $this->deleteUnusedDieticianCV();
+        // Get current date and time
+        $currentDateTime = Carbon::now();
 
+        // Delete records
+        DieticianBooking::where('payment_status', 0)
+            ->where('created_at', '<', $currentDateTime)
+            ->delete();
 
         $recipesCount = Recipe::count();
         $usersCount = User::count();
